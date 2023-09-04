@@ -5,6 +5,7 @@
 
     <div class="footer-col-wrapper">
       <div class="footer-col">
+        {%- if site.rss %}
         <p class="feed-subscribe">
           <a href="{{ site.feed.path | default: 'feed.xml' | absolute_url }}">
             <svg class="svg-icon orange">
@@ -12,6 +13,7 @@
             </svg><span>Subscribe</span>
           </a>
         </p>
+        {% endif -%}
       {%- if site.author %}
         <ul class="contact-list">
           {% if site.author.name -%}
@@ -38,27 +40,41 @@
 
 <div class="sub-footer">
   <div id="skin-switch-container">
-    Page rendered with the <select id="skin-switch" onchange="changeSkin()">
-      {%- for skin in page.available_skins %}
-      {% if skin == 'classic' -%}
-      <option value="style.css">classic</option>
-      {%- else -%}
-      <option value="{{ skin }}.css">{{ skin }}</option>
-      {%- endif %}
-      {%- endfor %}
-    </select> skin of Minima theme.
+    Select your theme: <select id="skin-switch" onchange="changeSkin()">
+      <option value="dark.css">dark</option>
+      <option value="style.css">light</option>
+      <option value="solarized-dark.css">solarized-dark</option>
+      <option value="solarized-light.css">solarized-light</option>
+      <option value="auto.css">auto</option>
+      <option value="solarized.css">solarized-auto</option>
+    </select>
   </div>
 </div>
 
 <script>
   document.getElementById("skin-switch-container").style.display = "block";
+  // try to get their last style from storage
+  const lastStyle = localStorage.getItem('skin');
+
+  // get the current info (this is going to be the default on page load)
   var metaTag = document.getElementById("stylesheet");
   var SSHref = metaTag.href;
   var SSName = (SSHref.substring(SSHref.lastIndexOf('/') + 1));
 
+  // if they saved a style preference, use that one
+  
+  if (lastStyle) {
+    metaTag.href = SSHref.replace(SSName, lastStyle);
+    SSName = lastStyle;
+    SSHref = metaTag.href;
+  }
+  
+
+  // select the option in the dropdown
   document.getElementById("skin-switch").value = SSName;
 
   function changeSkin() {
     metaTag.href = SSHref.replace(SSName, event.target.value);
+    localStorage.setItem('skin', event.target.value);
   }
 </script>
