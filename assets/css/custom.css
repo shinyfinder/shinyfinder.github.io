@@ -1,0 +1,7 @@
+input[type=button], input[type=reset] {
+    padding: 10px;
+}
+
+dd {
+    margin-left: 30px;
+}
