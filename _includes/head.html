@@ -15,6 +15,6 @@
 </head>
 
 <script>
-  const lastStyleHead = localStorage.getItem('skin');
-  document.getElementById('stylesheet').href = lastStyleHead ? `/assets/css/${lastStyleHead}` : '/assets/css/style.css';
+  const lastStyleHead = localStorage.getItem('skin') ?? '';
+  document.getElementById('stylesheet').href = lastStyleHead.length ? `/assets/css/${lastStyleHead}` : '/assets/css/style.css';
 </script>
