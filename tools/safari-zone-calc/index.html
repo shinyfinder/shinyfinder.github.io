@@ -4,926 +4,916 @@ title: Safari Zone Encounter Slot Calculator
 permalink: /tools/safari-zone-calc/
 ---
 
-<!DOCTYPE html>
 
-<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
 
-	<script type="text/javascript">
+	function Calc() {
+		// reset the table
+		const outputTableObj = document.getElementById('outputTable');
+		outputTableObj.getElementsByTagName("tbody")[0].innerHTML = outputTableObj.rows[0].innerHTML;
 
-		function Calc() {
-			// reset the table
-			const outputTableObj = document.getElementById('outputTable');
-			outputTableObj.getElementsByTagName("tbody")[0].innerHTML = outputTableObj.rows[0].innerHTML;
+		var ES, blockES, blockScoresES, loc, encounterMethod, TOD;
 
-			var ES, blockES, blockScoresES, loc, encounterMethod, TOD;
+		loc = document.getElementById("area").value;
+		encounterMethod = document.getElementById("method").value;
+		TOD = document.getElementById("timeOfDay").value;
 
-			loc = document.getElementById("area").value;
-			encounterMethod = document.getElementById("method").value;
-			TOD = document.getElementById("timeOfDay").value;
-
-			// check for selected area
-			// DESERT
-			if (loc == "desert") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Sandshrew (15)", "Sandslash (15)", "Sandshrew (15)", "Sandshrew (16)", "Sandslash (16)", "Cubone (16)", "Sandshrew (17)", "Sandslash (17)", "Cubone (17)", "Marowak (17)"];
-						blockES = ["Fearow (38)", "Spinda (45)", "Carnivine (48)", "Cacnea (35)", "Vibrava (45)", "Marowak (41)", "Hippopotas (43)", "Trapinch (47)", "Lotad (38)", "Cacturne (48)"];
-					} else if (TOD == "morning") {
-						ES = ["Sandshrew (15)", "Sandslash (15)", "Sandshrew (15)", "Sandshrew (16)", "Sandslash (16)", "Cubone (16)", "Sandshrew (17)", "Sandslash (17)", "Cubone (17)", "Marowak (17)"];
-						blockES = ["Fearow (38)", "Spinda (45)", "Carnivine (48)", "Cacnea (35)", "Vibrava (44)", "Marowak (41)", "Hippopotas (43)", "Trapinch (46)", "Lotad (38)", "Cacturne (48)"];
-					} else if (TOD == "night") {
-						ES = ["Sandshrew (15)", "Sandslash (15)", "Fearow (15)", "Sandshrew (16)", "Sandslash (16)", "Fearow (16)", "Sandshrew (17)", "Sandslash (17)", "Sandshrew (17)", "Fearow (17)"];
-						blockES = ["Fearow (38)", "Spinda (45)", "Carnivine (48)", "Cacnea (35)", "Vibrava (44)", "Fearow (41)", "Hippopotas (43)", "Trapinch (46)", "Lotad (38)", "Cacturne (48)"];
-					};
-
-					blockScoresES = [3, "Plains", 14, "Plains", 49, "Plains", 35, "Forest", 49, "Forest", 6, "Peak", 28, "Peak", 49, "Peak", 8, "Water", 42, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
-					blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
-					blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen  (12)", "Goldeen  (13)"];
-					blockES = ["Seaking (12)", "Seaking (20)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Dratini (25)", "Dratini (25)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
-					blockES = ["Dragonair (45)", "Dragonair (45)"];
-					blockScoresES = [20, "Water", 30, "Water"];
+		// check for selected area
+		// DESERT
+		if (loc == "desert") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Sandshrew (15)", "Sandslash (15)", "Sandshrew (15)", "Sandshrew (16)", "Sandslash (16)", "Cubone (16)", "Sandshrew (17)", "Sandslash (17)", "Cubone (17)", "Marowak (17)"];
+					blockES = ["Fearow (38)", "Spinda (45)", "Carnivine (48)", "Cacnea (35)", "Vibrava (45)", "Marowak (41)", "Hippopotas (43)", "Trapinch (47)", "Lotad (38)", "Cacturne (48)"];
+				} else if (TOD == "morning") {
+					ES = ["Sandshrew (15)", "Sandslash (15)", "Sandshrew (15)", "Sandshrew (16)", "Sandslash (16)", "Cubone (16)", "Sandshrew (17)", "Sandslash (17)", "Cubone (17)", "Marowak (17)"];
+					blockES = ["Fearow (38)", "Spinda (45)", "Carnivine (48)", "Cacnea (35)", "Vibrava (44)", "Marowak (41)", "Hippopotas (43)", "Trapinch (46)", "Lotad (38)", "Cacturne (48)"];
+				} else if (TOD == "night") {
+					ES = ["Sandshrew (15)", "Sandslash (15)", "Fearow (15)", "Sandshrew (16)", "Sandslash (16)", "Fearow (16)", "Sandshrew (17)", "Sandslash (17)", "Sandshrew (17)", "Fearow (17)"];
+					blockES = ["Fearow (38)", "Spinda (45)", "Carnivine (48)", "Cacnea (35)", "Vibrava (44)", "Fearow (41)", "Hippopotas (43)", "Trapinch (46)", "Lotad (38)", "Cacturne (48)"];
 				};
 
-
-				// FOREST
-			} else if (loc == "forest") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Bellsprout (15)", "Pidgey (15)", "Bellsprout (15)", "Bellsprout (16)", "Pidgey (16)", "Mr. Mime (16)", "Bellsprout (17)", "Pidgey (17)", "Mr. Mime (17)", "Misdreavus (17)"];
-						blockES = ["Mr. Mime (45)", "Budew (47)", "Misdreavus (42)", "Shuppet (46)", "Electabuzz (41)", "Bronzong (44)", "Beldum (44)", "Lickitung (40)", "Bidoof (40)", "Surskit (42)"];
-					} else if (TOD == "morning") {
-						ES = ["Bellsprout (15)", "Pidgey (15)", "Bellsprout (15)", "Bellsprout (16)", "Pidgey (16)", "Mr. Mime (16)", "Bellsprout (17)", "Pidgey (17)", "Mr. Mime (17)", "Misdreavus (17)"];
-						blockES = ["Mr. Mime (45)", "Budew (47)", "Misdreavus (42", "Shuppet (46)", "Electabuzz (41)", "Bronzong (45)", "Beldum (44)", "Lickitung (40)", "Bidoof (40)", "Surskit (42)"];
-					} else if (TOD == "night") {
-						ES = ["Bellsprout (15)", "Gastly (15)", "Misdreavus (15)", "Bellsprout (16)", "Haunter (16)", "Misdreavus (16)", "Bellsprout (17)", "Gastly (17)", "Misdreavus (17)", "Haunter (17)"];
-						blockES = ["Mr. Mime (45)", "Budew (47)", "Misdreavus (42)", "Shuppet (47)", "Electabuzz (41)", "Bronzong (44)", "Beldum (44)", "Lickitung (40)", "Bidoof (40)", "Surskit (42)"];
-					};
-
-					blockScoresES = [3, "Plains", 24, "Plains", 4, "Forest", 35, "Forest", 4, "Peak", 56, "Peak", "combo", 35, "Forest", 63, "Peak", 3, "Water", 10, "Water", 24, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
-					blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
-					blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
-					blockES = ["Seaking (20)", "Seaking (20)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Dratini (25)", "Dratini (25)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
-					blockES = ["Dragonair (45)", "Dragonair (45)"];
-					blockScoresES = [20, "Water", 30, "Water"];
-				};
-
-
-
-
-
-
-				// MARSHLAND
-			} else if (loc == "marshland") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Ekans (15)", "Koffing (15)", "Weezing (15)", "Ekans (16)", "Koffing (16)", "Weezing (16)", "Arbok (17)", "Koffing (17)", "Weezing  (17)", "Grimer (17)"];
-						blockES = ["Gloom (42)", "Jumpluff (38)", "Seviper (47)", "Carnivine (41)", "Croagunk (44)", "Roselia (46)", "Diglett (43)", "Shuckle  (44)", "Banette (44)", "Muk (38)"];
-					} else if (TOD == "morning") {
-						ES = ["Ekans (15)", "Koffing (15)", "Weezing (15)", "Ekans (16)", "Koffing (16)", "Weezing (16)", "Arbok (17)", "Koffing (17)", "Weezing (17)", "Grimer (17)"];
-						blockES = ["Gloom (42)", "Jumpluff (38)", "Seviper (48)", "Carnivine (41)", "Croagunk (44)", "Roselia (46)", "Diglett (43)", "Shuckle (44)", "Banette (44)", "Muk (38)"];
-					} else if (TOD == "night") {
-						ES = ["Wooper (15)", "Koffing (15)", "Oddish (15)", "Wooper (16)", "Koffing (16)", "Gloom (16)", "Wooper (17)", "Koffing (17)", "Oddish (17)", "Gloom (17)"];
-						blockES = ["Gloom (42)", "Jumpluff (38)", "Seviper (47)", "Carnivine (41)", "Croagunk (44)", "Roselia (46)", "Diglett (43)", "Shuckle  44", "Banette (45)", "Muk (38)"];
-					};
-
-					blockScoresES = [2, "Plains", 5, "Plains", 35, "Plains", 35, "Forest", 42, "Forest", 49, "Forest", 5, "Peak", 8, "Peak", 49, "Peak", 8, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Poliwag (15)", "Poliwag (15)", "Poliwag (16)", "Poliwag (17)", "Wooper (15)", "Wooper (16)", "Wooper (17)", "Grimer (15)", "Grimer (16)", "Grimer (17)"];
-					blockES = ["Jumpluff (47)", "Quagsire (43)", "Muk (48)"];
-					blockScoresES = [10, "Water", 13, "Water", 16, "Water"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (15)", "Poliwag (12)", "Poliwag (13)", "Poliwag (14)", "Poliwag (15)"];
-					blockES = ["Poliwag (16)", "Poliwag (18)"];
-					blockScoresES = [2, "Water", 3, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Poliwhirl (24)", "Poliwhirl (25)", "Poliwhirl (24)", "Poliwhirl (25)", "Poliwhirl (24)", "Poliwhirl (25)"];
-					blockES = ["Gyarados (26)", "Gyarados (29)"];
-					blockScoresES = [3, "Water", 4, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (37)", "Poliwhirl (36)", "Poliwhirl (37)", "Poliwhirl (38)", "Gyarados (36)", "Gyarados (37)"];
-					blockES = ["Barboach, (42)", "Barboach (45)"];
-					blockScoresES = [4, "Water", 5, "Water"];
-				};
-
-
-
-
-
-				// MEADOW
-			} else if (loc == "meadow") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Jigglypuff (15)", "Sunkern (15)", "Hoppip (15)", "Jigglypuff (16)", "Sunkern (16)", "Hoppip (16)", "Jigglypuff (17)", "Sunkern  (17)", "Hoppip (17)", "Skiploom (17)"];
-						blockES = ["Raticate (40)", "Chansey (42)", "Seedot (45)", "Skiploom (40)", "Nuzleaf (38)", "Nuzleaf (47)", "Geodude (45)", "Nosepass (45)", "Riolu (46)", "Wooper (40)"];
-					} else if (TOD == "morning") {
-						ES = ["Jigglypuff (15)", "Hoppip (15)", "Hoppip (15)", "Jigglypuff (16)", "Hoppip (16)", "Jigglypuff (16)", "Jigglypuff (17)", "Hoppip (17)", "Jigglypuff (17)", "Skiploom (17)"];
-						blockES = ["Raticate (40)", "Chansey (42)", "Seedot (45)", "Skiploom (40)", "Nuzleaf (38)", "Nuzleaf (48)", "Geodude (45)", "Nosepass (45)", "Riolu (45)", "Wooper (40)"];
-					} else if (TOD == "night") {
-						ES = ["Jigglypuff (15)", "Marill (15)", "Wooper (15)", "Jigglypuff (16)", "Marill (16)", "Wooper (16)", "Jigglypuff (17)", "Marill (17)", "Wooper (17)", "Clefairy (17)"];
-						blockES = ["Raticate (40)", "Chansey (42)", "Seedot (45)", "Skiploom (40)", "Nuzleaf (38)", "Nuzleaf (47)", "Clefairy (42)", "Nosepass (45)", "Riolu (45)", "Wooper (40)"];
-					};
-
-					blockScoresES = [5, "Plains", 12, "Plains", 35, "Plains", 8, "Forest", 28, "Forest", 35, "Forest", 3, "Peak", 35, "Peak", 42, "Peak", "combo", 28, "Forest", 3, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Magikarp (15)", "Magikarp (15)", "Magikarp (16)", "Magikarp (16)", "Magikarp (17)", "Wooper (15)", "Wooper (16)", "Wooper (17)", "Marill (16)", "Marill (17)"];
-					blockES = ["Skiploom (47)", "Masquerain (42)", "Masquerain (46)"];
-					blockScoresES = [3, "Water", 10, "Water", 14, "Water"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (15)", "Poliwag (12)", "Poliwag (13)", "Poliwag (14)", "Poliwag (15)"];
-					blockES = ["Poliwhirl (15)", "Poliwhirl (16)"];
-					blockScoresES = [2, "Water", 3, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Poliwag (22)", "Poliwag (22)", "Poliwag (23)", "Poliwag (24)", "Poliwhirl (24)", "Poliwhirl (25)"];
-					blockES = ["Poliwhirl (27)", "Gyarados (28)"];
-					blockScoresES = [5, "Water", 7, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Poliwag (35)", "Poliwag (35)", "Poliwag (36)", "Poliwag (36)", "Poliwhirl (35)", "Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (36)", "Poliwhirl (37)", "Poliwhirl (38)"];
-					blockES = ["Gyarados (42)", "Gyarados (45)"];
-					blockScoresES = [10, "Water", 14, "Water"];
-				};
-
-
-
-
-
-
-
-
-
-				// MOUNTAIN
-			} else if (loc == "mountain") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Raticate (15)", "Lickitung (15)", "Rattata (15)", "Raticate (16)", "Lickitung (16)", "Rattata (16)", "Raticate (17)", "Lickitung (17)", "Magneton (17)", "Larvitar (17)"];
-						blockES = ["Magneton (42)", "Volbeat (46)", "Chingling (38)", "Meditite (43)", "Dusclops (45)", "Larvitar (42)", "Lunatone (46)", "Metang (44)", "Krabby (43)", "Sealeo (45)"];
-					} else if (TOD == "morning") {
-						ES = ["Raticate (15)", "Lickitung (15)", "Rattata (15)", "Raticate (16)", "Lickitung (16)", "Rattata (16)", "Raticate (17)", "Lickitung (17)", "Magneton (17)", "Larvitar (17)"];
-						blockES = ["Magneton (42)", "Volbeat (46)", "Chingling (38)", "Meditite (44)", "Dusclops (45)", "Larvitar (42)", "Lunatone (46)", "Metang (44)", "Krabby (43)", "Sealeo (45)"];
-					} else if (TOD == "night") {
-						ES = ["Zubat (15)", "Golbat (15)", "Rattata (15)", "Zubat (16)", "Golbat (16)", "Rattata (16)", "Zubat (17)", "Golbat (17)", "Magneton (17)", "Zubat (17)"];
-						blockES = ["Magneton (42)", "Volbeat (46)", "Chingling (38)", "Meditite (43)", "Dusclops (46)", "Larvitar (42)", "Lunatone (46)", "Metang (44)", "Krabby (43)", "Sealeo (45)"];
-					};
-
-					blockScoresES = [3, "Plains", 10, "Plains", 10, "Forest", 20, "Forest", 35, "Forest", 5, "Peak", 15, "Peak", 56, "Peak", 3, "Water", 49, "Water", "combo", 21, "Peak"];
-				} else if (encounterMethod == "water") {
-					ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
-					blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
-					blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
-					blockES = ["Seaking (20)", "Seaking (20)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Dratini (25)", "Dratini (25)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
-					blockES = ["Dragonair (45)", "Dragonair (45)"];
-					blockScoresES = [20, "Water", 30, "Water"];
-				};
-
-
-
-
-
-				// PEAK
-			} else if (loc == "peak") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Geodude (15)", "Magnemite (15)", "Geodude (15)", "Geodude (16)", "Magnemite (16)", "Graveler (16)", "Geodude (17)", "Magneton (17)", "Graveler (17)", "Magmar (17)"];
-						blockES = ["Linoone (46)", "Zangoose (45)", "Paras (42)", "Fearow (44)", "Vigoroth (47)", "Magmar (41)", "Lairon (45)", "Bronzor (45)", "Slowbro (45)", "Spheal (45)"];
-					} else if (TOD == "morning") {
-						ES = ["Geodude (15)", "Magnemite (15)", "Geodude (15)", "Geodude (16)", "Magnemite (16)", "Graveler (16)", "Geodude (17)", "Magneton (17)", "Graveler (17)", "Magmar (17)"];
-						blockES = ["Linoone (46)", "Zangoose (45)", "Paras (42)", "Fearow (44)", "Vigoroth (47)", "Magmar (41)", "Lairon (45)", "Bronzor (45)", "Slowbro (45)", "Spheal (45)"];
-					} else if (TOD == "night") {
-						ES = ["Geodude (15)", "Magnemite (15)", "Geodude (15)", "Geodude (16)", "Wobbuffet (16)", "Magnemite (16)", "Geodude (17)", "Magneton (17)", "Wobbuffet (17)", "Magneton (17)"];
-						blockES = ["Linoone (46)", "Zangoose (43)", "Paras (42)", "Fearow (44)", "Vigoroth (47)", "Wobbuffet (41)", "Lairon (45)", "Bronzor (46)", "Slowbro (45)", "Spheal (44)"];
-					};
-
-					blockScoresES = [5, "Plains", 12, "Plains", 3, "Forest", 5, "Forest", 56, "Forest", "combo", 28, "Plains", 10, "Peak", 24, "Peak", 35, "Peak", "combo", 14, "Forest", 5, "Water", 35, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
-					blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
-					blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
-					blockES = ["Seaking (20)", "Seaking (20)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Dratini (25)", "Dratini (25)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
-					blockES = ["Dragonair (45)", "Dragonair (45)"];
-					blockScoresES = [20, "Water", 30, "Water"];
-				};
-
-
-
-
-				// PLAINS
-			} else if (loc == "plains") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Rattata (15)", "Abra (15)", "Girafarig (15)", "Rattata (16)", "Abra (16)", "Girafarig (16)", "Rattata (17)", "Abra (17)", "Girafarig (17)", "Smeargle (17)"];
-						blockES = ["Girafarig (40)", "Shinx (43)", "Manectric (45)", "Smeargle (41)", "Zigzagoon (44)", "Ponyta (42)", "Houndoom (43)", "Zangoose (43)", "Lotad (42)", "Surskit (46)"];
-					} else if (TOD == "morning") {
-						ES = ["Rattata (15)", "Abra (15)", "Girafarig (15)", "Rattata (16)", "Abra (16)", "Girafarig (16)", "Rattata (17)", "Abra (17)", "Girafarig (17)", "Smeargle (17)"];
-						blockES = ["Girafarig (40)", "Shinx (43)", "Manectric (45)", "Smeargle (41)", "Zigzagoon (44)", "Ponyta (42)", "Houndoom (43)", "Zangoose (43)", "Lotad (42)", "Surskit (46)"];
-					} else if (TOD == "night") {
-						ES = ["Raticate (15)", "Abra (15)", "Girafarig (15)", "Raticate (16)", "Abra (16)", "Girafarig (16)", "Raticate (17)", "Abra (17)", "Stantler (17)", "Stantler (17)"];
-						blockES = ["Stantler (40)", "Shinx (44)", "Manectric (45)", "Stantler (41)", "Zigzagoon (44)", "Ponyta (42)", "Houndoom (44)", "Zangoose (45)", "Lotad (42)", "Surskit (46)"];
-					};
-
-					blockScoresES = [3, "Plains", 10, "Plains", 15, "Plains", 3, "Forest", 15, "Forest", 5, "Peak", 10, "Peak", 15, "Peak", 12, "Water", 28, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
-					blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
-					blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
-					blockES = ["Seaking (20)", "Seaking (20)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Dratini (25)", "Dratini (25)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
-					blockES = ["Dragonair (45)", "Dragonair (45)"];
-					blockScoresES = [20, "Water", 30, "Water"];
-				};
-
-
-
-
-				// ROCKY BEACH
-			} else if (loc == "rockyBeach") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Doduo (15)", "Slowpoke (15)", "Krabby (15)", "Doduo (16)", "Slowpoke (16)", "Krabby (16)", "Doduo (17)", "Slowpoke (17)", "Krabby (17)", "Slowbro (17)"];
-						blockES = ["Dodrio (42)", "Electrike (42)", "Gible (44)", "Mareep (43)", "Manectric (37)", "Budew (40)", "Slowbro (42)", "Kingler (40)", "Aron (45)", "Slowbro (37)"];
-					} else if (TOD == "morning") {
-						ES = ["Doduo (15)", "Slowpoke (15)", "Krabby (15)", "Doduo (16)", "Slowpoke (16)", "Krabby (16)", "Doduo (17)", "Slowpoke (17)", "Krabby (17)", "Slowbro (17)"];
-						blockES = ["Dodrio (42)", "Electrike (42)", "Gible (44)", "Mareep (43)", "Manectric (37)", "Budew (40)", "Slowbro (42)", "Kingler (40)", "Aron (45)", "Slowbro (37)"];
-					} else if (TOD == "night") {
-						ES = ["Zubat (15)", "Slowpoke (15)", "Krabby (15)", "Zubat (16)", "Slowpoke (16)", "Krabby (16)", "Zubat (17)", "Slowpoke (17)", "Krabby (17)", "Slowbro (17)"];
-						blockES = ["Dodrio (42)", "Electrike (42)", "Gible (44)", "Mareep (43)", "Manectric (37)", "Budew (40)", "Slowbro (42)", "Kingler (40)", "Aron (44)", "Slowbro (37)"];
-					};
-
-					blockScoresES = [4, "Plains", 10, "Plains", 49, "Plains", "combo", 49, "Peak", 5, "Forest", 10, "Forest", 18, "Forest", 3, "Peak", 8, "Peak", 24, "Peak", 5, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Magikarp (15)", "Magikarp (16)", "Magikarp (16)", "Poliwag (15)", "Poliwag (16)", "Poliwag (16)", "Poliwhirl (16)", "Poliwhirl (17)", "Lapras (15)", "Lapras (16)"];
-					if (TOD != "night") {
-						blockES = ["Lapras (37)", "Lapras (42)", "Lapras (47)"];
-					} else {
-						blockES = ["Lapras (36)", "Lapras (41)", "Lapras (46)"];
-					};
-					blockScoresES = [10, "Water", 14, "Water", 18, "Water"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (14)", "Goldeen (13)", "Goldeen (14)", "Goldeen (15)", "Krabby (13)", "Krabby (14)", "Krabby (15)"];
-					blockES = ["Krabby (17)", "Krabby (18)"];
-					blockScoresES = [2, "Water", 3, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Krabby (22)", "Krabby (23)", "Krabby (24)", "Krabby (25)"];
-					blockES = ["Kingler (26)", "Kingler (27)"];
-					blockScoresES = [5, "Water", 8, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (35)", "Goldeen (36)", "Goldeen (37)", "Goldeen (38)", "Seaking (35)", "Seaking (36)", "Seaking (37)", "Seaking (38)", "Kingler (38)", "Kingler (39)"];
-					blockES = ["Corphish (46)", "Corphish (48)"];
-					blockScoresES = [15, "Water", 20, "Water"];
-				};
-
-
-
-
-				// SAVANNAH
-			} else if (loc == "savannah") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Nidoran-F (15)", "Nidoran-M (15)", "Tauros (15)", "Nidoran-F (16)", "Nidoran-M (16)", "Tauros (16)", "Nidoran-F (17)", "Nidoran-M  (17)", "Tauros (17)", "Rhyhorn (17)"];
-						blockES = ["Tauros (41)", "Zigzagoon (38)", "Luxio (46)", "Houndour (42)", "Cacturne (42)", "Shroomish (45)", "Rhyhorn (41)", "Rhydon (44)", "Torkoal (47)", "Azurill (42)"];
-					} else if (TOD == "morning") {
-						ES = ["Nidoran-F (15)", "Nidoran-M (15)", "Tauros (15)", "Nidoran-F (16)", "Nidoran-M (16)", "Tauros (16)", "Nidoran-F (17)", "Nidoran-M (17)", "Tauros (17)", "Rhyhorn (17)"];
-						blockES = ["Tauros (41)", "Zigzagoon (38)", "Luxio (46)", "Houndour (42)", "Cacturne (42)", "Shroomish (45)", "Rhyhorn (41)", "Rhydon (44)", "Torkoal (46)", "Azurill (42)"];
-					} else if (TOD == "night") {
-						ES = ["Nidorina (15)", "Nidorino (15)", "Zubat (15)", "Nidorina (16)", "Nidorino (16)", "Zubat (16)", "Nidorina (17)", "Nidorino (17)", "Zubat (17)", "Golbat (17)"];
-						blockES = ["Tauros (41)", "Zigzagoon (38)", "Luxio (45)", "Houndour (42)", "Cacturne (42)", "Shroomish (45)", "Rhyhorn (41)", "Rhydon (44)", "Torkoal (47)", "Azurill (42)"];
-					};
-
-					blockScoresES = [5, "Plains", 10, "Plains", 24, "Plains", 4, "Forest", 35, "Forest", 35, "Forest", "combo", 12, "Plains", 5, "Peak", 10, "Peak", 35, "Peak", 5, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
-					blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
-					blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
-					blockES = ["Seaking (20)", "Seaking (20)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Dratini (25)", "Dratini (25)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
-					blockES = ["Dragonair (45)", "Dragonair (45)"];
-					blockScoresES = [20, "Water", 30, "Water"];
-				};
-
-
-
-
-
-				// SWAMP
-			} else if (loc == "swamp") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Sentret (15)", "Jigglypuff (15)", "Paras (15)", "Sentret (16)", "Jigglypuff (16)", "Paras (16)", "Sentret (17)", "Jigglypuff (17)", "Paras (17)", "Murkrow (17)"];
-						blockES = ["Parasect (41)", "Furret (42)", "Pachirisu (47)", "Murkrow (37)", "Weepinbell (46)", "Chimecho (46)", "Voltorb (42)", "Duskull (38)", "Bagon (45)", "Floatzel (44)"];
-					} else if (TOD == "morning") {
-						ES = ["Sentret (15)", "Jigglypuff (15)", "Paras (15)", "Sentret (16)", "Jigglypuff (16)", "Paras (16)", "Sentret (17)", "Jigglypuff (17)", "Paras (17)", "Murkrow (17)"];
-						blockES = ["Parasect (41)", "Furret (42)", "Pachirisu (47)", "Murkrow (37)", "Weepinbell (46)", "Chimecho (46)", "Voltorb (42)", "Duskull (38)", "Bagon (45)", "Floatzel (44)"];
-					} else if (TOD == "night") {
-						ES = ["Sentret (15)", "Drowzee (15)", "Murkrow (15)", "Sentret (16)", "Hypno (16)", "Murkrow (16)", "Sentret (17)", "Drowzee (17)", "Murkrow (17)", "Hypno (17)"];
-						blockES = ["Parasect (41)", "Furret (42)", "Pachirisu (47)", "Hypno (37)", "Weepinbell (46)", "Chimecho (47)", "Voltorb (42)", "Duskull (38)", "Bagon (44)", "Floatzel (44)"];
-					};
-
-					blockScoresES = [3, "Plains", 5, "Plains", 10, "Plains", 5, "Forest", 8, "Forest", 15, "Forest", 10, "Peak", 28, "Peak", 56, "Peak", "combo", 35, "Forest", 10, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Magikarp (15)", "Magikarp (15)", "Magikarp (16)", "Magikarp (16)", "Magikarp (17)", "Magikarp (17)", "Goldeen (15)", "Goldeen (15)", "Goldeen (16)", "Goldeen (17)"];
-					blockES = ["Seaking (42)", "Murkrow (47)", "Duskull (48)"];
-					blockScoresES = [4, "Water", 10, "Water", 35, "Water"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (14)", "Magikarp (14)", "Magikarp (15)", "Magikarp (15)", "Magikarp (15)"];
-					blockES = ["Goldeen (17)", "Seaking (17)"];
-					blockScoresES = [2, "Water", 3, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Seaking (27)", "Dratini (29)"];
-					blockScoresES = [6, "Water", 10, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (35)", "Goldeen (35)", "Goldeen (36)", "Goldeen (37)", "Seaking (35)", "Seaking (35)", "Seaking (36)", "Seaking (37)", "Dratini (36)", "Dratini (37)"];
-					blockES = ["Dragonair (42)", "Dragonair (45)"];
-					blockScoresES = [15, "Water", 20, "Water"];
-				};
-
-
-
-
-				// WASTELAND
-			} else if (loc == "wasteland") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Kangaskhan (15)", "Onix (15)", "Magnemite (15)", "Machop (16)", "Onix (16)", "Magnemite (16)", "Kangaskhan (17)", "Onix (17)", "Magnemite (17)", "Machop (17)"];
-						blockES = ["Manectric (41)", "Illumise (46)", "Bellsprout (41)", "Medicham (44)", "Breloom (46)", "Machoke (40)", "Skorupi (44)", "Solrock (46)", "Golduck (45)", "Kingler (48)"];
-					} else if (TOD == "morning") {
-						ES = ["Kangaskhan (15)", "Onix (15)", "Magnemite (15)", "Machop (16)", "Onix (16)", "Magnemite (16)", "Kangaskhan (17)", "Machoke (17)", "Magnemite (17)", "Machop (17)"];
-						blockES = ["Manectric (41)", "Illumise (46)", "Bellsprout (41)", "Medicham (44)", "Breloom (46)", "Machoke (40)", "Skorupi (44)", "Solrock (45)", "Golduck (45)", "Kingler (48)"];
-					} else if (TOD == "night") {
-						ES = ["Fearow (15)", "Onix (15)", "Magnemite (15)", "Fearow (16)", "Onix (16)", "Magnemite (16)", "Fearow (17)", "Onix (17)", "Magnemite (17)", "Onix (17)"];
-						blockES = ["Manectric (41)", "Illumise (46)", "Bellsprout (41)", "Medicham (44)", "Breloom (46)", "Machoke (40)", "Skorupi (45)", "Solrock (45)", "Golduck (45)", "Kingler (48)"];
-					};
-
-					blockScoresES = [3, "Plains", 10, "Plains", 3, "Forest", 35, "Forest", 42, "Forest", 5, "Peak", 28, "Peak", 42, "Peak", 3, "Water", 10, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
-					blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
-					blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
-					blockES = ["Seaking (20)", "Seaking (20)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
-					blockES = ["Dratini (25)", "Dratini (25)"];
-					blockScoresES = [10, "Water", 20, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
-					blockES = ["Dragonair (45)", "Dragonair (45)"];
-					blockScoresES = [20, "Water", 30, "Water"];
-				};
-
-
-				// WETLAND
-			} else if (loc == "wetland") {
-				if (encounterMethod == "land") {
-					if (TOD == "day") {
-						ES = ["Spearow (15)", "Sentret (15)", "Farfetch'd (15)", "Spearow (16)", "Sentret (16)", "Farfetch'd (16)", "Spearow (17)", "Sentret (17)", "Farfetch'd (17)", "Ditto (17)"];
-						blockES = ["Furret (37)", "Surskit (40)", "Lombre (47)", "Farfetch'd (41)", "Pachirisu (43)", "Doduo (45)", "Golduck (40)", "Shelgon (46)", "Ditto (41)", "Buizel (45)"];
-					} else if (TOD == "morning") {
-						ES = ["Spearow (15)", "Sentret (15)", "Farfetch'd (15)", "Spearow (16)", "Sentret (16)", "Farfetch'd (16)", "Spearow (17)", "Sentret (17)", "Farfetch'd (17)", "Ditto (17)"];
-						blockES = ["Furret (37)", "Surskit (40)", "Lombre (47)", "Farfetch'd (41)", "Pachirisu (43)", "Doduo (45)", "Golduck (40)", "Shelgon (46)", "Ditto (41)", "Buizel (45)"];
-					} else if (TOD == "night") {
-						ES = ["Wooper (15)", "Wooper (15)", "Psyduck (15)", "Wooper (16)", "Quagsire (16)", "Psyduck (16)", "Wooper (17)", "Quagsire (17)", "Golduck (17)", "Golduck (17)"];
-						blockES = ["Furret (37)", "Surskit (40)", "Lombre (47)", "Farfetch'd (41)", "Pachirisu (43)", "Doduo (45)", "Golduck (40)", "Shelgon  (46)", "Ditto (41)", "Buizel (44)"];
-					};
-
-					blockScoresES = [2, "Plains", 6, "Plains", 14, "Plains", 3, "Forest", 8, "Forest", 4, "Peak", 5, "Peak", 63, "Peak", 15, "Water", 35, "Water"];
-				} else if (encounterMethod == "water") {
-					ES = ["Poliwag (15)", "Poliwag (16)", "Poliwag (16)", "Wooper (15)", "Wooper (16)", "Wooper (16)", "Psyduck (16)", "Psyduck (17)", "Quagsire (16)", "Quagsire (17)"];
-					blockES = ["Quagsire (37)", "Golduck (37)", "Golduck (45)"];
-					blockScoresES = [3, "Water", 4, "Water", 6, "Water"];
-				} else if (encounterMethod == "oldRod") {
-					ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (15)", "Poliwag (12)", "Poliwag (13)", "Poliwag (14)", "Poliwag (15)"];
-					blockES = ["Poliwhirl (17)", "Poliwhirl (18)"];
-					blockScoresES = [2, "Water", 3, "Water"];
-				} else if (encounterMethod == "goodRod") {
-					ES = ["Poliwag (22)", "Poliwag (22)", "Poliwag (22)", "Poliwag (23)", "Poliwag (23)", "Poliwag (24)", "Poliwag (24)", "Poliwhirl (23)", "Poliwhirl (24)", "Poliwhirl (25)"];
-					blockES = ["Corphish (26)", "Corphish (28)"];
-					blockScoresES = [10, "Water", 14, "Water"];
-				} else if (encounterMethod == "superRod") {
-					ES = ["Poliwag (35)", "Poliwag (35)", "Poliwag (36)", "Poliwag (36)", "Poliwag (37)", "Poliwhirl (35)", "Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (36)", "Poliwhirl (37)"];
-					blockES = ["Gyarados (44)", "Gyarados (47)"];
-					blockScoresES = [6, "Water", 9, "Water"];
-				};
-
-			};
-
-			// Retrieve entered values
-			var plains, forest, peak, water;
-			plains = Number(document.getElementById("plainsBlocks").value);
-			forest = Number(document.getElementById("forestBlocks").value);
-			peak = Number(document.getElementById("peakBlocks").value);
-			water = Number(document.getElementById("waterBlocks").value);
-
-
-			// search through block scores for types
-			//var blockTypes = ["Plains","Forest","Peak","Water"];
-			// also search for combo in case multi blocks needed
-
-			var plainsIndices = [];
-			var forestIndices = [];
-			var peakIndices = [];
-			var waterIndices = [];
-			var combinationType1 = [];
-			var combinationType2 = [];
-			var combinationIndices = [];
-
-			// loop through to find block types and their locations in the arrays
-			for (var i = 0; i < blockScoresES.length; i++) {
-				if (blockScoresES[i] == "Plains" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
-					plainsIndices.push(i);
-				} else if (blockScoresES[i] == "Forest" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
-					forestIndices.push(i);
-				} else if (blockScoresES[i] == "Peak" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
-					peakIndices.push(i);
-				} else if (blockScoresES[i] == "Water" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
-					waterIndices.push(i);
-				} else if (blockScoresES[i] == "combo") {
-					combinationIndices.push(i);
-					combinationType1.push(i);
-					combinationType2.push(i + 3);
-				};
+				blockScoresES = [3, "Plains", 14, "Plains", 49, "Plains", 35, "Forest", 49, "Forest", 6, "Peak", 28, "Peak", 49, "Peak", 8, "Water", 42, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
+				blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
+				blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen  (12)", "Goldeen  (13)"];
+				blockES = ["Seaking (12)", "Seaking (20)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Dratini (25)", "Dratini (25)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
+				blockES = ["Dragonair (45)", "Dragonair (45)"];
+				blockScoresES = [20, "Water", 30, "Water"];
 			};
 
 
-			// get the combo type
-			var comboType1Index = combinationType1.map(arraySubtract);
-			var comboType2Index = combinationType2.map(arraySubtract);
-
-
-			// determine the ES block scores for each type
-			var plainsScoresES, forestScoresES, peakScoresES, waterScoresES, comboType1ScoreES, comboType2ScoreES;
-
-
-			// get the indices
-			plainsScoresES = plainsIndices.map(arraySubtract); // could also be used as index in ES arrays for mons
-			forestScoresES = forestIndices.map(arraySubtract);
-			peakScoresES = peakIndices.map(arraySubtract);
-			waterScoresES = waterIndices.map(arraySubtract);
-			comboType1ScoreES = combinationType1.map(arraySubtract);
-			comboType1ScoreES = comboType1ScoreES.map(arraySubtract);
-			comboType2ScoreES = combinationType2.map(arraySubtract);
-			comboType2ScoreES = comboType2ScoreES.map(arraySubtract);
-
-
-
-			var plainsRequired = [];
-			var forestRequired = [];
-			var peakRequired = [];
-			var waterRequired = [];
-			var combo1Required = [];
-			var combo2Required = [];
-
-
-			// get the actual values
-			plainsRequired = requiredBlocks(plainsRequired, plainsScoresES, blockScoresES);
-			forestRequired = requiredBlocks(forestRequired, forestScoresES, blockScoresES);
-			peakRequired = requiredBlocks(peakRequired, peakScoresES, blockScoresES);
-			waterRequired = requiredBlocks(waterRequired, waterScoresES, blockScoresES);
-			combo1Required = requiredBlocks(combo1Required, comboType1ScoreES, blockScoresES);
-			combo2Required = requiredBlocks(combo2Required, comboType2ScoreES, blockScoresES);
-
-
-			// get the name of the combo block type
-			var comboType1 = [];
-			var comboType2 = [];
-
-			comboType1 = requiredBlocks(comboType1, comboType1Index, blockScoresES);
-			comboType2 = requiredBlocks(comboType2, comboType2Index, blockScoresES);
-
-
-
-			// determine if user block scores are greater than required for each type, and return the locations
-			var plainsBlockES = [];
-			var forestBlockES = [];
-			var peakBlockES = [];
-			var waterBlockES = [];
-			var comboBlock1ES = [];
-			var comboBlock2ES = [];
-			var combinationIndicesOn = []; var comboBlock1ESOn = []; var comboBlock2ESOn = [];
-
-			plainsBlockES = userBlockCheck(plains, plainsRequired);
-			forestBlockES = userBlockCheck(forest, forestRequired);
-			peakBlockES = userBlockCheck(peak, peakRequired);
-			waterBlockES = userBlockCheck(water, waterRequired);
-
-
-
-
-			for (var i = 0; i < comboType1.length; i++) {
-				comboBlock1ES = []; comboBlock2ES = [];
-				if (comboType1[i] == "Plains") {
-					comboBlock1ES = userBlockCheckCombo(plains, combo1Required[i], i);
-				} else if (comboType1[i] == "Forest") {
-					comboBlock1ES = userBlockCheckCombo(forest, combo1Required[i], i);
-				} else if (comboType1[i] == "Peak") {
-					comboBlock1ES = userBlockCheckCombo(peak, combo1Required[i], i);
-				} else if (comboType1[i] == "Water") {
-					comboBlock1ES = userBlockCheckCombo(water, combo1Required[i], i);
+			// FOREST
+		} else if (loc == "forest") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Bellsprout (15)", "Pidgey (15)", "Bellsprout (15)", "Bellsprout (16)", "Pidgey (16)", "Mr. Mime (16)", "Bellsprout (17)", "Pidgey (17)", "Mr. Mime (17)", "Misdreavus (17)"];
+					blockES = ["Mr. Mime (45)", "Budew (47)", "Misdreavus (42)", "Shuppet (46)", "Electabuzz (41)", "Bronzong (44)", "Beldum (44)", "Lickitung (40)", "Bidoof (40)", "Surskit (42)"];
+				} else if (TOD == "morning") {
+					ES = ["Bellsprout (15)", "Pidgey (15)", "Bellsprout (15)", "Bellsprout (16)", "Pidgey (16)", "Mr. Mime (16)", "Bellsprout (17)", "Pidgey (17)", "Mr. Mime (17)", "Misdreavus (17)"];
+					blockES = ["Mr. Mime (45)", "Budew (47)", "Misdreavus (42", "Shuppet (46)", "Electabuzz (41)", "Bronzong (45)", "Beldum (44)", "Lickitung (40)", "Bidoof (40)", "Surskit (42)"];
+				} else if (TOD == "night") {
+					ES = ["Bellsprout (15)", "Gastly (15)", "Misdreavus (15)", "Bellsprout (16)", "Haunter (16)", "Misdreavus (16)", "Bellsprout (17)", "Gastly (17)", "Misdreavus (17)", "Haunter (17)"];
+					blockES = ["Mr. Mime (45)", "Budew (47)", "Misdreavus (42)", "Shuppet (47)", "Electabuzz (41)", "Bronzong (44)", "Beldum (44)", "Lickitung (40)", "Bidoof (40)", "Surskit (42)"];
 				};
 
-
-				if (comboType2[i] == "Plains") {
-					comboBlock2ES = userBlockCheckCombo(plains, combo2Required[i], i);
-				} else if (comboType2[i] == "Forest") {
-					comboBlock2ES = userBlockCheckCombo(forest, combo2Required[i], i);
-				} else if (comboType2[i] == "Peak") {
-					comboBlock2ES = userBlockCheckCombo(peak, combo2Required[i], i);
-				} else if (comboType2[i] == "Water") {
-					comboBlock2ES = userBlockCheckCombo(water, combo2Required[i], i);
-				};
-
-
-				if (comboBlock1ES == 1) {
-					comboBlock1ESOn.push(i);
-				};
-
-				if (comboBlock2ES == 1) {
-					comboBlock2ESOn.push(i);
-				};
-
-				if (comboBlock1ES == 1 && comboBlock2ES == 1) {
-					combinationIndicesOn.push(combinationIndices[i]);
-					//comboBlock1ESOn = comboBlock1ESOn.push(i);
-					//comboBlock2ESOn = comboBlock2ESOn.push(i);
-				};
-
-			};
-
-
-			// return the mons who are brought in by the blocks
-			var ESnew = [];
-			var comboMon = [];
-
-			newMons(plainsBlockES, plainsScoresES, blockES, ESnew, combinationIndices); // plains
-			newMons(forestBlockES, forestScoresES, blockES, ESnew, combinationIndices); // forest
-			newMons(peakBlockES, peakScoresES, blockES, ESnew, combinationIndices); // peak
-			newMons(waterBlockES, waterScoresES, blockES, ESnew, combinationIndices); // water
-
-			if (combinationIndicesOn.length > 0) {
-				newMons(comboBlock1ESOn, comboType1ScoreES, blockES, comboMon, combinationIndices);
+				blockScoresES = [3, "Plains", 24, "Plains", 4, "Forest", 35, "Forest", 4, "Peak", 56, "Peak", "combo", 35, "Forest", 63, "Peak", 3, "Water", 10, "Water", 24, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
+				blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
+				blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
+				blockES = ["Seaking (20)", "Seaking (20)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Dratini (25)", "Dratini (25)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
+				blockES = ["Dragonair (45)", "Dragonair (45)"];
+				blockScoresES = [20, "Water", 30, "Water"];
 			};
 
 
 
-			// determine the index of active block mons
-			var blockMonIndexArray = [];
-
-			activeBlockMonIndex(plainsBlockES, plainsScoresES, blockMonIndexArray); // plains
-			activeBlockMonIndex(forestBlockES, forestScoresES, blockMonIndexArray); // forest
-			activeBlockMonIndex(peakBlockES, peakScoresES, blockMonIndexArray); // peak
-			activeBlockMonIndex(waterBlockES, waterScoresES, blockMonIndexArray); // water
-
-
-			// fill the remaining encounter slots
-			var ESout = fillES(ESnew, ES, comboMon, blockMonIndexArray, combinationIndicesOn, combinationIndices);
-
-
-			// create array of slot numbers
-			var slotNum = []; var i;
-			for (i = 0; i <= 9; i++) {
-				slotNum.push(i);
-			};
-
-			// print the results
-			ESout.forEach((v, i) => {
-				var newRow = outputTableObj.insertRow();
-				var cell1 = newRow.insertCell(0);
-				var cell2 = newRow.insertCell(1);
-
-				cell1.innerHTML = slotNum[i];
-				cell2.innerHTML = v;
-			})
 
 
 
-
-		};
-
-
-
-
-		function arraySubtract(newArray) {
-			newArray = newArray - 1;
-			return newArray;
-
-		};
-
-
-
-
-		function requiredBlocks(scores, blockIndices, blockScoresES) {
-			var i;
-			for (i = 0; i < blockIndices.length; i++) {
-				scores.push(blockScoresES[blockIndices[i]]);
-			};
-			return scores;
-		};
-
-
-
-
-		function userBlockCheck(userScore, reqScore) {
-			var i; var encounterArray = [];
-			for (i = 0; i < reqScore.length; i++) {
-				if (userScore >= reqScore[i]) {
-					encounterArray.push(i);
-				};
-			};
-			return encounterArray;
-
-		};
-
-
-
-		function userBlockCheckCombo(userScore, reqScore, i) {
-			var encounterArray = [];
-			if (userScore >= reqScore) {
-				encounterArray = 1;
-			};
-
-			return encounterArray;
-
-		};
-
-
-		function newMons(scoreIndex, score, mons, monArray, comboIndex) {
-			// scoreIndex: which of blocks are active based on user score
-			// score: indices of block type in blockScoreES
-			// mons: which mons are now active -- should correspond to score (all block mons)
-			// comboIndex: where "combo" occurs in the block mon ES array
-
-			var i; var mons; var blockScoreIndex; var monIndex;
-			for (i = 0; i < scoreIndex.length; i++) {
-				blockScoreIndex = score[scoreIndex[i]];
-
-				if (blockScoreIndex > comboIndex[1]) {
-					blockScoreIndex -= 6;
-				} else if (blockScoreIndex > comboIndex[0]) {
-					blockScoreIndex -= 3;
+			// MARSHLAND
+		} else if (loc == "marshland") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Ekans (15)", "Koffing (15)", "Weezing (15)", "Ekans (16)", "Koffing (16)", "Weezing (16)", "Arbok (17)", "Koffing (17)", "Weezing  (17)", "Grimer (17)"];
+					blockES = ["Gloom (42)", "Jumpluff (38)", "Seviper (47)", "Carnivine (41)", "Croagunk (44)", "Roselia (46)", "Diglett (43)", "Shuckle  (44)", "Banette (44)", "Muk (38)"];
+				} else if (TOD == "morning") {
+					ES = ["Ekans (15)", "Koffing (15)", "Weezing (15)", "Ekans (16)", "Koffing (16)", "Weezing (16)", "Arbok (17)", "Koffing (17)", "Weezing (17)", "Grimer (17)"];
+					blockES = ["Gloom (42)", "Jumpluff (38)", "Seviper (48)", "Carnivine (41)", "Croagunk (44)", "Roselia (46)", "Diglett (43)", "Shuckle (44)", "Banette (44)", "Muk (38)"];
+				} else if (TOD == "night") {
+					ES = ["Wooper (15)", "Koffing (15)", "Oddish (15)", "Wooper (16)", "Koffing (16)", "Gloom (16)", "Wooper (17)", "Koffing (17)", "Oddish (17)", "Gloom (17)"];
+					blockES = ["Gloom (42)", "Jumpluff (38)", "Seviper (47)", "Carnivine (41)", "Croagunk (44)", "Roselia (46)", "Diglett (43)", "Shuckle  44", "Banette (45)", "Muk (38)"];
 				};
 
-				monIndex = Math.floor(blockScoreIndex / 2);
-
-				if (monIndex == NaN) {
-					monIndex = [];
-				}
-				monArray.push(mons[monIndex]);
+				blockScoresES = [2, "Plains", 5, "Plains", 35, "Plains", 35, "Forest", 42, "Forest", 49, "Forest", 5, "Peak", 8, "Peak", 49, "Peak", 8, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Poliwag (15)", "Poliwag (15)", "Poliwag (16)", "Poliwag (17)", "Wooper (15)", "Wooper (16)", "Wooper (17)", "Grimer (15)", "Grimer (16)", "Grimer (17)"];
+				blockES = ["Jumpluff (47)", "Quagsire (43)", "Muk (48)"];
+				blockScoresES = [10, "Water", 13, "Water", 16, "Water"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (15)", "Poliwag (12)", "Poliwag (13)", "Poliwag (14)", "Poliwag (15)"];
+				blockES = ["Poliwag (16)", "Poliwag (18)"];
+				blockScoresES = [2, "Water", 3, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Poliwhirl (24)", "Poliwhirl (25)", "Poliwhirl (24)", "Poliwhirl (25)", "Poliwhirl (24)", "Poliwhirl (25)"];
+				blockES = ["Gyarados (26)", "Gyarados (29)"];
+				blockScoresES = [3, "Water", 4, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (37)", "Poliwhirl (36)", "Poliwhirl (37)", "Poliwhirl (38)", "Gyarados (36)", "Gyarados (37)"];
+				blockES = ["Barboach, (42)", "Barboach (45)"];
+				blockScoresES = [4, "Water", 5, "Water"];
 			};
-			return monArray;
-		};
 
 
 
-		function activeBlockMonIndex(scoreIndex, score, indexArray) {
-			// scoreIndex: which of blocks are active based on user score
-			// score: indices of block type in blockScoreES
-			// indexArray: array of indicies with all activated block mons
 
-			var i; var blockScoreIndex;
-			for (i = 0; i < scoreIndex.length; i++) {
-				blockScoreIndex = score[scoreIndex[i]];
 
-				indexArray.push(blockScoreIndex);
+			// MEADOW
+		} else if (loc == "meadow") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Jigglypuff (15)", "Sunkern (15)", "Hoppip (15)", "Jigglypuff (16)", "Sunkern (16)", "Hoppip (16)", "Jigglypuff (17)", "Sunkern  (17)", "Hoppip (17)", "Skiploom (17)"];
+					blockES = ["Raticate (40)", "Chansey (42)", "Seedot (45)", "Skiploom (40)", "Nuzleaf (38)", "Nuzleaf (47)", "Geodude (45)", "Nosepass (45)", "Riolu (46)", "Wooper (40)"];
+				} else if (TOD == "morning") {
+					ES = ["Jigglypuff (15)", "Hoppip (15)", "Hoppip (15)", "Jigglypuff (16)", "Hoppip (16)", "Jigglypuff (16)", "Jigglypuff (17)", "Hoppip (17)", "Jigglypuff (17)", "Skiploom (17)"];
+					blockES = ["Raticate (40)", "Chansey (42)", "Seedot (45)", "Skiploom (40)", "Nuzleaf (38)", "Nuzleaf (48)", "Geodude (45)", "Nosepass (45)", "Riolu (45)", "Wooper (40)"];
+				} else if (TOD == "night") {
+					ES = ["Jigglypuff (15)", "Marill (15)", "Wooper (15)", "Jigglypuff (16)", "Marill (16)", "Wooper (16)", "Jigglypuff (17)", "Marill (17)", "Wooper (17)", "Clefairy (17)"];
+					blockES = ["Raticate (40)", "Chansey (42)", "Seedot (45)", "Skiploom (40)", "Nuzleaf (38)", "Nuzleaf (47)", "Clefairy (42)", "Nosepass (45)", "Riolu (45)", "Wooper (40)"];
+				};
+
+				blockScoresES = [5, "Plains", 12, "Plains", 35, "Plains", 8, "Forest", 28, "Forest", 35, "Forest", 3, "Peak", 35, "Peak", 42, "Peak", "combo", 28, "Forest", 3, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Magikarp (15)", "Magikarp (15)", "Magikarp (16)", "Magikarp (16)", "Magikarp (17)", "Wooper (15)", "Wooper (16)", "Wooper (17)", "Marill (16)", "Marill (17)"];
+				blockES = ["Skiploom (47)", "Masquerain (42)", "Masquerain (46)"];
+				blockScoresES = [3, "Water", 10, "Water", 14, "Water"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (15)", "Poliwag (12)", "Poliwag (13)", "Poliwag (14)", "Poliwag (15)"];
+				blockES = ["Poliwhirl (15)", "Poliwhirl (16)"];
+				blockScoresES = [2, "Water", 3, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Poliwag (22)", "Poliwag (22)", "Poliwag (23)", "Poliwag (24)", "Poliwhirl (24)", "Poliwhirl (25)"];
+				blockES = ["Poliwhirl (27)", "Gyarados (28)"];
+				blockScoresES = [5, "Water", 7, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Poliwag (35)", "Poliwag (35)", "Poliwag (36)", "Poliwag (36)", "Poliwhirl (35)", "Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (36)", "Poliwhirl (37)", "Poliwhirl (38)"];
+				blockES = ["Gyarados (42)", "Gyarados (45)"];
+				blockScoresES = [10, "Water", 14, "Water"];
 			};
-			return indexArray;
-		};
 
 
 
-		function fillES(blockMons, defaultMons, comboMons, scoreIndex, comboIndex, comboLoc) {
 
-			// blockMons: names/lvl of Pokemon turned on by blocks
-			// defaultMons: names/lvl of default Pokemon slots
-			// comboMons: names/lvl of combo Pokemon turned on by blocks
-			// scoreIndex: index of block score in blockES array
-			// comboIndex: index of "combo" turned on in blockES array
-			// comboLoc: location of "combo" in blockES array
-			// peak, night, land, 28, 56, 35, 5
 
-			
-			// determine the priorities
-			var blockScoreIndex; var i; var allMons = []; var j; var comboFlag;
 
-			comboFlag = 0;
 
-			for (i = 0; i < blockMons.length + comboMons.length; i++) {
-				if (i >= blockMons.length) {
-					blockScoreIndex = 50;
+
+
+			// MOUNTAIN
+		} else if (loc == "mountain") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Raticate (15)", "Lickitung (15)", "Rattata (15)", "Raticate (16)", "Lickitung (16)", "Rattata (16)", "Raticate (17)", "Lickitung (17)", "Magneton (17)", "Larvitar (17)"];
+					blockES = ["Magneton (42)", "Volbeat (46)", "Chingling (38)", "Meditite (43)", "Dusclops (45)", "Larvitar (42)", "Lunatone (46)", "Metang (44)", "Krabby (43)", "Sealeo (45)"];
+				} else if (TOD == "morning") {
+					ES = ["Raticate (15)", "Lickitung (15)", "Rattata (15)", "Raticate (16)", "Lickitung (16)", "Rattata (16)", "Raticate (17)", "Lickitung (17)", "Magneton (17)", "Larvitar (17)"];
+					blockES = ["Magneton (42)", "Volbeat (46)", "Chingling (38)", "Meditite (44)", "Dusclops (45)", "Larvitar (42)", "Lunatone (46)", "Metang (44)", "Krabby (43)", "Sealeo (45)"];
+				} else if (TOD == "night") {
+					ES = ["Zubat (15)", "Golbat (15)", "Rattata (15)", "Zubat (16)", "Golbat (16)", "Rattata (16)", "Zubat (17)", "Golbat (17)", "Magneton (17)", "Zubat (17)"];
+					blockES = ["Magneton (42)", "Volbeat (46)", "Chingling (38)", "Meditite (43)", "Dusclops (46)", "Larvitar (42)", "Lunatone (46)", "Metang (44)", "Krabby (43)", "Sealeo (45)"];
+				};
+
+				blockScoresES = [3, "Plains", 10, "Plains", 10, "Forest", 20, "Forest", 35, "Forest", 5, "Peak", 15, "Peak", 56, "Peak", 3, "Water", 49, "Water", "combo", 21, "Peak"];
+			} else if (encounterMethod == "water") {
+				ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
+				blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
+				blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
+				blockES = ["Seaking (20)", "Seaking (20)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Dratini (25)", "Dratini (25)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
+				blockES = ["Dragonair (45)", "Dragonair (45)"];
+				blockScoresES = [20, "Water", 30, "Water"];
+			};
+
+
+
+
+
+			// PEAK
+		} else if (loc == "peak") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Geodude (15)", "Magnemite (15)", "Geodude (15)", "Geodude (16)", "Magnemite (16)", "Graveler (16)", "Geodude (17)", "Magneton (17)", "Graveler (17)", "Magmar (17)"];
+					blockES = ["Linoone (46)", "Zangoose (45)", "Paras (42)", "Fearow (44)", "Vigoroth (47)", "Magmar (41)", "Lairon (45)", "Bronzor (45)", "Slowbro (45)", "Spheal (45)"];
+				} else if (TOD == "morning") {
+					ES = ["Geodude (15)", "Magnemite (15)", "Geodude (15)", "Geodude (16)", "Magnemite (16)", "Graveler (16)", "Geodude (17)", "Magneton (17)", "Graveler (17)", "Magmar (17)"];
+					blockES = ["Linoone (46)", "Zangoose (45)", "Paras (42)", "Fearow (44)", "Vigoroth (47)", "Magmar (41)", "Lairon (45)", "Bronzor (45)", "Slowbro (45)", "Spheal (45)"];
+				} else if (TOD == "night") {
+					ES = ["Geodude (15)", "Magnemite (15)", "Geodude (15)", "Geodude (16)", "Wobbuffet (16)", "Magnemite (16)", "Geodude (17)", "Magneton (17)", "Wobbuffet (17)", "Magneton (17)"];
+					blockES = ["Linoone (46)", "Zangoose (43)", "Paras (42)", "Fearow (44)", "Vigoroth (47)", "Wobbuffet (41)", "Lairon (45)", "Bronzor (46)", "Slowbro (45)", "Spheal (44)"];
+				};
+
+				blockScoresES = [5, "Plains", 12, "Plains", 3, "Forest", 5, "Forest", 56, "Forest", "combo", 28, "Plains", 10, "Peak", 24, "Peak", 35, "Peak", "combo", 14, "Forest", 5, "Water", 35, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
+				blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
+				blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
+				blockES = ["Seaking (20)", "Seaking (20)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Dratini (25)", "Dratini (25)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
+				blockES = ["Dragonair (45)", "Dragonair (45)"];
+				blockScoresES = [20, "Water", 30, "Water"];
+			};
+
+
+
+
+			// PLAINS
+		} else if (loc == "plains") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Rattata (15)", "Abra (15)", "Girafarig (15)", "Rattata (16)", "Abra (16)", "Girafarig (16)", "Rattata (17)", "Abra (17)", "Girafarig (17)", "Smeargle (17)"];
+					blockES = ["Girafarig (40)", "Shinx (43)", "Manectric (45)", "Smeargle (41)", "Zigzagoon (44)", "Ponyta (42)", "Houndoom (43)", "Zangoose (43)", "Lotad (42)", "Surskit (46)"];
+				} else if (TOD == "morning") {
+					ES = ["Rattata (15)", "Abra (15)", "Girafarig (15)", "Rattata (16)", "Abra (16)", "Girafarig (16)", "Rattata (17)", "Abra (17)", "Girafarig (17)", "Smeargle (17)"];
+					blockES = ["Girafarig (40)", "Shinx (43)", "Manectric (45)", "Smeargle (41)", "Zigzagoon (44)", "Ponyta (42)", "Houndoom (43)", "Zangoose (43)", "Lotad (42)", "Surskit (46)"];
+				} else if (TOD == "night") {
+					ES = ["Raticate (15)", "Abra (15)", "Girafarig (15)", "Raticate (16)", "Abra (16)", "Girafarig (16)", "Raticate (17)", "Abra (17)", "Stantler (17)", "Stantler (17)"];
+					blockES = ["Stantler (40)", "Shinx (44)", "Manectric (45)", "Stantler (41)", "Zigzagoon (44)", "Ponyta (42)", "Houndoom (44)", "Zangoose (45)", "Lotad (42)", "Surskit (46)"];
+				};
+
+				blockScoresES = [3, "Plains", 10, "Plains", 15, "Plains", 3, "Forest", 15, "Forest", 5, "Peak", 10, "Peak", 15, "Peak", 12, "Water", 28, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
+				blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
+				blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
+				blockES = ["Seaking (20)", "Seaking (20)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Dratini (25)", "Dratini (25)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
+				blockES = ["Dragonair (45)", "Dragonair (45)"];
+				blockScoresES = [20, "Water", 30, "Water"];
+			};
+
+
+
+
+			// ROCKY BEACH
+		} else if (loc == "rockyBeach") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Doduo (15)", "Slowpoke (15)", "Krabby (15)", "Doduo (16)", "Slowpoke (16)", "Krabby (16)", "Doduo (17)", "Slowpoke (17)", "Krabby (17)", "Slowbro (17)"];
+					blockES = ["Dodrio (42)", "Electrike (42)", "Gible (44)", "Mareep (43)", "Manectric (37)", "Budew (40)", "Slowbro (42)", "Kingler (40)", "Aron (45)", "Slowbro (37)"];
+				} else if (TOD == "morning") {
+					ES = ["Doduo (15)", "Slowpoke (15)", "Krabby (15)", "Doduo (16)", "Slowpoke (16)", "Krabby (16)", "Doduo (17)", "Slowpoke (17)", "Krabby (17)", "Slowbro (17)"];
+					blockES = ["Dodrio (42)", "Electrike (42)", "Gible (44)", "Mareep (43)", "Manectric (37)", "Budew (40)", "Slowbro (42)", "Kingler (40)", "Aron (45)", "Slowbro (37)"];
+				} else if (TOD == "night") {
+					ES = ["Zubat (15)", "Slowpoke (15)", "Krabby (15)", "Zubat (16)", "Slowpoke (16)", "Krabby (16)", "Zubat (17)", "Slowpoke (17)", "Krabby (17)", "Slowbro (17)"];
+					blockES = ["Dodrio (42)", "Electrike (42)", "Gible (44)", "Mareep (43)", "Manectric (37)", "Budew (40)", "Slowbro (42)", "Kingler (40)", "Aron (44)", "Slowbro (37)"];
+				};
+
+				blockScoresES = [4, "Plains", 10, "Plains", 49, "Plains", "combo", 49, "Peak", 5, "Forest", 10, "Forest", 18, "Forest", 3, "Peak", 8, "Peak", 24, "Peak", 5, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Magikarp (15)", "Magikarp (16)", "Magikarp (16)", "Poliwag (15)", "Poliwag (16)", "Poliwag (16)", "Poliwhirl (16)", "Poliwhirl (17)", "Lapras (15)", "Lapras (16)"];
+				if (TOD != "night") {
+					blockES = ["Lapras (37)", "Lapras (42)", "Lapras (47)"];
 				} else {
-					blockScoreIndex = scoreIndex[i - comboFlag];
-				}
+					blockES = ["Lapras (36)", "Lapras (41)", "Lapras (46)"];
+				};
+				blockScoresES = [10, "Water", 14, "Water", 18, "Water"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (14)", "Goldeen (13)", "Goldeen (14)", "Goldeen (15)", "Krabby (13)", "Krabby (14)", "Krabby (15)"];
+				blockES = ["Krabby (17)", "Krabby (18)"];
+				blockScoresES = [2, "Water", 3, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Krabby (22)", "Krabby (23)", "Krabby (24)", "Krabby (25)"];
+				blockES = ["Kingler (26)", "Kingler (27)"];
+				blockScoresES = [5, "Water", 8, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (35)", "Goldeen (36)", "Goldeen (37)", "Goldeen (38)", "Seaking (35)", "Seaking (36)", "Seaking (37)", "Seaking (38)", "Kingler (38)", "Kingler (39)"];
+				blockES = ["Corphish (46)", "Corphish (48)"];
+				blockScoresES = [15, "Water", 20, "Water"];
+			};
 
-				if (blockScoreIndex < comboIndex[comboFlag] && comboMons.length > 0) {
-					allMons.push(blockMons[i - comboFlag]);
-				} else if (blockScoreIndex > comboIndex[comboFlag] && comboFlag <= comboMons.length && comboMons.length > 0) {
-					allMons.push(comboMons[comboFlag]);
-					comboFlag += 1;
-				} else {
-					allMons.push(blockMons[i - comboFlag]);
-				}
+
+
+
+			// SAVANNAH
+		} else if (loc == "savannah") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Nidoran-F (15)", "Nidoran-M (15)", "Tauros (15)", "Nidoran-F (16)", "Nidoran-M (16)", "Tauros (16)", "Nidoran-F (17)", "Nidoran-M  (17)", "Tauros (17)", "Rhyhorn (17)"];
+					blockES = ["Tauros (41)", "Zigzagoon (38)", "Luxio (46)", "Houndour (42)", "Cacturne (42)", "Shroomish (45)", "Rhyhorn (41)", "Rhydon (44)", "Torkoal (47)", "Azurill (42)"];
+				} else if (TOD == "morning") {
+					ES = ["Nidoran-F (15)", "Nidoran-M (15)", "Tauros (15)", "Nidoran-F (16)", "Nidoran-M (16)", "Tauros (16)", "Nidoran-F (17)", "Nidoran-M (17)", "Tauros (17)", "Rhyhorn (17)"];
+					blockES = ["Tauros (41)", "Zigzagoon (38)", "Luxio (46)", "Houndour (42)", "Cacturne (42)", "Shroomish (45)", "Rhyhorn (41)", "Rhydon (44)", "Torkoal (46)", "Azurill (42)"];
+				} else if (TOD == "night") {
+					ES = ["Nidorina (15)", "Nidorino (15)", "Zubat (15)", "Nidorina (16)", "Nidorino (16)", "Zubat (16)", "Nidorina (17)", "Nidorino (17)", "Zubat (17)", "Golbat (17)"];
+					blockES = ["Tauros (41)", "Zigzagoon (38)", "Luxio (45)", "Houndour (42)", "Cacturne (42)", "Shroomish (45)", "Rhyhorn (41)", "Rhydon (44)", "Torkoal (47)", "Azurill (42)"];
+				};
+
+				blockScoresES = [5, "Plains", 10, "Plains", 24, "Plains", 4, "Forest", 35, "Forest", 35, "Forest", "combo", 12, "Plains", 5, "Peak", 10, "Peak", 35, "Peak", 5, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
+				blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
+				blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
+				blockES = ["Seaking (20)", "Seaking (20)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Dratini (25)", "Dratini (25)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
+				blockES = ["Dragonair (45)", "Dragonair (45)"];
+				blockScoresES = [20, "Water", 30, "Water"];
+			};
+
+
+
+
+
+			// SWAMP
+		} else if (loc == "swamp") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Sentret (15)", "Jigglypuff (15)", "Paras (15)", "Sentret (16)", "Jigglypuff (16)", "Paras (16)", "Sentret (17)", "Jigglypuff (17)", "Paras (17)", "Murkrow (17)"];
+					blockES = ["Parasect (41)", "Furret (42)", "Pachirisu (47)", "Murkrow (37)", "Weepinbell (46)", "Chimecho (46)", "Voltorb (42)", "Duskull (38)", "Bagon (45)", "Floatzel (44)"];
+				} else if (TOD == "morning") {
+					ES = ["Sentret (15)", "Jigglypuff (15)", "Paras (15)", "Sentret (16)", "Jigglypuff (16)", "Paras (16)", "Sentret (17)", "Jigglypuff (17)", "Paras (17)", "Murkrow (17)"];
+					blockES = ["Parasect (41)", "Furret (42)", "Pachirisu (47)", "Murkrow (37)", "Weepinbell (46)", "Chimecho (46)", "Voltorb (42)", "Duskull (38)", "Bagon (45)", "Floatzel (44)"];
+				} else if (TOD == "night") {
+					ES = ["Sentret (15)", "Drowzee (15)", "Murkrow (15)", "Sentret (16)", "Hypno (16)", "Murkrow (16)", "Sentret (17)", "Drowzee (17)", "Murkrow (17)", "Hypno (17)"];
+					blockES = ["Parasect (41)", "Furret (42)", "Pachirisu (47)", "Hypno (37)", "Weepinbell (46)", "Chimecho (47)", "Voltorb (42)", "Duskull (38)", "Bagon (44)", "Floatzel (44)"];
+				};
+
+				blockScoresES = [3, "Plains", 5, "Plains", 10, "Plains", 5, "Forest", 8, "Forest", 15, "Forest", 10, "Peak", 28, "Peak", 56, "Peak", "combo", 35, "Forest", 10, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Magikarp (15)", "Magikarp (15)", "Magikarp (16)", "Magikarp (16)", "Magikarp (17)", "Magikarp (17)", "Goldeen (15)", "Goldeen (15)", "Goldeen (16)", "Goldeen (17)"];
+				blockES = ["Seaking (42)", "Murkrow (47)", "Duskull (48)"];
+				blockScoresES = [4, "Water", 10, "Water", 35, "Water"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (14)", "Magikarp (14)", "Magikarp (15)", "Magikarp (15)", "Magikarp (15)"];
+				blockES = ["Goldeen (17)", "Seaking (17)"];
+				blockScoresES = [2, "Water", 3, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Seaking (27)", "Dratini (29)"];
+				blockScoresES = [6, "Water", 10, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (35)", "Goldeen (35)", "Goldeen (36)", "Goldeen (37)", "Seaking (35)", "Seaking (35)", "Seaking (36)", "Seaking (37)", "Dratini (36)", "Dratini (37)"];
+				blockES = ["Dragonair (42)", "Dragonair (45)"];
+				blockScoresES = [15, "Water", 20, "Water"];
+			};
+
+
+
+
+			// WASTELAND
+		} else if (loc == "wasteland") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Kangaskhan (15)", "Onix (15)", "Magnemite (15)", "Machop (16)", "Onix (16)", "Magnemite (16)", "Kangaskhan (17)", "Onix (17)", "Magnemite (17)", "Machop (17)"];
+					blockES = ["Manectric (41)", "Illumise (46)", "Bellsprout (41)", "Medicham (44)", "Breloom (46)", "Machoke (40)", "Skorupi (44)", "Solrock (46)", "Golduck (45)", "Kingler (48)"];
+				} else if (TOD == "morning") {
+					ES = ["Kangaskhan (15)", "Onix (15)", "Magnemite (15)", "Machop (16)", "Onix (16)", "Magnemite (16)", "Kangaskhan (17)", "Machoke (17)", "Magnemite (17)", "Machop (17)"];
+					blockES = ["Manectric (41)", "Illumise (46)", "Bellsprout (41)", "Medicham (44)", "Breloom (46)", "Machoke (40)", "Skorupi (44)", "Solrock (45)", "Golduck (45)", "Kingler (48)"];
+				} else if (TOD == "night") {
+					ES = ["Fearow (15)", "Onix (15)", "Magnemite (15)", "Fearow (16)", "Onix (16)", "Magnemite (16)", "Fearow (17)", "Onix (17)", "Magnemite (17)", "Onix (17)"];
+					blockES = ["Manectric (41)", "Illumise (46)", "Bellsprout (41)", "Medicham (44)", "Breloom (46)", "Machoke (40)", "Skorupi (45)", "Solrock (45)", "Golduck (45)", "Kingler (48)"];
+				};
+
+				blockScoresES = [3, "Plains", 10, "Plains", 3, "Forest", 35, "Forest", 42, "Forest", 5, "Peak", 28, "Peak", 42, "Peak", 3, "Water", 10, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Wooper (22)", "Wooper (22)", "Wooper (23)", "Wooper (23)", "Wooper (24)", "Wooper (25)", "Tentacool (23)", "Tentacool (23)", "Tentacool (24)", "Tentacool (25)"];
+				blockES = ["Quagsire (25)", "Surskit (25)", "Surskit (25)"];
+				blockScoresES = [10, "Water", 20, "Forest", 20, "Forest"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Goldeen (12)", "Goldeen (12)", "Goldeen (12)", "Goldeen (13)"];
+				blockES = ["Seaking (20)", "Seaking (20)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Magikarp (22)", "Magikarp (22)", "Magikarp (23)", "Magikarp (24)", "Goldeen (22)", "Goldeen (22)", "Goldeen (23)", "Goldeen (24)", "Seaking (24)", "Seaking (25)"];
+				blockES = ["Dratini (25)", "Dratini (25)"];
+				blockScoresES = [10, "Water", 20, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Goldeen (42)", "Goldeen (42)", "Goldeen (43)", "Goldeen (43)", "Seaking (44)", "Seaking (45)", "Seaking (44)", "Seaking (45)", "Dratini (44)", "Dratini (45)"];
+				blockES = ["Dragonair (45)", "Dragonair (45)"];
+				blockScoresES = [20, "Water", 30, "Water"];
+			};
+
+
+			// WETLAND
+		} else if (loc == "wetland") {
+			if (encounterMethod == "land") {
+				if (TOD == "day") {
+					ES = ["Spearow (15)", "Sentret (15)", "Farfetch'd (15)", "Spearow (16)", "Sentret (16)", "Farfetch'd (16)", "Spearow (17)", "Sentret (17)", "Farfetch'd (17)", "Ditto (17)"];
+					blockES = ["Furret (37)", "Surskit (40)", "Lombre (47)", "Farfetch'd (41)", "Pachirisu (43)", "Doduo (45)", "Golduck (40)", "Shelgon (46)", "Ditto (41)", "Buizel (45)"];
+				} else if (TOD == "morning") {
+					ES = ["Spearow (15)", "Sentret (15)", "Farfetch'd (15)", "Spearow (16)", "Sentret (16)", "Farfetch'd (16)", "Spearow (17)", "Sentret (17)", "Farfetch'd (17)", "Ditto (17)"];
+					blockES = ["Furret (37)", "Surskit (40)", "Lombre (47)", "Farfetch'd (41)", "Pachirisu (43)", "Doduo (45)", "Golduck (40)", "Shelgon (46)", "Ditto (41)", "Buizel (45)"];
+				} else if (TOD == "night") {
+					ES = ["Wooper (15)", "Wooper (15)", "Psyduck (15)", "Wooper (16)", "Quagsire (16)", "Psyduck (16)", "Wooper (17)", "Quagsire (17)", "Golduck (17)", "Golduck (17)"];
+					blockES = ["Furret (37)", "Surskit (40)", "Lombre (47)", "Farfetch'd (41)", "Pachirisu (43)", "Doduo (45)", "Golduck (40)", "Shelgon  (46)", "Ditto (41)", "Buizel (44)"];
+				};
+
+				blockScoresES = [2, "Plains", 6, "Plains", 14, "Plains", 3, "Forest", 8, "Forest", 4, "Peak", 5, "Peak", 63, "Peak", 15, "Water", 35, "Water"];
+			} else if (encounterMethod == "water") {
+				ES = ["Poliwag (15)", "Poliwag (16)", "Poliwag (16)", "Wooper (15)", "Wooper (16)", "Wooper (16)", "Psyduck (16)", "Psyduck (17)", "Quagsire (16)", "Quagsire (17)"];
+				blockES = ["Quagsire (37)", "Golduck (37)", "Golduck (45)"];
+				blockScoresES = [3, "Water", 4, "Water", 6, "Water"];
+			} else if (encounterMethod == "oldRod") {
+				ES = ["Magikarp (12)", "Magikarp (12)", "Magikarp (13)", "Magikarp (13)", "Magikarp (14)", "Magikarp (15)", "Poliwag (12)", "Poliwag (13)", "Poliwag (14)", "Poliwag (15)"];
+				blockES = ["Poliwhirl (17)", "Poliwhirl (18)"];
+				blockScoresES = [2, "Water", 3, "Water"];
+			} else if (encounterMethod == "goodRod") {
+				ES = ["Poliwag (22)", "Poliwag (22)", "Poliwag (22)", "Poliwag (23)", "Poliwag (23)", "Poliwag (24)", "Poliwag (24)", "Poliwhirl (23)", "Poliwhirl (24)", "Poliwhirl (25)"];
+				blockES = ["Corphish (26)", "Corphish (28)"];
+				blockScoresES = [10, "Water", 14, "Water"];
+			} else if (encounterMethod == "superRod") {
+				ES = ["Poliwag (35)", "Poliwag (35)", "Poliwag (36)", "Poliwag (36)", "Poliwag (37)", "Poliwhirl (35)", "Poliwhirl (35)", "Poliwhirl (36)", "Poliwhirl (36)", "Poliwhirl (37)"];
+				blockES = ["Gyarados (44)", "Gyarados (47)"];
+				blockScoresES = [6, "Water", 9, "Water"];
+			};
+
+		};
+
+		// Retrieve entered values
+		var plains, forest, peak, water;
+		plains = Number(document.getElementById("plainsBlocks").value);
+		forest = Number(document.getElementById("forestBlocks").value);
+		peak = Number(document.getElementById("peakBlocks").value);
+		water = Number(document.getElementById("waterBlocks").value);
+
+
+		// search through block scores for types
+		//var blockTypes = ["Plains","Forest","Peak","Water"];
+		// also search for combo in case multi blocks needed
+
+		var plainsIndices = [];
+		var forestIndices = [];
+		var peakIndices = [];
+		var waterIndices = [];
+		var combinationType1 = [];
+		var combinationType2 = [];
+		var combinationIndices = [];
+
+		// loop through to find block types and their locations in the arrays
+		for (var i = 0; i < blockScoresES.length; i++) {
+			if (blockScoresES[i] == "Plains" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
+				plainsIndices.push(i);
+			} else if (blockScoresES[i] == "Forest" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
+				forestIndices.push(i);
+			} else if (blockScoresES[i] == "Peak" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
+				peakIndices.push(i);
+			} else if (blockScoresES[i] == "Water" && blockScoresES[i + 1] != "combo" && blockScoresES[i - 2] != "combo") {
+				waterIndices.push(i);
+			} else if (blockScoresES[i] == "combo") {
+				combinationIndices.push(i);
+				combinationType1.push(i);
+				combinationType2.push(i + 3);
+			};
+		};
+
+
+		// get the combo type
+		var comboType1Index = combinationType1.map(arraySubtract);
+		var comboType2Index = combinationType2.map(arraySubtract);
+
+
+		// determine the ES block scores for each type
+		var plainsScoresES, forestScoresES, peakScoresES, waterScoresES, comboType1ScoreES, comboType2ScoreES;
+
+
+		// get the indices
+		plainsScoresES = plainsIndices.map(arraySubtract); // could also be used as index in ES arrays for mons
+		forestScoresES = forestIndices.map(arraySubtract);
+		peakScoresES = peakIndices.map(arraySubtract);
+		waterScoresES = waterIndices.map(arraySubtract);
+		comboType1ScoreES = combinationType1.map(arraySubtract);
+		comboType1ScoreES = comboType1ScoreES.map(arraySubtract);
+		comboType2ScoreES = combinationType2.map(arraySubtract);
+		comboType2ScoreES = comboType2ScoreES.map(arraySubtract);
+
+
+
+		var plainsRequired = [];
+		var forestRequired = [];
+		var peakRequired = [];
+		var waterRequired = [];
+		var combo1Required = [];
+		var combo2Required = [];
+
+
+		// get the actual values
+		plainsRequired = requiredBlocks(plainsRequired, plainsScoresES, blockScoresES);
+		forestRequired = requiredBlocks(forestRequired, forestScoresES, blockScoresES);
+		peakRequired = requiredBlocks(peakRequired, peakScoresES, blockScoresES);
+		waterRequired = requiredBlocks(waterRequired, waterScoresES, blockScoresES);
+		combo1Required = requiredBlocks(combo1Required, comboType1ScoreES, blockScoresES);
+		combo2Required = requiredBlocks(combo2Required, comboType2ScoreES, blockScoresES);
+
+
+		// get the name of the combo block type
+		var comboType1 = [];
+		var comboType2 = [];
+
+		comboType1 = requiredBlocks(comboType1, comboType1Index, blockScoresES);
+		comboType2 = requiredBlocks(comboType2, comboType2Index, blockScoresES);
+
+
+
+		// determine if user block scores are greater than required for each type, and return the locations
+		var plainsBlockES = [];
+		var forestBlockES = [];
+		var peakBlockES = [];
+		var waterBlockES = [];
+		var comboBlock1ES = [];
+		var comboBlock2ES = [];
+		var combinationIndicesOn = []; var comboBlock1ESOn = []; var comboBlock2ESOn = [];
+
+		plainsBlockES = userBlockCheck(plains, plainsRequired);
+		forestBlockES = userBlockCheck(forest, forestRequired);
+		peakBlockES = userBlockCheck(peak, peakRequired);
+		waterBlockES = userBlockCheck(water, waterRequired);
+
+
+
+
+		for (var i = 0; i < comboType1.length; i++) {
+			comboBlock1ES = []; comboBlock2ES = [];
+			if (comboType1[i] == "Plains") {
+				comboBlock1ES = userBlockCheckCombo(plains, combo1Required[i], i);
+			} else if (comboType1[i] == "Forest") {
+				comboBlock1ES = userBlockCheckCombo(forest, combo1Required[i], i);
+			} else if (comboType1[i] == "Peak") {
+				comboBlock1ES = userBlockCheckCombo(peak, combo1Required[i], i);
+			} else if (comboType1[i] == "Water") {
+				comboBlock1ES = userBlockCheckCombo(water, combo1Required[i], i);
+			};
+
+
+			if (comboType2[i] == "Plains") {
+				comboBlock2ES = userBlockCheckCombo(plains, combo2Required[i], i);
+			} else if (comboType2[i] == "Forest") {
+				comboBlock2ES = userBlockCheckCombo(forest, combo2Required[i], i);
+			} else if (comboType2[i] == "Peak") {
+				comboBlock2ES = userBlockCheckCombo(peak, combo2Required[i], i);
+			} else if (comboType2[i] == "Water") {
+				comboBlock2ES = userBlockCheckCombo(water, combo2Required[i], i);
+			};
+
+
+			if (comboBlock1ES == 1) {
+				comboBlock1ESOn.push(i);
+			};
+
+			if (comboBlock2ES == 1) {
+				comboBlock2ESOn.push(i);
+			};
+
+			if (comboBlock1ES == 1 && comboBlock2ES == 1) {
+				combinationIndicesOn.push(combinationIndices[i]);
+				//comboBlock1ESOn = comboBlock1ESOn.push(i);
+				//comboBlock2ESOn = comboBlock2ESOn.push(i);
+			};
+
+		};
+
+
+		// return the mons who are brought in by the blocks
+		var ESnew = [];
+		var comboMon = [];
+
+		newMons(plainsBlockES, plainsScoresES, blockES, ESnew, combinationIndices); // plains
+		newMons(forestBlockES, forestScoresES, blockES, ESnew, combinationIndices); // forest
+		newMons(peakBlockES, peakScoresES, blockES, ESnew, combinationIndices); // peak
+		newMons(waterBlockES, waterScoresES, blockES, ESnew, combinationIndices); // water
+
+		if (combinationIndicesOn.length > 0) {
+			newMons(comboBlock1ESOn, comboType1ScoreES, blockES, comboMon, combinationIndices);
+		};
+
+
+
+		// determine the index of active block mons
+		var blockMonIndexArray = [];
+
+		activeBlockMonIndex(plainsBlockES, plainsScoresES, blockMonIndexArray); // plains
+		activeBlockMonIndex(forestBlockES, forestScoresES, blockMonIndexArray); // forest
+		activeBlockMonIndex(peakBlockES, peakScoresES, blockMonIndexArray); // peak
+		activeBlockMonIndex(waterBlockES, waterScoresES, blockMonIndexArray); // water
+
+
+		// fill the remaining encounter slots
+		var ESout = fillES(ESnew, ES, comboMon, blockMonIndexArray, combinationIndicesOn, combinationIndices);
+
+
+		// create array of slot numbers
+		var slotNum = []; var i;
+		for (i = 0; i <= 9; i++) {
+			slotNum.push(i);
+		};
+
+		// print the results
+		ESout.forEach((v, i) => {
+			var newRow = outputTableObj.insertRow();
+			var cell1 = newRow.insertCell(0);
+			var cell2 = newRow.insertCell(1);
+
+			cell1.innerHTML = slotNum[i];
+			cell2.innerHTML = v;
+		})
+
+
+
+
+	};
+
+
+
+
+	function arraySubtract(newArray) {
+		newArray = newArray - 1;
+		return newArray;
+
+	};
+
+
+
+
+	function requiredBlocks(scores, blockIndices, blockScoresES) {
+		var i;
+		for (i = 0; i < blockIndices.length; i++) {
+			scores.push(blockScoresES[blockIndices[i]]);
+		};
+		return scores;
+	};
+
+
+
+
+	function userBlockCheck(userScore, reqScore) {
+		var i; var encounterArray = [];
+		for (i = 0; i < reqScore.length; i++) {
+			if (userScore >= reqScore[i]) {
+				encounterArray.push(i);
+			};
+		};
+		return encounterArray;
+
+	};
+
+
+
+	function userBlockCheckCombo(userScore, reqScore, i) {
+		var encounterArray = [];
+		if (userScore >= reqScore) {
+			encounterArray = 1;
+		};
+
+		return encounterArray;
+
+	};
+
+
+	function newMons(scoreIndex, score, mons, monArray, comboIndex) {
+		// scoreIndex: which of blocks are active based on user score
+		// score: indices of block type in blockScoreES
+		// mons: which mons are now active -- should correspond to score (all block mons)
+		// comboIndex: where "combo" occurs in the block mon ES array
+
+		var i; var mons; var blockScoreIndex; var monIndex;
+		for (i = 0; i < scoreIndex.length; i++) {
+			blockScoreIndex = score[scoreIndex[i]];
+
+			if (blockScoreIndex > comboIndex[1]) {
+				blockScoreIndex -= 6;
+			} else if (blockScoreIndex > comboIndex[0]) {
+				blockScoreIndex -= 3;
+			};
+
+			monIndex = Math.floor(blockScoreIndex / 2);
+
+			if (monIndex == NaN) {
+				monIndex = [];
+			}
+			monArray.push(mons[monIndex]);
+		};
+		return monArray;
+	};
+
+
+
+	function activeBlockMonIndex(scoreIndex, score, indexArray) {
+		// scoreIndex: which of blocks are active based on user score
+		// score: indices of block type in blockScoreES
+		// indexArray: array of indicies with all activated block mons
+
+		var i; var blockScoreIndex;
+		for (i = 0; i < scoreIndex.length; i++) {
+			blockScoreIndex = score[scoreIndex[i]];
+
+			indexArray.push(blockScoreIndex);
+		};
+		return indexArray;
+	};
+
+
+
+	function fillES(blockMons, defaultMons, comboMons, scoreIndex, comboIndex, comboLoc) {
+
+		// blockMons: names/lvl of Pokemon turned on by blocks
+		// defaultMons: names/lvl of default Pokemon slots
+		// comboMons: names/lvl of combo Pokemon turned on by blocks
+		// scoreIndex: index of block score in blockES array
+		// comboIndex: index of "combo" turned on in blockES array
+		// comboLoc: location of "combo" in blockES array
+		// peak, night, land, 28, 56, 35, 5
+
+
+		// determine the priorities
+		var blockScoreIndex; var i; var allMons = []; var j; var comboFlag;
+
+		comboFlag = 0;
+
+		for (i = 0; i < blockMons.length + comboMons.length; i++) {
+			if (i >= blockMons.length) {
+				blockScoreIndex = 50;
+			} else {
+				blockScoreIndex = scoreIndex[i - comboFlag];
 			}
 
-
-			// determine the length of the current ES array to determine starting index
-			if (allMons[0] == undefined) {
-				var numMons = 0;
-				allMons = [];
+			if (blockScoreIndex < comboIndex[comboFlag] && comboMons.length > 0) {
+				allMons.push(blockMons[i - comboFlag]);
+			} else if (blockScoreIndex > comboIndex[comboFlag] && comboFlag <= comboMons.length && comboMons.length > 0) {
+				allMons.push(comboMons[comboFlag]);
+				comboFlag += 1;
 			} else {
-				var numMons = allMons.length;
-			};
+				allMons.push(blockMons[i - comboFlag]);
+			}
+		}
 
 
-
-			// build the rest of the array
-			for (i = numMons; i < defaultMons.length; i++) {
-				allMons.push(defaultMons[i]);
-			};
-			return allMons;
+		// determine the length of the current ES array to determine starting index
+		if (allMons[0] == undefined) {
+			var numMons = 0;
+			allMons = [];
+		} else {
+			var numMons = allMons.length;
 		};
 
-	</script>
-
-</head>
-
-<body>
-	<h2>What this does</h2>
-	<p>This calculator is a tool to help determine the encounter slots for the HeartGold &amp; SoulSilver Safari Zone.
-		Simply enter in the information for each field and click Calculate to determine which Pok&eacute;mon occupy
-		which encounter slots. The encounter slot tables and time for each block upgrade can be found on the <a
-			href="https://sites.google.com/site/pokemonslots/gen-iv/safari-zone" target="_blank">Safari Zone slot
-			webpage</a>. Enjoy!</p>
 
 
-	<h2>Terms</h2>
-	<dl>
-		<strong>
-			<dt>Area</dt>
-		</strong>
-		<dd>The region in the Safari Zone where you are searching for Pok&eacute;mon. The areas can be managed on the
-			machine to the right of the Safari Zone clerk.</dd>
-		<strong>
-			<dt>Time of Day</dt>
-		</strong>
-		<dd>The time period in which you are trying to RNG. Choices include Morning, Day, or Night.</dd>
-		<strong>
-			<dt>Encounter Method</dt>
-		</strong>
-		<dd>How you encounter the Pok&eacute;mon. The options are in grass (land), surfing (water), or fishing
-			(old/good/super rod).</dd>
-		<strong>
-			<dt>Block Scores</dt>
-		</strong>
-		<dd>The <em>total</em> value of the block types in your area. Each block "levels up" after a certain amount of
-			time of being placed in the area, allowing it to count as multiple blocks. See the "Block Scores" tab on the
-			<a href="https://sites.google.com/site/pokemonslots/gen-iv/safari-zone" target="_blank">encounter slots</a>
-			for these time periods.</dd>
-		<strong>
-			<dt>Slot Number</dt>
-		</strong>
-		<dd>The encounter slot number that is occupied. These values correspond to those in the RNG Reporter/PPRNG for
-			each frame.</dd>
-		<strong>
-			<dt>lvl</dt>
-		</strong>
-		<dd>The level of the Pok&eacute;mon that will appear.</dd>
-	</dl>
+		// build the rest of the array
+		for (i = numMons; i < defaultMons.length; i++) {
+			allMons.push(defaultMons[i]);
+		};
+		return allMons;
+	};
 
-	<h3>Credits</h3>
-	<p>Questions/comments/concerns can be directed to shiny finder on <a
-			href="https://www.smogon.com/forums/members/shiny-finder.206479/" target="_blank">Smogon</a> (preferable) or
-		as an issue on <a href="https://github.com/shinyfinder" target="_blank">GitHub</a>.</p>
+</script>
 
-	<hr />
-	<h2>The Calculator</h2>
-	<form>
-		<!-- Area Select -->
-		<strong>Select the area you wish to RNG in:</strong>
-		<select name="area" id="area">
-			<option value="desert">Desert</option>
-			<option value="forest">Forest</option>
-			<option value="marshland">Marshland</option>
-			<option value="meadow">Meadow</option>
-			<option value="mountain">Mountain</option>
-			<option value="peak">Peak</option>
-			<option value="plains">Plains</option>
-			<option value="rockyBeach">Rocky Beach</option>
-			<option value="savannah">Savannah</option>
-			<option value="swamp">Swamp</option>
-			<option value="wasteland">Wasteland</option>
-			<option value="wetland">Wetland</option>
-		</select>
-		<br />
-		<strong>Select the time of day: </strong>
-		<select name="timeOfDay" id="timeOfDay">
-			<option value="day">Day</option>
-			<option value="morning">Morning</option>
-			<option value="night">Night</option>
-		</select>
-		<br />
-		<strong>Select the encounter method:</strong>
-		<select name="method" id="method">
-			<option value="land">Land</option>
-			<option value="water">Water</option>
-			<option value="oldRod">Old Rod</option>
-			<option value="goodRod">Good Rod</option>
-			<option value="superRod">Super Rod</option>
-		</select>
-	</form>
+<p>This calculator is a tool to help determine the encounter slots for the HeartGold &amp; SoulSilver Safari Zone.
+	Simply enter in the information for each field and click Calculate to determine which Pok&eacute;mon occupy
+	which encounter slots. The encounter slot tables and time for each block upgrade can be found on the <a
+		href="https://sites.google.com/site/pokemonslots/gen-iv/safari-zone" target="_blank">Safari Zone slot
+		webpage</a>. Enjoy!</p>
+
+
+<h2>Terms</h2>
+<dl>
+	<strong>
+		<dt>Area</dt>
+	</strong>
+	<dd>The region in the Safari Zone where you are searching for Pok&eacute;mon. The areas can be managed on the
+		machine to the right of the Safari Zone clerk.</dd>
+	<strong>
+		<dt>Time of Day</dt>
+	</strong>
+	<dd>The time period in which you are trying to RNG. Choices include Morning, Day, or Night.</dd>
+	<strong>
+		<dt>Encounter Method</dt>
+	</strong>
+	<dd>How you encounter the Pok&eacute;mon. The options are in grass (land), surfing (water), or fishing
+		(old/good/super rod).</dd>
+	<strong>
+		<dt>Block Scores</dt>
+	</strong>
+	<dd>The <em>total</em> value of the block types in your area. Each block "levels up" after a certain amount of
+		time of being placed in the area, allowing it to count as multiple blocks. See the "Block Scores" tab on the
+		<a href="https://sites.google.com/site/pokemonslots/gen-iv/safari-zone" target="_blank">encounter slots</a>
+		for these time periods.
+	</dd>
+	<strong>
+		<dt>Slot Number</dt>
+	</strong>
+	<dd>The encounter slot number that is occupied. These values correspond to those in the RNG Reporter/PPRNG for
+		each frame.</dd>
+	<strong>
+		<dt>lvl</dt>
+	</strong>
+	<dd>The level of the Pok&eacute;mon that will appear.</dd>
+</dl>
+
+<h3>Credits</h3>
+<p>Questions/comments/concerns can be directed to shiny finder on <a
+		href="https://www.smogon.com/forums/members/shiny-finder.206479/" target="_blank">Smogon</a> (preferable) or
+	as an issue on <a href="https://github.com/shinyfinder" target="_blank">GitHub</a>.</p>
+
+<hr />
+<h2>The Calculator</h2>
+<form>
+	<!-- Area Select -->
+	<strong>Select the area you wish to RNG in:</strong>
+	<select name="area" id="area">
+		<option value="desert">Desert</option>
+		<option value="forest">Forest</option>
+		<option value="marshland">Marshland</option>
+		<option value="meadow">Meadow</option>
+		<option value="mountain">Mountain</option>
+		<option value="peak">Peak</option>
+		<option value="plains">Plains</option>
+		<option value="rockyBeach">Rocky Beach</option>
+		<option value="savannah">Savannah</option>
+		<option value="swamp">Swamp</option>
+		<option value="wasteland">Wasteland</option>
+		<option value="wetland">Wetland</option>
+	</select>
 	<br />
-	<form>
-		<!-- Block Scores -->
-		<strong>Enter the total block scores in your selected area:</strong><br />
-		<!-- Plains -->
-		<label for="plainsBlocks" class="formData plainsBlocks">Plains Block Scores:</label>
-		<input type="number" name="plainsBlocks" id="plainsBlocks" class="formData plainsBlocks" style="width: 50px;"
-			value="0" min="0" /><br />
-
-		<!-- Forest -->
-		<label for="forestBlocks" class="formData forestBlocks">Forest Block Scores:</label>
-		<input type="number" name="forestBlocks" id="forestBlocks" class="formData forestBlocks" style="width: 50px;"
-			value="0" min="0" /> <br />
-
-		<!-- Peak -->
-		<label for="peakBlocks" class="formData peakBlocks">Peak Block Scores:</label>
-		<input type="number" name="peakBlocks" id="peakBlocks" class="formData peakBlocks" style="width: 50px;"
-			value="0" min="0" /><br />
-
-		<!-- Water -->
-		<label for="waterBlocks" class="formData waterBlocks">Water Block Scores:</label>
-		<input type="number" name="waterBlocks" id="waterBlocks" class="formData waterBlocks" style="width: 50px;"
-			value="0" min="0" />
-		<br />
-
-
-		<!-- Form Buttons -->
-		<br />
-		<input type="button" onclick="Calc()" value="Calculate" class="formData Button" />
-
-	</form>
+	<strong>Select the time of day: </strong>
+	<select name="timeOfDay" id="timeOfDay">
+		<option value="day">Day</option>
+		<option value="morning">Morning</option>
+		<option value="night">Night</option>
+	</select>
 	<br />
-	<table id="outputTable">
-		<tr>
-			<th>Slot Number</th>
-			<th>Pok&eacute;mon (lvl)</th>
-		</tr>
-	</table>
-</body>
+	<strong>Select the encounter method:</strong>
+	<select name="method" id="method">
+		<option value="land">Land</option>
+		<option value="water">Water</option>
+		<option value="oldRod">Old Rod</option>
+		<option value="goodRod">Good Rod</option>
+		<option value="superRod">Super Rod</option>
+	</select>
+</form>
+<br />
+<form>
+	<!-- Block Scores -->
+	<strong>Enter the total block scores in your selected area:</strong><br />
+	<!-- Plains -->
+	<label for="plainsBlocks" class="formData plainsBlocks">Plains Block Scores:</label>
+	<input type="number" name="plainsBlocks" id="plainsBlocks" class="formData plainsBlocks" style="width: 50px;"
+		value="0" min="0" /><br />
 
-</html>
+	<!-- Forest -->
+	<label for="forestBlocks" class="formData forestBlocks">Forest Block Scores:</label>
+	<input type="number" name="forestBlocks" id="forestBlocks" class="formData forestBlocks" style="width: 50px;"
+		value="0" min="0" /> <br />
+
+	<!-- Peak -->
+	<label for="peakBlocks" class="formData peakBlocks">Peak Block Scores:</label>
+	<input type="number" name="peakBlocks" id="peakBlocks" class="formData peakBlocks" style="width: 50px;" value="0"
+		min="0" /><br />
+
+	<!-- Water -->
+	<label for="waterBlocks" class="formData waterBlocks">Water Block Scores:</label>
+	<input type="number" name="waterBlocks" id="waterBlocks" class="formData waterBlocks" style="width: 50px;" value="0"
+		min="0" />
+	<br />
+
+
+	<!-- Form Buttons -->
+	<br />
+	<input type="button" onclick="Calc()" value="Calculate" class="formData Button" />
+
+</form>
+<br />
+<table id="outputTable">
+	<tr>
+		<th>Slot Number</th>
+		<th>Pok&eacute;mon (lvl)</th>
+	</tr>
+</table>

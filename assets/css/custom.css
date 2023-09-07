@@ -5,3 +5,30 @@ input[type=button], input[type=reset] {
 dd {
     margin-left: 30px;
 }
+
+textarea {
+    width: 800px;
+    height: 200px;
+}
+
+form {
+    padding: 10px;
+}
+
+button {
+    padding: 10px;
+    margin-top: 1em;
+}
+
+#findPIDBtnForm {
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+#findPIDInputTable {
+    margin-top: 20px;
+}
+
+#findPIDInputTable > tbody > tr > td > label {
+    margin-right: 20px;
+}

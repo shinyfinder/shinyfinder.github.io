@@ -1,0 +1,394 @@
+---
+layout: page
+title: IV to PID Applet
+permalink: /tools/iv-to-pid/
+---
+
+<script type="text/javascript">
+    /////////////////////////////////////////////////////////////////
+    //  RNG CODE BEGIN
+    /////////////////////////////////////////////////////////////////
+    //  ctor to define our lcrngr class.  Very simple, holds
+    //  the current seed that the _get method will use to
+    //  get the previous number.
+    function lcrngr(seed) {
+        //  Set the initial seed of the RNG
+        this.seed = seed;
+    }
+
+    //  Get the previous value        
+    function lcrngr_get() {
+        this.seed = (((0xEEB90000 * this.seed | 0) + (0xEB65 * this.seed)) + 0x0A3561A1) & 0xFFFFFFFF;
+        return this.seed >>> 16;
+    }
+    lcrngr.prototype.lcrngr_get = lcrngr_get;
+    /////////////////////////////////////////////////////////////////                        
+
+    /////////////////////////////////////////////////////////////////
+    //  CALCULATION CODE BEGIN
+    /////////////////////////////////////////////////////////////////
+    //                
+    function calculate(hp, atk, def, spa, spd, spe, nature, id) {
+        //  Create our array that we are going to return which
+        //  will contain all of the information that we are
+        //  interested in.
+        var resultArray = [];
+
+        //  We need to test the last IV with the high bit both
+        //  cleared and set, as either can actually produce the
+        //  same end IVs.
+        var lastIvClear = 0;
+        var lastIvSet = 0;
+        lastIvClear = spe + (spa << 5) + (spd << 10);
+        lastIvSet = lastIvClear ^ 0x8000;
+
+        var firstIvClear = 0;
+        var firstIvSet = 0;
+        firstIvClear = hp + (atk << 5) + (def << 10);
+        firstIvSet = firstIvClear ^ 0x8000;
+
+        for (var cnt = 0; cnt <= 0x1FFFE; cnt++) {
+            //  We need to test with the high bit cleared 
+            //  and set so we're just going to do them both
+            //  in a single loop.
+            var lastivTest = 0;
+
+            if (cnt % 2 == 0) {
+                lastivTest = lastIvClear;
+            }
+            else {
+                lastivTest = lastIvSet;
+            }
+
+            //  This is the seed for the string of RNG results
+            //  that we want to test for a match to supplied
+            //  IVs and nature.
+            var seedTest = (lastivTest << 16) + (cnt % 0xFFFF);
+
+            //  We are going to check this one now, reversing
+            //  through and seeing if we get a nature match.
+            var rng = new lcrngr(seedTest);
+
+            //  Get the next two numbers, as we need them 
+            //  to create our IV comparison.               
+            var rng1 = rng.lcrngr_get();
+            var rng2 = rng.lcrngr_get();
+
+            if (rng1 == firstIvSet || rng1 == firstIvClear) {
+                var rng3 = rng.lcrngr_get();
+                var rng4 = rng.lcrngr_get();
+
+                //  Keep track of our starting seed, which is what
+                //  we can pass to a forward running RNG to recreate
+                //  this sequence.
+                var method1Seed = rng.seed;
+                rng.lcrngr_get();
+                var method234Seed = rng.seed;
+
+                //  This means we have at least a partial match
+                //  for methods 1, 2, and 3.  Lets go through
+                //  each one of these and build a PID/Check the 
+                //  nature.
+                var method1pid = unsign((rng2 << 16) + rng3);
+
+                if (method1pid % 25 == nature) {
+                    var sid = (rng2 ^ rng3 ^ id) & 0xFFF8;
+
+                    resultArray[resultArray.length]
+                        = new seed("Method 1", unsign(method1Seed), method1pid, method1pid % 2, method1pid % 256, sid);
+                }
+
+                var method2pid = unsign((rng3 << 16) + rng4);
+                if (method2pid % 25 == nature) {
+                    var sid = (rng3 ^ rng4 ^ id) & 0xFFF8;
+
+                    resultArray[resultArray.length]
+                        = new seed("Method 2", unsign(method234Seed), method2pid, method2pid % 2, method2pid % 256, sid);
+                }
+
+                var method3pid = unsign((rng2 << 16) + rng4);
+                if (method3pid % 25 == nature) {
+                    var sid = (rng2 ^ rng4 ^ id) & 0xFFF8;
+
+                    resultArray[resultArray.length]
+                        = new seed("Method 3", unsign(method234Seed), method3pid, method3pid % 2, method3pid % 256, sid);
+                }
+            }
+
+            if (rng2 == firstIvSet || rng2 == firstIvClear) {
+                var rng3 = rng.lcrngr_get();
+                var rng4 = rng.lcrngr_get();
+
+                //  Get the next RNG call that we need to create our seed
+                rng.lcrngr_get();
+                var method234Seed = rng.seed;
+
+                var method4pid = unsign((rng3 << 16) + rng4);
+
+                if (method4pid % 25 == nature) {
+                    var sid = (rng3 ^ rng4 ^ id) & 0xFFF8;
+
+                    resultArray[resultArray.length]
+                        = new seed("Method 4", unsign(method234Seed), method4pid, method4pid % 2, method4pid % 256, sid);
+                }
+            }
+        }
+
+        return resultArray;
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //  SEED 
+    /////////////////////////////////////////////////////////////////
+    function seed(method, seed, pid, ability, gender, sid) {
+        this.method = method;
+        this.seed = seed;
+        this.pid = pid;
+        this.ability = ability;
+        this.gender = gender;
+        this.sid = sid;
+    }
+
+    function unsign(v) {
+        return (v >>> 1) * 2 + (v & 1)
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //  DISPLAY / USER INTERFACE
+    /////////////////////////////////////////////////////////////////
+    //
+    function calculateAndDisplay() {
+        //  Pull all of our values that we are going to pass
+        //  to the calculate function from our text boxes and
+        //  validate the values.
+        var hp = parseInt(document.getElementById('TextHp').value);
+        var atk = parseInt(document.getElementById('TextAtk').value);
+        var def = parseInt(document.getElementById('TextDef').value);
+        var spa = parseInt(document.getElementById('TextSpA').value);
+        var spd = parseInt(document.getElementById('TextSpD').value);
+        var spe = parseInt(document.getElementById('TextSpe').value);
+        var nat = parseInt(document.getElementById('nature').value);
+        var idn = parseInt(document.getElementById('idnum').value);
+
+        var resultArray = calculate(hp, atk, def, spa, spd, spe, nat, idn);
+
+        displayResults(resultArray);
+    }
+
+    function fixField(field, minValue, maxValue) {
+        if (field.value.search(/^[0-9]+$/) === -1)
+            field.value = minValue;
+        else if (field.value < minValue)
+            field.value = minValue;
+        else if (field.value > maxValue)
+            field.value = maxValue;
+    }
+
+    function displayResults(resultArray) {
+        var tbl = document.getElementById('resultTable');
+
+        while (tbl.rows.length > 1) {
+            tbl.deleteRow(tbl.rows.length - 1);
+        }
+        
+        // if no results found populate with empty values
+        if (!resultArray.length) {
+            // add a row
+            let row = tbl.insertRow()
+            // append the cell multiple times to populate the table
+            // there are 6 columns
+            for (let i = 0; i < 6; i++) {
+                const textNode = document.createTextNode('-');
+                row.insertCell().appendChild(textNode);
+            }
+        }
+        else {
+            for (i = 0; i < resultArray.length; i++) {
+                var lastRow = tbl.rows.length;
+                var iteration = lastRow;
+                var row = tbl.insertRow(lastRow);
+
+                var cellMethod = row.insertCell(0);
+                var textNode = document.createTextNode(resultArray[i].method);
+                cellMethod.appendChild(textNode);
+
+                var cellSeed = row.insertCell(1);
+                textNode = document.createTextNode(resultArray[i].seed.toString(16).toUpperCase());
+                cellSeed.appendChild(textNode);
+
+                var cellPID = row.insertCell(2);
+                textNode = document.createTextNode(resultArray[i].pid.toString(16).toUpperCase());
+                cellPID.appendChild(textNode);
+
+                var cellAbility = row.insertCell(3);
+                textNode = document.createTextNode(resultArray[i].ability.toString(16).toUpperCase());
+                cellAbility.appendChild(textNode);
+
+                var cellGender = row.insertCell(4);
+                
+                // convert the gender value to a M/F gender
+                // based on https://www.smogon.com/ingame/rng/pid_iv_creation#finding_gender_from_pid
+                const genderP = Number(document.getElementById('genderP').value);
+                let genderOut = '';
+                console.log(resultArray[i].gender);
+                console.log(genderP);
+                if (genderP < 0) {
+                    genderOut = 'None';
+                }
+                else if (genderP == 0) {
+                    genderOut = 'M';
+                }
+                else if (resultArray[i].gender <= 30) {
+                    genderOut = 'F';
+                } 
+                else if (resultArray[i].gender <= 63) {
+                    if (genderP > 12.5) {
+                        genderOut = 'F';
+                    }
+                    else {
+                        genderOut = 'M';
+                    }
+                }
+                else if (resultArray[i].gender <= 126) {
+                    if (genderP > 25) {
+                        genderOut = 'F';
+                    }
+                    else {
+                        genderOut = 'M';
+                    }
+                }
+                else if (resultArray[i].gender <= 190) {
+                    if (genderP > 50) {
+                        genderOut = 'F';
+                    }
+                    else {
+                        genderOut = 'M';
+                    }
+                }
+                else {
+                    genderOut = 'M';
+                }
+
+                textNode = document.createTextNode(genderOut);
+                cellGender.appendChild(textNode);
+
+                var cellSID = row.insertCell(5);
+                textNode = document.createTextNode(resultArray[i].sid.toString());
+                cellSID.appendChild(textNode);
+            }
+        }
+        
+    }
+</script>
+<p>
+    The game where the Pokemon was captured will determine which output you are interested in.
+    <ul>
+        <li>For all Legendaries in every Pokémon game, you will look for PIDs created by Method 1.</li>
+        <li>For 4th Generation games, you will look for PIDs created by Method 1.</li>
+        <li>For wild Pokemon in 3rd Generation games you will look for PIDs created by Methods 1, 2, 3, or 4.</li>
+    </ul>
+</p>
+<p>For more information regarding the Ability, please refer to the <a href="http://www.smogon.com/ingame/rng/pid_iv_creation#finding_ability_from_pid" target="_blank">documentation</a>.</p>
+<p>
+    Logic by <a href="https://www.smogon.com/forums/members/x-act.2412/" target="_blank">X-Act</a>, <a href="https://www.smogon.com/forums/members/mingot.21459/" target="_blank">mingot</a>, and <a href="https://www.smogon.com/forums/members/sarenji.597/" target="_blank">Sarenji</a>; app modified and maintained by shinyfinder.
+</p>
+
+<table id="findPIDInputTable">
+    <form>
+        <tr>
+            
+            <td>
+                <label for="TextHp">HP:</label>
+                <input id="TextHp" type="text" size="2" maxlength="2" value="31" onblur="fixField(this, 0, 31);" />
+            </td>
+            <td>
+                <label for="TextAtk">Atk:</label>
+                <input id="TextAtk" type="text" size="2" maxlength="2" value="31" onblur="fixField(this, 0, 31);" />
+            </td>
+            <td>
+                <label for="TextDef">Def:</label>
+                <input id="TextDef" type="text" size="2" maxlength="2" value="31" onblur="fixField(this, 0, 31);" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="TextSpA">SpA:</label>
+                <input id="TextSpA" type="text" size="2" maxlength="2" value="31" onblur="fixField(this, 0, 31);" />
+            </td>
+            
+            <td>
+                <label for="TextSpD">SpD:</label>
+                <input id="TextSpD" type="text" size="2" maxlength="2" value="31" onblur="fixField(this, 0, 31);" />
+            </td>
+            <td>
+                <label for="TextSpe">Spe:</label>
+                <input id="TextSpe" type="text" size="2" maxlength="2" value="31" onblur="fixField(this, 0, 31);" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="nature">Nature:</label>
+                <select id="nature">
+                    <option value="0">Hardy</option>
+                    <option value="1">Lonely</option>
+                    <option value="2">Brave</option>
+                    <option value="3">Adamant</option>
+                    <option value="4">Naughty</option>
+                    <option value="5">Bold</option>
+                    <option value="6">Docile</option>
+                    <option value="7">Relaxed</option>
+                    <option value="8">Impish</option>
+                    <option value="9">Lax</option>
+                    <option value="10">Timid</option>
+                    <option value="11">Hasty</option>
+                    <option value="12">Serious</option>
+                    <option value="13">Jolly</option>
+                    <option value="14">Naive</option>
+                    <option value="15">Modest</option>
+                    <option value="16">Mild</option>
+                    <option value="17">Quiet</option>
+                    <option value="18">Bashful</option>
+                    <option value="19">Rash</option>
+                    <option value="20">Calm</option>
+                    <option value="21">Gentle</option>
+                    <option value="22">Sassy</option>
+                    <option value="23">Careful</option>
+                    <option value="24">Quirky</option>
+                </select>
+            </td>
+            <td>
+                <label for="idnum">ID:</label>
+                <input id="idnum" type="text" size="5" maxlength="5" value="0" onblur="fixField(this, 0, 65535);" />
+            </td>
+            <td>
+                <label for="genderP">Female:</label>
+                <select id="genderP">
+                    <option value="0">0%</option>
+                    <option value="12.5">12.5%</option>
+                    <option value="25">25%</option>
+                    <option value="50">50%</option>
+                    <option value="75">75%</option>
+                    <option value="100">100%</option>
+                    <option value="-1">None</option>
+                </select>
+            </td>
+        </tr>
+    </form>
+</table>
+<form id="findPIDBtnForm">
+    <input id="FindPID" type="button" value="Find PID" onclick="calculateAndDisplay();" />
+</form>
+
+<table id="resultTable">
+
+    <tr>
+        <th>Method</th>
+        <th>Seed</th>
+        <th>PID</th>
+
+        <th>Ability</th>
+        <th>Gender</th>
+
+        <th>SID</th>
+    </tr>
+</table>

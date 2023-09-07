@@ -1,0 +1,296 @@
+---
+layout: page
+title: BB Code to HTML Converter
+permalink: /tools/bb-to-html/
+---
+
+<script type="text/javascript">
+    function bbConvert() {
+        const orig = document.getElementById("bbIn").value;
+        var htmld = orig;
+
+        //e -> eacute
+        htmld = htmld.replace(/é/g, '&eacute;');
+        htmld = htmld.replace(/Poke/g, 'Pok&eacute;');
+
+        if (!document.getElementById("eAccent").checked) {
+            htmld = htmld.replace(/Pok&eacute;mon/gi, 'Pokemon');
+        }
+
+        // bold
+        htmld = htmld.replace(/\[b*?\]/gi, '<strong>');
+        htmld = htmld.replace(/\[\/b\]/gi, '</strong>');
+        // italics
+        htmld = htmld.replace(/\[i*?\]/gi, '<em>');
+        htmld = htmld.replace(/\[\/i\]/gi, '</em>');
+
+        // underline
+        htmld = htmld.replace(/\[u*?\]/gi, '<ins>');
+        htmld = htmld.replace(/\[\/u*?\]/gi, '</ins>');
+
+        // strikethrough
+        htmld = htmld.replace(/\[s*?\]/gi, '<del>');
+        htmld = htmld.replace(/\[\/s*?\]/gi, '</del>');
+
+        // tables
+        htmld = htmld.replace(/\[table.*?\]/gi, '<table>');
+        htmld = htmld.replace(/\[\/table.*?\]/gi, '</table>');
+        htmld = htmld.replace(/\[tr.*?\]/gi, '<tr>');
+        htmld = htmld.replace(/\[\/tr.*?\]/gi, '</tr>');
+        htmld = htmld.replace(/\[th.*?\]/gi, '<th>');
+        htmld = htmld.replace(/\[\/th.*?\]/gi, '</th>');
+        htmld = htmld.replace(/\[td.*?\]/gi, '<td>');
+        htmld = htmld.replace(/\[\/td.*?\]/gi, '</td>');
+
+        // lists
+        htmld = htmld.replace(/\[list=1.*?\]/gi, '<ol>');
+        htmld = htmld.replace(/\[list.*?\]/gi, '<ul>');
+        htmld = htmld.replace(/\[\*.*?\]/gi, '<li>');
+
+        // links
+
+        htmld = htmld.replace(/\[url=\'https?:([^\s\]]+)\s*\'\](.*?)\[\/url\]/gi, '<a href="$1" target="_blank">$2</a>');
+        htmld = htmld.replace(/\/\/www\.smogon\.com/gi, '');
+
+        // users
+        //htmld = htmld.replace(/\[user=([^\s\]]+)\s*\](.*(?=\[\/user\]))\[\/user\]/gi, '<a href="/forums/members/$2.$1">$2</a>'); 
+        htmld = htmld.replace(/\[user=([^\s\]]+)\s*\](.*?)\[\/user\]/gi, '<a href="/forums/members/$2.$1">$2</a>');
+
+        // images
+        htmld = htmld.replace(/\[img.*?\]/gi, '<img src="');
+        htmld = htmld.replace(/\[\/img.*?\]/gi, '" alt="MISSING IMAGE" />');
+
+
+        // left/right/center
+        htmld = htmld.replace(/\[left.*?\]/gi, '<div style="text-align:left">\n');
+        htmld = htmld.replace(/\[\/left.*?\]/gi, '\n</div>');
+        htmld = htmld.replace(/\[right.*?\]/gi, '<div style="text-align:right">\n');
+        htmld = htmld.replace(/\[\/right.*?\]/gi, '\n</div>');
+        htmld = htmld.replace(/\[center.*?\]/gi, '<div style="text-align:center">\n');
+        htmld = htmld.replace(/\[\/center.*?\]/gi, '\n</div>');
+
+        // ignore size declarations
+        htmld = htmld.replace(/\[size=\d.*?\]/gi, '');
+        htmld = htmld.replace(/\[\/size.*?\]/gi, '');
+
+        // ignore font declarations
+        htmld = htmld.replace(/\[font=(.*?).*?\]/gi, '');
+        htmld = htmld.replace(/\[\/font.*?\]/gi, '');
+
+        // ignore hide/spoiler tags
+        htmld = htmld.replace(/\[hide=(.*?)\]/gi, '<strong>$1</strong>\n');
+        htmld = htmld.replace(/\[\/hide.*?\]/gi, '');
+
+        htmld = htmld.replace(/\[hide.*?\]/gi, '');
+        htmld = htmld.replace(/\[\/hide.*?\]/gi, '');
+
+        htmld = htmld.replace(/\[spoiler=(.*?)\]/gi, '<strong>$1</strong>\n');
+        htmld = htmld.replace(/\[\/spoiler.*?\]/gi, '');
+
+        htmld = htmld.replace(/\[spoiler.*?\]/gi, '');
+        htmld = htmld.replace(/\[\/spoiler.*?\]/gi, '');
+
+        // smogon sprites
+        if (document.getElementById("dexLink").checked) {
+            htmld = htmld.replace(/:(.*?): (.+\s*?)?/gi, '<div class="vr"><div class="sprite"><img src="/dex/media/sprites/xyicons/$1.png" alt="$1 sprite" /></div><a href="/dex/ss/pokemon/$1" target="_blank">$2</a></div>');
+
+            htmld = htmld.replace(/:(.*?):/gi, function (match) {
+                match = match.slice(1, -1);
+                var txt = match;
+
+                return '<div class="vr"><div class="sprite"><img src="/dex/media/sprites/xyicons/' + match + '.png" alt="' + match + ' sprite" /></div> <a href="/dex/ss/pokemon/' + match + '" target="_blank">' + capDash(txt) + '</a></div>';
+
+
+                function capDash(str) {
+                    console.log(str);
+                    var strArray = [];
+                    const strSplit = str.split('-');
+                    console.log(strSplit);
+                    for (var i = 0; i < strSplit.length; i++) {
+                        strArray.push(strSplit[i].charAt(0).toUpperCase() + strSplit[i].substr(1).toLowerCase());
+                    }
+                    console.log(strArray);
+                    return strArray.join("-");
+                }
+
+            });
+            /*
+            htmld = htmld.replace(/:(.*?):/gi, '<img src="/dex/media/sprites/xyicons/$1.png" alt="$1 sprite" /> <a href="/dex/ss/pokemon/$1" target="_blank">$1</a>');*/
+        } else {
+            htmld = htmld.replace(/:(.*?): (.+\s*?)/gi, '<img src="/dex/media/sprites/xyicons/$1.png" alt="$1 sprite" /> <p>$2</p>');
+        }
+
+        // curly to ascii quotes
+        htmld = htmld.replace(/“/gi, '"');
+        htmld = htmld.replace(/”/gi, '"');
+        htmld = htmld.replace(/‘/gi, '\'');
+        htmld = htmld.replace(/’/gi, '\'');
+
+        // color	
+        htmld = htmld.replace(/\[color=(.*?)\s*\](.*?)\[\/color\]/gi, '<span style="color:$1;">$2</span>');
+
+
+        // new line
+        htmld = htmld.replace(/(\r\n)|(\n\r)|(\n)|(\r)|(\r\r)|(\n\n)/gi, '\n');
+        var strings = htmld.split(/\n/gi);
+
+        var tagExclude = ['<table>', '</table>', '<tr>', '</tr>', '<th>', '</th>', '<td>', '</td>', '<ul>', '[/LIST]', '<li>', '</li>', '<ol>', '<img', '<div', '</div>'];
+        var strOut = [];
+        var isExcluded = 0;
+        var strParsed = [];
+        var listClosed = 0; // default closed
+        var ignoreCnt = 0;
+        var headerID = [];
+        var id = [];
+        var tocTitle;
+        var tocTitleArr = [];
+        var idPoke = [];
+
+        for (var i = 0; i < strings.length; i++) {
+            if (strings[i] && strings[i] != '\n') {
+                for (var j = 0; j < tagExclude.length; j++) {
+                    if (strings[i].includes(tagExclude[j])) {
+                        isExcluded = 1;
+                        break;
+                    }
+                }
+
+                // header handler
+                var stringSplit = strings[i].split(" ");
+
+                if (stringSplit[0].includes('<strong>') && stringSplit[stringSplit.length - 1].includes('</strong>')) {
+                    tocTitle = strings[i].replace(/<strong>(.*?)<\/strong>/gi, '$1');
+                    tocTitleArr.push(tocTitle);
+                    id = strings[i].replace(/<strong>(.*?)<\/strong>/gi, '$1').replace(/\s/gi, '-').toLowerCase();
+                    idPoke = id.replace(/&eacute;/g, 'e');
+                    headerID.push(idPoke);
+                    strings[i] = strings[i].replace(/<strong>/, '<h2' + ' id="' + idPoke + '">');
+                    strings[i] = strings[i].replace(/<\/strong>/, '<\/h2>');
+                    isExcluded = 1;
+                }
+
+
+                // li handler
+                if (strings[i].includes('<li>')) {
+                    strings[i] = strings[i] + '</li>';
+                }
+
+
+                if (strings[i].includes('\/LIST')) {
+                    for (var k = strParsed.length - 1; k >= 0; k--) {
+                        if (strParsed[k].includes('</ul>') || strParsed[k].includes('</ol>')) {
+                            ignoreCnt++;
+                        }
+
+                        if (strParsed[k].includes('<ul>') && ignoreCnt == 0) {
+                            strings[i] = strings[i].replace(/\[\/list.*?\]/gi, '</ul>');
+                        } else if (strParsed[k].includes('<ol>') && ignoreCnt == 0) {
+                            strings[i] = strings[i].replace(/\[\/list.*?\]/gi, '</ol>');
+                        }
+
+
+                        if (ignoreCnt != 0 && (strParsed[k].includes('<ul>') || strParsed[k].includes('<ol>'))) {
+                            ignoreCnt--;
+                        }
+
+
+                    }
+                }
+
+                if (isExcluded == 0) {
+                    strOut.push('<p>' + strings[i] + '</p>');
+                } else {
+                    strOut.push(strings[i]);
+                }
+                isExcluded = 0;
+                strParsed.push(strings[i]);
+            }
+        }
+
+        strOut = strOut.join('\n\n');
+
+        var smogFormat = '[title]\nWrite the title of the article here.\n\n[head]\n<meta name="description" content="Write a short description of the article here" />\n\n<link rel="stylesheet" href="../stylesheet.css" />\n\n<style type="text/css">\nWrite your CSS (if needed) here. If you do not have to include any sort of CSS, do not add the <style> tag.\n</style>\n\n[page]\n<div class="author">By <a href="/forums/members/MemberName.number">Author\'s Name</a>. Art by <a href="/forums/members/MemberName.number">Artist\'s Name</a>.</div>\n<!--HTML generated using shiny finder\'s script: https://shinyfinder.github.io/BBtoHTML/-->\n\n';
+
+
+        // Table of Contents
+        var toc = '<ul class="toc">\n';
+        for (var i = 0; i < tocTitleArr.length; i++) {
+            toc += '<li><a href="#' + headerID[i] + '">' + tocTitleArr[i] + '</a></li>\n';
+        }
+        toc += '</ul>\n'
+
+        var result = smogFormat.concat(toc, strOut);
+
+
+        document.getElementById("HTMLOut").value = result;
+        document.getElementById("preview").innerHTML = result;//strOut;
+    }
+</script>
+
+
+<p>This is a tool to convert BB Code into a Smogon-friendly HTML format. Paste the BB Code into the respective textarea,
+    then click the "Convert" button. A copy-pastable HTML output will populate the other textarea, which you can save or
+    move to wherever it's needed. A preview is automatically shown as well when the text is converted. With the HTML in
+    hand, you are free to check over the output and apply your own styling.</p>
+
+<h2>Features and Limitations</h2>
+
+<h3>Features</h3>
+<p>The following tags and items are supported in this tool:</p>
+<ul>
+    <li>Bold</li>
+    <li>Italics</li>
+    <li>Underline</li>
+    <li>Strikethrough</li>
+    <li>Links (user and page). Smogon URLs are automatically made relative.</li>
+    <li>Paragraphs</li>
+    <li>Headers (see limitations)</li>
+    <li>Images (see limitations)</li>
+    <li>Lists (ordered and unordered), including nested lists</li>
+    <li>Justification (left/right/center)</li>
+    <li>Tables</li>
+    <li>Color declarations</li>
+    <li>Hide tags (see limitations)</li>
+    <li>Table of contents (see header limitations)</li>
+    <li>e &rarr; &eacute;</li>
+    <li>Link Smogon sprites to respective dex page (see limitations)</li>
+    <li>All URLs are made protocol agnostic (http:/https: removed);</li>
+    <li>Curly to ASCII quotes</li>
+</ul>
+
+<h3>Limitations</h3>
+<p>The following are notable limitations of the tool:</p>
+<ul>
+    <li>Size declarations are ignored, as typically that should be done with proper header usage anyway.</li>
+    <li>The tool tries to interpret headers as lines that are entirely bold. Further, the tool only outputs headers as
+        h2, as only context will determine what is the proper weight. Always check your headers!</li>
+    <li>Hide tags with declared texts are considered headers, subject to the above limitation.</li>
+    <li>Images are included if an external (valid) link exists. Alt text is always MISSING IMAGE. Attachments are not
+        supported, and the tags are regurgitated in the output. Naturally, these will need to be uploaded anyway, so
+        this is a reminder to do so.</li>
+    <li>Code tags and spoilers are currently unsupported.</li>
+    <li>Linking to the dex page currently only supports the current generation (SwSh)</li>
+    <li><strong>This tool is not meant to replace proper HTMLing; it is a supplement to save time. Always check over the
+            output.</strong></li>
+    <li>The HTML result will likely not look pretty. That's your job ;)</li>
+</ul>
+
+
+<h2>BB Code: </h2>
+<textarea id="bbIn"></textarea>
+<br />
+<form>
+    <input type="checkbox" name="eAccent" id="eAccent">
+    <label for="eAccent">Convert e to &eacute;</label>
+    <br />
+    <input type="checkbox" name="dexLink" id="dexLink">
+    <label for="dexLink">Link sprites to dex pages</label>
+    <br />
+    <button type="button" onclick="bbConvert()">Convert!</button>
+</form>
+
+
+<h2>HTML: </h2>
+<textarea id="HTMLOut" readonly></textarea>
+
+<p id="preview"></p>
