@@ -1,0 +1,46 @@
+---
+layout: page
+title: GWS - About
+permalink: /go-weather/about
+---
+
+<link rel="stylesheet" type="text/css" href="weather.css"></link>
+
+<div class="topnav">
+	<a class="" href="index.html">Search</a>
+	<a class="" href="map.html">Map</a>
+	<a class="" href="credits.html">Credits</a>
+	<a class="nav-active" href="about.html">About</a>
+	<a class="" href="faq.html">FAQ</a>
+</div>
+<p>In recent updates to Pok&eacute;mon GO, a weather feature was added. The in-game weather changes every hour to
+	"match" the weather in real life at your location based on your phone's GPS. The weather boosts which types of
+	Pok&eacute;mon may appear, making it easier (or potentially harder) to find a specific Pok&eacute;mon. While it's
+	easy to know the weather at your current location, what if you want to quickly want to know the weather at some
+	other location you could travel to--physically or magically ;)? That's where the GO! Weather Seacher comes into
+	play!</p>
+
+<p>GWS is a webtool used to lookup the latitude/longitude coordinates of a specific weather condition used within the
+	game (clear, cloudy, windy, rainy, partly cloudy, snowy, foggy). With the click of a single button, you can find the
+	current weather from any of the top 150 cities around the world! Can't find the weather you are after? Check back in
+	an hour because the tool is updated 16 minutes past the hour with the current conditions, 24/7, just like the game.
+</p>
+
+<p>Normally these lookups are done with a call to an API provided by a weather center (and in fact, that's exactly what
+	this tool does). However, the keys required to make these calls have limitations in the number of requests (unless
+	you're willing to shill out BIG money), only return info for 1 location per request, and can only be used by 1
+	person. Yikes. GWS takes out all the hassle and serves the information to you, without having to deal with the
+	complications of APIs.</p>
+
+<p>Speaking of limitations, GWS is a one-man operation and based on these API services, which means it's limited to
+	these same restrictions. Because of that, only a small number of cities from around the world can be reported. Which
+	means, at this time, it's currently limited to the 150 cities and only the current conditions; but hey, that's much
+	better than 1, right? Niantic is also rather hush about how the game works in regards to the weather. Technically,
+	Pok&eacute;mon GO reports the weather for a location determined by level 10 S2 cells. The weather itself is derived
+	from the weather reports provided by AccuWeather, with <a href="https://i.imgur.com/LgkxoJx.png">these
+		conversions</a> specficially (entirely speculation based on community research. Thanks to whoever made that
+	infographic!). What does all that mean? It means that this tool cannot be 100% accurate to the game, so you very
+	well may find that the in-game weather doesn't match the ones reported. Will it be close? Yep. Will it often be
+	right? I certianly hope so! Should you drop everything, buy a ticket, and hop on that plane right now because the
+	tool says it's sunny on the other side of the world? Well...up to you. But if you do, souveniers are always
+	appreciated!</p>

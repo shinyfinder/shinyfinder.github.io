@@ -1,0 +1,113 @@
+---
+layout: page
+title: GWS - Map
+permalink: /go-weather/map
+---
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+crossorigin=""/>
+
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<link rel="stylesheet" type="text/css" href="weather.css"></link>
+
+<div class="topnav">
+    <a class="" href="index.html">Search</a>
+    <a class="nav-active" href="map.html">Map</a>
+    <a class="" href="credits.html">Credits</a>
+    <a class="" href="about.html">About</a>
+    <a class="" href="faq.html">FAQ</a>
+</div>
+<p>Below is a worldwide map of the current wind conditions (updated whenever the map is idle). Clicking anywhere on the
+    map will return a popup with the latitude and longitude coordinates of the location you clicked on. It is speculated
+    that wind conditions > 6.67 m/s (24 km/h) and no precipitation will result in windy weather in Pok&eacute;mon GO.
+    Wind and precipitation data are provided as layers on the map below. Hover over the tiles in the upper right corner
+    of the map and select the desired overlays.</p>
+<div class="scale-details">
+    <div class="scale-label">Wind speed, m/s</div>
+    <div class="gradient-container">
+        <div style="width: 310px;" class="scale-dividers">
+            <div>0</div>
+            <div>2</div>
+            <div>3</div>
+            <div>6</div>
+            <div>12</div>
+            <div>25</div>
+            <div>50</div>
+            <div>100</div>
+        </div>
+        <div style="width: 310px; background: rgba(0, 0, 0, 0) linear-gradient(to left, rgb(0, 255, 0), rgba(0, 255, 0, 0.9), rgb(0, 255, 0), rgba(0, 255, 0, 0.84), rgba(255, 255, 255, 0.71), rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.44), rgba(255, 255, 255, 0)) repeat scroll 0% 0%;"
+            class="horizontal-gradient-line"></div>
+    </div>
+</div>
+<div class="scale-details">
+    <div>Precipitation, mm</div>
+    <div class="gradient-container">
+        <div style="width: 300px;" class="scale-dividers ">
+            <div>0</div>
+            <div>0.1</div>
+            <div>0.2</div>
+            <div>0.5</div>
+            <div>1</div>
+            <div>10</div>
+            <div>140</div>
+        </div>
+        <div style="width: 300px; background: rgba(0, 0, 0, 0) linear-gradient(to left, #C89696, #9696AA, #7878BE, #6E6ECD, #5050E1, #ffffff) repeat scroll 0% 0%;"
+            class="horizontal-gradient-line"></div>
+    </div>
+</div>
+
+<div id="mapid"></div>
+
+
+<script type="text/javascript">
+
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18, attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://owm.io/">VANE</a>'
+    });
+
+    var map = L.map('mapid', { center: new L.LatLng(40, -40), zoom: 2, layers: [osm] });
+
+    var wind = L.tileLayer('https://{s}.sat.owm.io/vane/2.0/weather/WS10/{z}/{x}/{y}?opacity=0.6&palette=0:ffffff;2:ffffff;3:ffffff;6:ffffff;12:00ff00;25:00ff00;50:00ff00;100:00ff00&appid={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'wind',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: '9de243494c0b295cca9337e1e96b00e2' // key from openweathermap. Please get/use your own.
+    });
+
+    var precip = L.tileLayer('https://{s}.sat.owm.io/vane/2.0/weather/PA0/{z}/{x}/{y}?appid={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'precipitation',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: '9de243494c0b295cca9337e1e96b00e2' // key from openweathermap. Please get/use your own.
+    });
+
+
+    var baseMaps = { "OSM Standard": osm };
+    var overlayMaps = {
+        "Wind": wind,
+        "Precipitation": precip
+    }
+
+    var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+    var popup = L.popup();
+
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(map);
+    }
+
+    map.on('click', onMapClick);
+</script>
+

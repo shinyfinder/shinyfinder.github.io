@@ -20,6 +20,10 @@ button {
     margin-top: 1em;
 }
 
+.sub-footer {
+    z-index: 2000;
+}
+
 #findPIDBtnForm {
     margin-top: -20px;
     margin-bottom: 20px;
@@ -31,4 +35,65 @@ button {
 
 #findPIDInputTable > tbody > tr > td > label {
     margin-right: 20px;
+}
+
+/* TR FINDER
+/* Container holding the image and the text */
+.raidForm.container {
+    position: relative;
+    height: 1064px;
+    width: 458px;
+}
+
+#raidForm {
+    margin-top: -45px;
+}
+
+.circle {
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+}
+
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+/* Accordians */
+.accordion {
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 10px;
+}
+
+.panel {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    border-left: 3px solid;
+}
+
+.accordion:after {
+    content: '\02795';
+    /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2796";
+    /* Unicode character for "minus" sign (-) */
 }

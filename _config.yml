@@ -16,7 +16,8 @@ minima:
 header_pages:
   - about.md
   - tools/tools.md
-
+  - projects/projects.md
+  - go-weather/index.html
 
 show_excerpts: false # set to true to show excerpts on the homepage
 

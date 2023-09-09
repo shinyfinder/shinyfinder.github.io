@@ -1,0 +1,305 @@
+---
+layout: page
+title: Dream Radar Calculators
+permalink: /tools/dream-radar/
+---
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // show fields necessary for selected dropdown
+        $("select").change(function () {
+            // hide and reset all display options
+            $(".formData").hide();
+            $("#inputForm")[0].reset();
+            document.getElementById("Results").innerHTML = '';
+
+            // if regular selected, show and enable all fields. Else, show and enable only the relevant ones
+            if (this.value == "regular") {
+                $(".formData").show();
+                //$(".formData.occupied, .formData.genderless").attr("disabled",false);
+            } else {
+                $(".formData.PIDFrame, .formData.IVFrame, .formData.Button").show();
+                //$(".formData.occupied, .formData.genderless").attr("disabled",true);
+            };
+        });
+    });
+
+    $(function () {
+        $("#method option[value='regular']").attr("selected", true);
+    });
+
+
+    function Calc() {
+        var PID, offset, advances, match, slots, genderless, IV, finalFrame, memoryLink, method, output;
+
+        var errorArray = ["Error(s) Found!"];
+        var errorMessage = "";
+
+        // Retrieve entered values
+        memoryLink = document.querySelector("input[name=memLink]:checked").value;
+        PID = document.getElementById("PIDFrame").value;
+        slots = document.getElementById("occupied").value;
+        genderless = document.getElementById("genderless").value;
+        offset = document.querySelector("input[name=offset]:checked").value;
+        IV = document.getElementById("IVFrame").value;
+        method = document.getElementById("method").value;
+
+
+        // check for input errors and display messages
+        // PID input error
+        if (PID == '' || PID < 1 || PID % 1 != 0) {
+            errorMessage = "Error: PID frame must be an integer of at least 1.";
+            errorArray.push(errorMessage);
+            //document.getElementById("Results").innerHTML = errorArray.join('<br />');
+        };
+
+        // occupied slots
+        if ((slots == '' || slots < 1 || slots > 6 || slots % 1 != 0) && method == "regular") {
+            errorMessage = "Error: The target Pok&eacute;mon's slot must be an integer between 1 and 6.";
+            errorArray.push(errorMessage);
+        };
+
+        // number of genderless Pokemon
+        if ((genderless == '' || genderless < 0 || genderless > 5 || genderless % 1 != 0) && method == "regular") {
+            errorMessage = "Error: There must be between 0 and 5 genderless Pok&eacute;mon before your target.";
+            errorArray.push(errorMessage);
+        };
+
+        // IV frame
+        if (IV == '' || IV < 1 || IV % 1 != 0) {
+            errorMessage = "Error: Target IV frame must be an integer of at least 1.";
+            errorArray.push(errorMessage);
+
+        };
+
+        // display error mesages and break function execution
+        if (errorMessage != '') {
+            document.getElementById("Results").innerHTML = errorArray.join("<br />");
+            $("#Results").css("color", "red");
+            return;
+        };
+
+        // For remaining processing and error checks, convert inputs to numbers
+        memoryLink = Number(memoryLink);
+        PID = Number(PID);
+        slots = Number(slots);
+        genderless = Number(genderless);
+        offset = Number(offset);
+        IV = Number(IV);
+
+
+        // check if IV frame is correct Even/Odd for given slot
+        if (slots % 2 == 0 && method == "regular") {
+            if (IV % 2 == 0) {
+                errorMessage = "Error: IV Frame must be an odd number.";
+                errorArray.push(errorMessage);
+            };
+        } else if (slots % 2 != 0 && method == "regular") {
+            if (IV % 2 != 0) {
+                errorMessage = "Error: IV frame must be an even number.";
+                errorArray.push(errorMessage);
+            };
+        } else if (method == "therian") {
+            if (IV % 2 == 0) {
+                errorMessage = "Error: IV frame must be an odd number.";
+                errorArray.push(errorMessage);
+            };
+        } else if (method == "otherLegend") {
+            if (IV % 2 != 0) {
+                errorMessage = "Error: IV frame must be an even number.";
+                errorArray.push(errorMessage);
+            };
+        };
+
+        // check if number of genderless exceeds slot of target
+        if (genderless >= slots && method == "regular") {
+            errorMessage = "Error: There cannot be more than or the same number of genderless Pok&eacute;mon as the slot of your target.";
+            errorArray.push(errorMessage);
+        };
+
+        // check if target IV frame meets minimum required
+        if (method == "regular") {
+            if (IV < (8 + (13 * (slots - 1)))) {
+                minFrame = 8 + 13 * (slots - 1);
+                errorMessage = "Error: Your target IV frame must be at least " + minFrame + ".";
+                errorArray.push(errorMessage);
+            };
+
+        } else if (method == "therian") {
+            if (IV < 21) {
+                errorMessage = "Error: Your target IV frame must be at least 21.";
+                errorArray.push(errorMessage);
+            };
+        } else if (method == "otherLegend") {
+            if (IV < 8) {
+                errorMessage = "Error: Your target IV frame must be at least 8.";
+                errorArray.push(errorMessage);
+            };
+        };
+
+        // display error mesages and break function execution
+        if (errorMessage != '') {
+            document.getElementById("Results").innerHTML = errorArray.join("<br />");
+            $("#Results").css("color", "red");
+            return;
+        };
+
+
+        // Perform Calculations
+        if (method == "regular") {
+            // Required advances to get to IV Frame
+            advances = 0.5 * (IV - 8 - (13 * (slots - 1)));
+
+            // First match in researcher
+            match = PID + 1 - memoryLink;
+
+            // Final PID frame
+            finalFrame = PID + offset + (2 * advances) + (5 * (slots - 1)) - genderless - memoryLink;
+
+
+
+        } else if (method == "therian") {
+            // Advances to IV frame
+            advances = 0.5 * (IV - 21);
+
+            // First match in researcher
+            match = PID + 1 - memoryLink;
+
+            // Final PID frame
+            finalFrame = PID + 2 + (advances * 2) + (5 * 1) - memoryLink;
+
+
+
+        } else if (method == "otherLegend") {
+            // Advances to IV frame
+            advances = 0.5 * (IV - 8);
+
+            // First match in researcher
+            match = PID + 1 - memoryLink;
+
+            // final PID frame
+            finalFrame = PID + 2 + (advances * 2) + (5 * 0) - memoryLink;
+
+        };
+
+
+        // Print results to output paragraph
+        // first, create array of output 
+        output = ["Results: <br />"];
+
+        // assign output variables
+        var advancesOut = "Number of advances required: " + advances;
+        var matchOut = "Frame in Researcher corresponding to first spinner match: " + match;
+        var finalFrameOut = "Final PID frame: " + finalFrame;
+
+        // append to array
+        output.push(advancesOut, matchOut, finalFrameOut);
+
+        // display output
+        document.getElementById("Results").innerHTML = output.join("<br />");
+        $("#Results").css("color", "black");
+
+
+
+    };
+</script>
+
+<p>This calculator is a tool to help determine when RNGing the Dream Radar for the gen 5 Pokemon games.
+	Simply enter in the information for each field and click Calculate to determine information such as your final PID frame and how many advances you need to do. For more information regarding the process,
+    please refer to my <a href="https://www.smogon.com/ingame/rng/bw_rng_part8" target="_blank">guide</a>.</p>
+
+<p><strong>Note</strong>: The apps for the Therians and Gen IV Legends assume that you are not sending normal Pokemon to your game at the same time, and that you are only sending one legend at a time.
+    Sending non-legend Pokemon to your game simultaneously with Legendaries may cause the frame to advance differently than the apps calculate.</p>
+
+<h2>Terms</h2>
+<dl>
+	<strong>
+		<dt>Initial PID Frame</dt>
+	</strong>
+	<dd>The frame determined by hitting "Calculate Initial PIDRNG Frame" in the main window</dd>
+	<strong>
+		<dt>Number of Occupied Slots before Target</dt>
+	</strong>
+	<dd>he number of Pokemon before the one you are trying to rng when you send them to your game from the radar</dd>
+	<strong>
+		<dt>Number of Genderless Pokemon before Target</dt>
+	</strong>
+	<dd>The number of genderless Pokemon in the slots before the one you are trying to rng</dd>
+	<strong>
+		<dt>Target Pokemon's Offset</dt>
+	</strong>
+	<dd>If the Pokemon you are trying to rng is gendered, put 2; otherwise, the offset is 1</dd>
+	<strong>
+		<dt>Target IV Frame</dt>
+	</strong>
+	<dd>The IV frame from the Time Finder (i.e. the IV frame you are aiming for)</dd>
+	<strong>
+		<dt>Number of Advances Required</dt>
+	</strong>
+	<dd>How many times you have to check the spinner</dd>
+    <strong>
+		<dt>Frame in Researcher of First Spinner Match</dt>
+	</strong>
+	<dd>The first frame in the researcher that should correspond to your first spinner</dd>
+    <strong>
+		<dt>Target's PID Frame</dt>
+	</strong>
+	<dd>The PID frame (in the main window) that your target Pokemon will be on after doing your advances</dd>
+</dl>
+
+<hr />
+
+<form>
+    <!-- Memory Link -->
+    Have you used the Memory Link:
+    <input type="radio" name="memLink" value="1" /> Yes
+    <input type="radio" name="memLink" value="0" checked /> No
+
+    <br />
+
+    <!-- RNG Target -->
+    Select your RNG target:
+    <select name="method" id="method">
+        <option value="regular">Regular Pok&eacute;mon</option>
+        <option value="therian">Therians</option>
+        <option value="otherLegend">Gen 4 Legend</option>
+    </select>
+</form>
+
+<!-- Create form -->
+<form name="regularData" id="inputForm">
+    <!-- PID Frame -->
+    <label for="PIDFrame" class="formData PIDFrame">Initial PID frame:</label>
+    <input type="number" name="PIDFrame" id="PIDFrame" class="formData PIDFrame" style="width: 50px;" /><br />
+
+    <!-- Target IV Frame -->
+    <label for="IVFrame" class="formData IVFrame">Target IV frame:</label>
+    <input type="number" name="IVFrame" id="IVFrame" class="formData IVFrame" style="width: 50px;" /> <br />
+
+    <!-- Occupied slots -->
+    <label for="occupied" class="formData occupied">Slot of target Pok&eacute;mon:</label>
+    <input type="number" name="occupied" id="occupied" class="formData occupied" style="width: 40px;" /><br />
+
+    <!-- Genderless -->
+    <label for="genderless" class="formData genderless">Number of genderless Pok&eacute;mon before target:
+    </label>
+    <input type="number" name="genderless" id="genderless" class="formData genderless" style="width: 40px;" />
+    <br />
+
+    <!-- Target Offset -->
+    <div id="offsetRadio" class="formData offset">
+        Does your target Pok&eacute;mon have a gender?
+        <input type="radio" name="offset" id="offsetGenderless" value="2" checked />Yes
+        <input type="radio" name="offset" id="offsetGendered" value="1" />No<br /><br />
+    </div>
+
+
+    <!-- Form Buttons -->
+    <input type="reset" class="formData Button" onclick="document.getElementById('Results').innerHTML = ''" />
+    <input type="button" onclick="Calc()" value="Calculate" class="formData Button" />
+
+</form>
+
+<p id="Results"></p>

@@ -1,0 +1,74 @@
+.column {
+    float: left;
+    width: 40%;
+    margin: 10px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#updateTime {
+    color: red;
+}
+
+.nav-active {
+    text-decoration: underline;
+}
+.topnav {
+    padding: 10px;
+}
+.topnav a {
+    padding: 5px;
+}
+
+
+#mapid {
+    height: 700px;
+    overflow: hidden;
+}
+
+.horizontal-gradient-line {
+    border-radius: 4pt;
+    height: 4px;
+    border-left: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+}
+.scale-details {
+    margin-bottom: 10px;
+    color: #48484a;
+    height: 30pt;
+    padding: 2pt 4pt;
+    background-color: white;
+    border-radius: 4pt;
+    box-shadow: 0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+    justify-content: space-between;
+    font-size: 15px;
+    display: inline-block;
+}
+.scale-details > div:nth-child(1) {
+    width: 200px;
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+.scale-dividers > div:nth-child(n+2)  {
+    display: inline-block;
+    text-align: center;
+    margin-left: 25px;
+}
+
+.scale-dividers > div:nth-child(1) {
+    display: inline-block;
+    text-align: center;
+}
+
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+    .column {
+      width: 100%;
+    }
+  }

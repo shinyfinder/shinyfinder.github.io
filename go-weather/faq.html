@@ -1,0 +1,91 @@
+---
+layout: page
+title: GWS - FAQ
+permalink: /go-weather/faq
+---
+
+
+
+<link rel="stylesheet" type="text/css" href="weather.css"></link>
+
+<div class="topnav">
+    <a class="" href="index.html">Search</a>
+    <a class="" href="map.html">Map</a>
+    <a class="" href="credits.html">Credits</a>
+    <a class="" href="about.html">About</a>
+    <a class="nav-active" href="faq.html">FAQ</a>
+</div>
+
+<button class="accordion">What is GWS?</button>
+<div class="panel">
+    <p>GWS is a webtool used to serve the current weather conditions at different latitude/longitude coordinates from
+        around the world. Weather conditions are classified according to those used in Pok&eacute;mon GO.</p>
+</div>
+
+<button class="accordion">What weather information is used?</button>
+<div class="panel">
+    <p>Weather information is provded by <a href="https://www.accuweather.com/">AccuWeather</a> and <a
+            href="https://openweathermap.org/">OpenWeather</a> via their respective APIs. Sattelite imagery is provided
+        by <a href="https://owm.io/sat">OWM.io/vane:</a>.</p>
+</div>
+
+<button class="accordion">How often is the weather updated?</button>
+<div class="panel">
+    <p>The weather information is updated hourly, at 16 minutes past the hour. Wind data is updated upon loading of the
+        map.</p>
+</div>
+
+<button class="accordion">How does this tool work?</button>
+<div class="panel">
+    <p>GWS queries the weather APIs every hour and saves the data on the server. This allows anyone to access the
+        weather data via the tool without having to perform a new API call. The weather is then sorted into the
+        categories used by Pok&eacute;mon GO and returned upon request.</p>
+</div>
+
+<button class="accordion">What language was the tool written in?</button>
+<div class="panel">
+    <p>The tool (front end and back end) is entrirely written in javascript.</p>
+</div>
+
+<button class="accordion">Do you have weather information for [city]?</button>
+<div class="panel">
+    <p>The cities GWS searches are the top 150 cities as reported by <a
+            href="https://developer.accuweather.com/accuweather-current-conditions-api/apis/get/currentconditions/v1/topcities/%7Bgroup%7D">AccuWeather</a>.
+        Due to API limitations, this number cannot currently be increased. If you are looking for the weather in a
+        certain city, it's probably better to go to AccuWeather.com or similar and look it up for that particular
+        location.</p>
+</div>
+
+<button class="accordion">Can you report forcast data?</button>
+<div class="panel">
+    <p>Available forcast data is currently limited to daily forcasts for the next 5 days due to API limitations. Because
+        the in-game weather is updated hourly, it does not make sense to provide this information at this time.</p>
+</div>
+
+<button class="accordion">GWS says the weather is [x], but GO says the weather is [y]. What's up?</button>
+<div class="panel">
+    <p>The specifics of how Niantic determines the in-game weather are currently unknown. It is speculated that level 10
+        S2 cells are used in determining the in-game weather, as provided by the real weather supplied by AccuWeather.
+        How the weather is averaged into these cells, when the information is updated, and what defintions Niantic uses
+        for the in-game conditions are not available to us. This tool attempts to fill in the gaps based on
+        community-based research; however, the results may be inaccurate. Until we have GO's source code, we'll never
+        know for sure how the weather is determined, and that may never happen.</p>
+</div>
+
+<script type="text/javascript">
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        });
+    }
+
+</script>

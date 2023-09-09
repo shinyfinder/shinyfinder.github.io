@@ -1,0 +1,242 @@
+---
+layout: page
+title: GWS
+permalink: /go-weather/
+---
+<link rel="stylesheet" type="text/css" href="weather.css"></link>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<div class="topnav">
+    <a class="nav-active" href="">Search</a>
+    <a class="" href="map.html">Map</a>
+    <a class="" href="credits.html">Credits</a>
+    <a class="" href="about.html">About</a>
+    <a class="" href="faq.html">FAQ</a>
+</div>
+<p>GO! Weather Searcher (GWS) is a simple webtool used to output the current forecast in 150 cities from around the world, updated
+    every hour! The tool is geared toward Pok&eacute;mon GO players who would like a quick way to find a location with a
+    specific weather. Usage is simple: choose a weather condition and click the button to get the coorindinates of the
+    weather.</p>
+<p id="updateTime"></p>
+<div class="row">
+    <div id="tool">
+        <form>
+            <label for='weatherSelect'>Choose a weather condition:</label>
+            <select name='weatherSelect' id='weatherSelect'>
+                <option value='Clear'>Clear</option>
+                <option value='Rain'>Rainy</option>
+                <option value='Partly'>Partly Cloudy</option>
+                <option value='Clouds'>Cloudy</option>
+                <option value='Wind'>Windy</option>
+                <option value='Snow'>Snow</option>
+                <option value='Fog'>Fog</option>
+            </select>
+            <br />
+            <input type="button" id="search" onclick="weatherFind()" value="Find the weather!" style="margin-top: 10px;" />
+            
+        </form>
+        <p id="noRes"></p>
+
+
+        <table class="column" id="outputTable">
+            <tr>
+                <th>City</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+            <tr>
+                <td id='cityOut'></td>
+                <td id='latOut'></td>
+                <td id='lonOut'></td>
+            </tr>
+        </table>
+        
+    </div>
+    
+    <div id="boostedTypes" class="column">
+        <img src="/assets/images/weatherBoost.png" alt='boosted types' width="350" height="575">
+    </div>
+</div>
+<p><strong>Weather info reflects current weather conditions. In-game weather in Pok&eacute;mon GO may vary.</strong></p>
+<div class="footer">Weather info provided by <img src="/assets/images/acculogo.png" alt='AccuWeather' width='100' height='15'></div>
+
+<script type="text/javascript">
+    var obj; var updateHr; var resultAll = [];
+    $(document).ready(function () {
+        // get the date/time
+        var d = new Date();
+        var min = d.getMinutes();
+        var hr = d.getHours();
+        updateHr = hr;
+
+        // send notice 16 min after to refresh the page
+        var timeoutDelay = 16 - min;
+        if (timeoutDelay <= 0) {
+            timeoutDelay = timeoutDelay + 60;
+            updateHr = (hr + 1) % 24;
+        }
+        if (updateHr < 10) {
+            document.getElementById('updateTime').innerHTML = 'Next weather update: 0' + updateHr + ":16";
+        } else {
+            document.getElementById('updateTime').innerHTML = 'Next weather update: ' + updateHr + ":16";
+        }
+
+
+        setTimeout(function () { alert('Weather info updated. Please dismiss this alert and refresh the page to see new weather data.') }, timeoutDelay * 60 * 1000);
+
+
+        // get the json from github
+        $.get("https://raw.githubusercontent.com/shinyfinder/go-weather/weather/weather.json", function (result) {
+            // assign to gobal var
+            obj = result;
+            // parse new array as JSON
+            obj = JSON.parse(obj);
+        });
+    });
+
+    function weatherFind() {
+        var results = [];
+        var toSearch = document.getElementById('weatherSelect').value;
+        document.getElementById('noRes').innerHTML = '';
+
+        // reset the table
+		const outputTableObj = document.getElementById('outputTable');
+		outputTableObj.getElementsByTagName("tbody")[0].innerHTML = outputTableObj.rows[0].innerHTML;
+
+        // OW condition codes: Thunderstorm, Drizzle, Rain, Snow, Mist, Smoke, Haze, Dust, Fog, Sand, Dust, Ash, Squall, Tornado, Clear, Clouds (11-25%, 26-50%, 51-84%, 85-100%)
+
+        switch (toSearch) {
+            case 'Clear':
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherText == 'Sunny' || obj[i].WeatherText == 'Clear' || obj[i].WeatherText == 'Mostly Sunny' || obj[i].WeatherText == 'Mostly Clear') {
+                        results.push(obj[i]);
+                    }
+                }
+                break;
+
+            case 'Wind':
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherIcon == 32 && obj[i].PrecipitationType === null) {
+                        //obj[i].weather[0].main = 'Windy';
+                        results.push(obj[i]);
+                    }
+                }
+                break;
+
+            case 'Partly':
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherText == 'Partly Sunny' || obj[i].WeatherText == 'Partly Cloudy' || obj[i].WeatherText == 'Intermittent Clouds' || obj[i].WeatherText == 'Partly Sunny w/ Showers' || obj[i].WeatherText == 'Partly Cloudy w/ Showers' || obj[i].WeatherText == 'Partly Sunny w/ T-Storms' || obj[i].WeatherText == 'Partly Cloudy w/ T-Storms' || obj[i].WeatherText == 'Partly Sunny w/ Flurries') {
+                        results.push(obj[i]);
+                    }
+                }
+                break;
+
+            case 'Clouds':
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherText == 'Mostly Cloudy' || obj[i].WeatherText == 'Cloudy' || obj[i].WeatherText == 'Mostly Cloudy w/ Showers' || obj[i].WeatherText == 'Mostly Cloudy w/ T-Storms' || obj[i].WeatherText == 'Hazy Sunshine' || obj[i].WeatherText == 'Hazy Moonlight' || obj[i].WeatherText == 'Mostly Cloudy w/ Flurries' || obj[i].WeatherText == 'Mostly Cloudy w/ Snow') {
+                        results.push(obj[i]);
+                    }
+                }
+
+                break;
+
+            case 'Rain':
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherText == 'Showers' || obj[i].WeatherText == 'Rain' || obj[i].WeatherText == 'T-Storms') {
+                        results.push(obj[i]);
+                    }
+                }
+                break;
+
+            case 'Fog':
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherText == 'Fog') {
+                        results.push(obj[i]);
+                    }
+                }
+                break;
+
+            case 'Snow':
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherText == 'Snow' || obj[i].WeatherText == 'Flurries' || obj[i].WeatherText == 'Rain and Snow') {
+                        results.push(obj[i]);
+                    }
+                }
+
+
+            default:
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].WeatherText.indexOf(toSearch) != -1) {
+                        results.push(obj[i]);
+                    }
+                }
+
+        }
+
+        // push the names and locations into separate arrays
+
+        var loc = []; var lon = []; var lat = [];
+        if (results.length > 10) {
+            var loopEnd = 10;
+        } else {
+            var loopEnd = results.length;
+        }
+
+        for (var i = 0; i < loopEnd; i++) {
+            loc.push(results[i].EnglishName);
+            lon.push(results[i].GeoPosition.Longitude);
+            lat.push(results[i].GeoPosition.Latitude);
+        }
+
+        // print the results
+		loc.forEach((v, i) => {
+			var newRow = outputTableObj.insertRow();
+			var cell1 = newRow.insertCell(0);
+			var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+
+			cell1.innerHTML = v;
+			cell2.innerHTML = lon[i];;
+            cell3.innerHTML = lat[i];
+		})
+        resultAll = results;
+
+
+        if (results === undefined || results.length == 0) {
+            document.getElementById('noRes').innerHTML = 'No results found. Check back later.';
+            if (toSearch == "Wind") {
+                document.getElementById('noRes').innerHTML += ' Check the <a href="map.html">map</a> for more possible locations.'
+            }
+        } else if (results.length > 10) {
+            document.getElementById('noRes').innerHTML = results.length - 10 + ' more result(s) found. ' + '<a href="#" onclick="showAll()">See all?</a>';
+        }
+
+    }
+
+    function showAll() {
+        document.getElementById('noRes').innerHTML = '';
+        // reset the table
+		const outputTableObj = document.getElementById('outputTable');
+		outputTableObj.getElementsByTagName("tbody")[0].innerHTML = outputTableObj.rows[0].innerHTML;
+
+        var loc = []; var lon = []; var lat = [];
+        for (var i = 0; i < resultAll.length; i++) {
+            loc.push(resultAll[i].EnglishName);
+            lon.push(resultAll[i].GeoPosition.Longitude);
+            lat.push(resultAll[i].GeoPosition.Latitude);
+        }
+        // print the results
+		loc.forEach((v, i) => {
+			var newRow = outputTableObj.insertRow();
+			var cell1 = newRow.insertCell(0);
+			var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+
+			cell1.innerHTML = v;
+			cell2.innerHTML = lon[i];;
+            cell3.innerHTML = lat[i];
+		})
+    }
+</script>

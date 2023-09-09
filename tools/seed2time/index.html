@@ -1,0 +1,270 @@
+---
+layout: page
+title: RS Seed2Time
+permalink: /tools/seed2time/
+---
+
+<p>This tool is used to calculate the associated date/time for an initial seed in Pokemon Ruby or Sapphire, assuming you have a live battery.</p>
+
+<h2>How to Use</h2>
+
+<p>Obtaining the desired initial seed is a two step process:
+    <ol>
+        <li>
+            Using the <a href="/tools/iv-to-pid/index.html" target="_blank">IV to PID tool</a>, search for a Method 2 or 4 seed that has your desired Nature and IVs. The ID is your Trainer ID.
+        </li>
+        <li>
+            Input the seed from (1) into the <a href="https://www.smogon.com/forums/threads/rng-manipulation-in-firered-leafgreen-wild-pokémon-supported-in-rng-reporter-9-93.62357/" target="_blank">FR/LG Seed Finder</a>
+            (attached to first post) to obtain the desired 16-bit seed. The output of the Seed Finder will contain a 4-digit hex value (i.e. BB53), which is the seed that is necessary to use this tool.
+        </li>
+    </ol>  
+</p>
+
+<p>After hitting the calculate button, the tool will output the date/time associated with the seed. You can then use that information to hit your target initial seed in Ruby or Sapphire! 
+    Note that the time output uses a 24 hour scale (i.e. 1:00 pm = 13:00).
+</p>
+
+
+<h2>Credits</h2>
+<div>
+    <ul>
+        <li>FractalFusion for information on how the initial seed is determined</li>
+        <li>mingot, et al. for the RNG Reporter and research into this subject</li>
+        <li>NeoSyrex, the original author of the Seed Finder</li>
+        <li>Skymin_Flower, who originally wrote this tool</li>
+        <li>.com for helping to optimize this javascript</li>
+        <li>shiny finder, who (upon request from Skymin_Flower) converted the tool into a usable web interface and hosted this site</li>
+    </ul>
+</div>
+    
+<hr />
+
+<form>
+	<label for="Seed">Initial Seed (in hex):</label>
+	<input type="text" id="Seed" maxlength="4" style="width: 30px;" value="0000">
+	<br>
+	<br>
+	<button type="button" onclick="findTime()" id="Calc">Calculate Seed Date/Time</button>
+</form>
+
+<p id="result" style="margin-top: 20px;"></p>
+
+<script>
+// define/initialize variables
+var d = new Date();
+d.setFullYear(2000,11,31);
+
+var loop_var = 1;
+
+var modifiedEqn = false;
+
+function findTime() {
+	// reinitialize variables
+	d.setFullYear(2000,11,31);
+	modifiedEqn = false;
+	
+	document.getElementById("result").innerHTML = "Calculating Date/Time...";
+	// capture input value
+	var seedInput = document.getElementById("Seed").value.toUpperCase();
+	
+	// confirm valid input
+	var improperInput = /[^0-9A-F]/;
+	var result = improperInput.test(seedInput);
+	if (result) {
+		document.getElementById("result").innerHTML = " ";
+		alert("Invalid hex input! Input must only contain numbers 0-9 and/or letters A-F!");
+		return;
+	}
+	
+	// convert seed to number
+	seedInput = parseInt(seedInput, 16);
+	var seed = seedInput;
+	
+	while (loop_var == 1) {
+	
+	var seedMod1440 = (seed % 1440); // mod seed with 1440
+	var seedTest = (seedMod1440-48) % 60; // shift loop 48 and mod with 60 to get # to test seed
+	if (seedTest < 0) {
+		seedTest += 60;
+	}
+	
+	
+	// test for improper values of variables
+	if (rangeTest(seedTest)) {
+		var days = findDays(seed);
+		var hourT = findHour(seedMod1440)[1];
+		var hourU = findHour(seedMod1440)[2];
+		var minT = findMinute(seed, days, hourT, hourU)[1];
+		var minU = findMinute(seed, days, hourT, hourU)[2];
+		
+		// modify the hours to account for 40 min if less than 1 hour time
+		if (seed <= 89 && seed >= 64) {
+			hourU--;
+			
+			modifiedEqn = true;
+			
+			// format the time and break
+			var formattedDate = dateFormatter(days); 
+			var hour = (hourT*10)+hourU;
+			var minute = findMinute(seed, days, hourT, hourU)[0];
+			
+			break;
+		}
+		
+		// modify the days if invalid result
+		if (hourU >= 10 || minT >= 6 || minU >= 10) {
+			//subtract 1 from the days
+			if (days > 0) {
+				days--;
+			}
+			
+			while (hourU > 9 || minT > 5 || minU > 9) {
+			//recalculate the minutes
+			var minT = findMinute(seed, days, hourT, hourU)[1];
+			var minU = findMinute(seed, days, hourT, hourU)[2];
+			
+			if (hourU < 10 && seed >= 629 && (minT > 5 || minU > 9)) {
+				hourU++;
+			}
+			 if (hourU < 10 && seed < 629) {
+				 hourU--;
+				 break;
+			 }
+			if (hourU >= 10) {
+				hourU = 0;
+				hourT++;
+			}
+			}
+			modifiedEqn = true;
+			
+			// format the date/time
+			var formattedDate = dateFormatter(days); 
+			var hour = (hourT*10)+hourU;
+			var minute = findMinute(seed, days, hourT, hourU)[0];
+			
+			break;
+		}
+	}
+	
+	// break iteration if possible = false
+	if (!rangeTest(seedTest) || !rangeTestMod(seedMod1440)) {
+		seed += 65535;
+		continue;}
+	
+	// see if result matches initial seed
+	var x = Math.floor(seed / 65536);
+	var y = seed % 65536;
+	var result = x ^ y;
+	
+	if (result != seedInput) {
+		seed += 65535; 
+	} else {
+		break;
+	}
+	
+	}
+	
+	//find the resulting date/time for seed
+	if (modifiedEqn === false) {
+		var formattedDate = dateFormatter(days); 
+		var hour = findHour(seedMod1440)[0];
+		var minute = findMinute(seed, days, hourT, hourU)[0];
+	}
+	
+	if (minute <= 9) {
+		minute = "0" + minute;
+	}
+	
+	if (hour <= 9) {
+		hour = "0" + hour;
+	}
+	// format the time
+	var formattedTime = hour.toString() + ":" + minute;
+	
+	document.getElementById("result").innerHTML = "<b>Date:</b> " + formattedDate + " (mm/dd/yyyy)" + "<br>" +  
+		"<b>Time:</b> " + formattedTime + " (hh:mm)";
+	
+}
+
+
+
+
+
+// test range of seed for validity
+function rangeTest(val) {
+	if (val >= 0 && val <= 9 ) {
+		return true;
+	} else if (val >= 12 && val <= 25) {
+		return true;
+	} else if (val >= 28 && val <= 41) {
+		return true;
+	} else if (val >= 44 && val <= 53) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// test range of seed % 1440 for validity
+function rangeTestMod(val) {
+	if (val < 629 ) {
+		return true;
+	} else if (val >= 960 && val <= 1589) {
+		return true;
+	} else if (val >= 1920 && val <= 2189) {
+		return true;
+	} else {
+		return false;
+	}	
+} 
+
+
+/*// combine T/F possibilities
+function possTest(poss1, poss2) {
+	if (poss1 === poss2 && poss1 === true) {
+		return true;
+	} else {
+		return false;
+	}
+}
+*/
+
+// find the days added (input: seed)
+function findDays(k) {
+	var daysAdded = Math.floor(k/1440);
+	return daysAdded;
+}
+
+// find the hour (input: seedMod1440)
+function findHour(k) {
+	var hoursT = Math.floor(k/960);
+	var hoursU = Math.floor((k - (hoursT*960))/60);
+	var rslt = ((hoursT*10)+hoursU); 
+	return [rslt, hoursT, hoursU];
+}
+
+// find minutes
+function findMinute(sd, daysAdded, hoursT, hoursU) {	
+	var totalMinutes = sd - (1440*daysAdded) - (960*hoursT) - (60*hoursU);
+	
+	var minutesT = Math.floor(totalMinutes/16);
+	var minutesU = totalMinutes - (16*minutesT);
+	
+	var rslt = (minutesT*10) + minutesU;
+	return [rslt, minutesT, minutesU];
+	
+}
+
+
+// format the date
+function dateFormatter(daysAdded) {
+	d.setDate(d.getDate() + daysAdded);
+	var mm = d.getMonth() + 1;
+	var dd = d.getDate();
+	var y = d.getFullYear();
+	
+	var rslt = mm + "/" + dd + "/" + y;
+	return rslt;
+}
+
+</script>
