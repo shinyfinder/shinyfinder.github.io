@@ -111,7 +111,15 @@ button {
     margin: auto;
 }
 
+.es-nav-container {
+    text-align: center;
+}
 .es-nav-container a {
     margin: 20px;
     display: inline-block;
+}
+
+.subslot {
+    font-style: italic;
+    font-size: smaller;
 }

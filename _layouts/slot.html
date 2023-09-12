@@ -10,6 +10,7 @@
     <main class="page-content">
       <div class="wrapper">
         <h1 class="post-title">{{ page.title | escape }}</h1>
+      </div>
         <div class="es-nav-container">
           {% for all-page in site.pages %}
             {% if all-page.dir == page.dir %}    
@@ -17,7 +18,7 @@
             {% endif %}
           {% endfor %}
         </div>
-      </div>
+      
       
 
       <div>
