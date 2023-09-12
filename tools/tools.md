@@ -15,3 +15,5 @@ permalink: /tools/
 [RS Seed2Time](/tools/seed2time/index.html)
 
 [SWSH TR Finder](/tools/tr-finder/index.html)
+
+[Pokemon GO Weather Searcher](/tools/go-weather/index.html)

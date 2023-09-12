@@ -16,8 +16,9 @@ minima:
 header_pages:
   - about.md
   - tools/tools.md
-  - projects/projects.md
-  - go-weather/index.html
+  - tools/swiss/index.html
+  - misc/misc.md
+  - encounter-slots/slots.md
 
 show_excerpts: false # set to true to show excerpts on the homepage
 

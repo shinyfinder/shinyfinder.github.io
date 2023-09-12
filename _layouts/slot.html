@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+
+  {%- include head.html -%} 
+  <body>
+
+    {%- include header.html -%}
+
+    
+    <main class="page-content">
+      <div class="wrapper">
+        <h1 class="post-title">{{ page.title | escape }}</h1>
+        <div class="es-nav-container">
+          {% for all-page in site.pages %}
+            {% if all-page.dir == page.dir %}    
+              <a href="{{ all-page.url }}" class="es-nav">{{ all-page.name | replace: '.html', '' }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      
+
+      <div>
+        {{ content }}
+      </div>
+    </main>
+    
+    {%- include es.html -%}
+    {%- include footer.html -%}
+  </body>
+
+</html>

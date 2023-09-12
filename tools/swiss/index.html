@@ -1,0 +1,184 @@
+---
+layout: page
+title: Swiss Bracket Manager
+permalink: /tools/swiss/
+---
+
+<script type="text/javascript" src="./bracketmaker.js"></script>
+<style type="text/css">
+    #pageContent {
+        display: none;
+    }
+
+    #advance {
+        display: none;
+    }
+
+    #quitStandings {
+        display: none;
+    }
+
+    .column {
+        float: left;
+        width: 50%;
+        padding: 50px;
+        box-sizing: border-box;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    #previous-round {
+        border-right: 3px solid;
+    }
+
+    /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 600px) {
+        .column {
+            width: 100%;
+        }
+
+        #previous-round {
+            border-right: none;
+            border-bottom: 3px solid;
+        }
+    }
+
+    #numRounds {
+        width: 40px;
+    }
+
+    input {
+        margin: 3px;
+    }
+
+    #manage-tournament {
+        margin-bottom: 100px;
+    }
+
+    #inputBox {
+        width: 400px;
+        height: 200px;
+    }
+</style>
+
+<p>Go to <a href="./validate.html">Validator</a></p>
+<h2>Manage Brackets</h2>
+<p>Enter the name and number of rounds for a new bracket, or select a saved bracket from the dropdown to load.</p>
+<div id="manage-bracket">
+    <form id="newBracket">
+        <label for="bracketName">Name:</label>
+        <input type="text" id="bracketName" name="bracketName">
+        <br />
+        <label for="numRounds">Number of Rounds:</label>
+        <input type="number" id="numRounds" name="numRounds" min="1" value='1'>
+        <button type="button" onclick="newBracket()">Create New Bracket</button>
+    </form>
+    <form id="loadBracket">
+        <label for="bracketSelect">Load a bracket:</label>
+        <select id="bracketSelect">
+            <option option disabled selected value>-- select a bracket --</option>
+        </select>
+        <button type="button" onclick="loadBracket()">Load</button>
+        <button onclick="deleteBracket()">Delete</button>
+        <button type="button" onclick="exportBracket()">Export</button>
+        <br />
+        <label for="bracket-file-input">Import a bracket:</label>
+        <input type="file" id="bracket-file-input" />
+    </form>
+</div>
+<hr />
+<h2>Manage Users</h2>
+<p><strong>Warning:</strong> The following fields are experimental. Use with caution.</p>
+<div id="manage-user">
+    <form id="'modifyUser">
+        <label for="removeUserField">Remove a user:</label>
+        <input type="text" id="removeUserField">
+        <button type="button" onclick="removeUser()">Remove</button>
+        <br />
+        <label for="subUserField1">Replace:</label>
+        <input type="text" id="subUserField1">
+        <label for="subUserField2">...with:</label>
+        <input type="text" id="subUserField2">
+        <button onclick="subUser()">Sub</button>
+    </form>
+</div>
+<div id="manage-matches">
+    <form id="manageMatches">
+        <input type="checkbox" id="player1Check">
+        <input type="text" id="player1Field">
+        <label for="player2Field"> VS </label>
+        <input type="text" id="player2Field">
+        <input type="checkbox" id="player2Check">
+        <button type="button" onclick="addMatch()">Insert game</button>
+    </form>
+</div>
+<hr />
+
+<div id="pageContent">
+    <h2>Current Bracket: <span id='curBrackName'></span></h2>
+    <p>Enter the usernames of the participants below, with each entrant on their own line. Alternatively, paste the
+        output from the <a href="https://www.smogon.com/bracketmaker/" target="_blank">bracket maker</a> into the field
+        below and check the box before making a new bracket. Note that users will be re-paired if using the output from
+        the bracket maker.</p>
+    <form>
+        <label for="inputBox">Usernames</label>
+        <br />
+        <textarea id="inputBox" name="inputBox"></textarea>
+        <br />
+        <input type="checkbox" id="parseBracketMakerOption">
+        <label for="parseBracketMakerOption">Parse bracket maker output</label>
+    </form>
+    <button type="button" onclick="initBracket()" form="inputBox" id="makeBracketBtn">Make Bracket</button>
+
+    <div id="output" class="row">
+        <div id="previous-round" class="column">
+            <h2>Previous Round Results</h2>
+            <h3>Outcome</h3>
+            <div id="results"></div>
+
+            <h3>Extensions</h3>
+            <div id="results-ext"></div>
+
+            <h3>Standings</h3>
+            <div id="standings"></div>
+        </div>
+
+        <div id="current-rount" class="column">
+            <h2 id="current">Current Round</h2>
+            <div id="current-output">
+                <h3>Extensions</h3>
+                <div id="output-ext"></div>
+
+                <h3>Matchups</h3>
+                <div id="output-bracket"></div>
+            </div>
+            <div id="quitStandings">
+                <h3>Quits</h3>
+                <div id="quitResults"></div>
+            </div>
+        </div>
+
+
+    </div>
+    <hr />
+    <div id="manage-tournament">
+        <h2>Manage Tournament</h2>
+        <h3>Rounds Remaining: <span id="rounds"></span></h3>
+        <p>Choose a winner in each matchup by selecting the appropriate checkbox. Extensions are granted by not
+            selecting a winner in a matchup. Extensions and byes cannot be extended. When you are ready to proceed with
+            the tournament, click the Advance button.</p>
+        <h3>Extensions</h3>
+        <div id="extensions"></div>
+
+        <h3>Brackets</h3>
+        <div id="chooseWinners"></div>
+
+        <button type="button" onclick="advanceRound()" id="advance">Advance Round</button>
+    </div>
+
+</div>

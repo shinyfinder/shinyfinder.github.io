@@ -1,0 +1,122 @@
+---
+layout: page
+title: Swiss Bracket Validator
+permalink: /tools/swiss/validate
+---
+
+<script type="text/javascript" src="./validator.js"></script>
+<style type="text/css">
+    #pageContent {
+        display: none;
+    }
+
+    .column {
+        float: left;
+        width: 50%;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 1000px) {
+        .column {
+            width: 100%;
+        }
+    }
+
+    input {
+        margin: 3px;
+    }
+
+
+    textarea {
+        width: 400px;
+        height: 200px;
+    }
+
+    #pageContent label {
+        margin: 10px 0px;
+        display: inline-block;
+    }
+</style>
+
+
+
+<p>Go to <a href="./index.html">Manager</a></p>
+<h2>Validate Brackets</h2>
+<p>This page is used to check brackets made in Smogon's <a href="https://www.smogon.com/bracketmaker/"
+        target="_blank">bracket maker</a> for duplicated matchups to aid in Swiss tournament management. Participants'
+    records are stored locally so they can be grouped and printed each round.</p>
+<p>Enter the name for a new bracket, or select a saved bracket from the dropdown to load.</p>
+<div id="manage-bracket">
+    <form id="newBracket">
+        <label for="bracketName">Name:</label>
+        <input type="text" id="bracketName" name="bracketName">
+        <button type="button" onclick="newBracket()">Create New Bracket</button>
+    </form>
+    <form id="loadBracket">
+        <label for="bracketSelect">Load a bracket:</label>
+        <select id="bracketSelect">
+            <option option disabled selected value>-- select a bracket --</option>
+        </select>
+        <button type="button" onclick="loadBracket()">Load</button>
+        <button onclick="deleteBracket()">Delete</button>
+        <button type="button" onclick="exportBracket()">Export</button>
+        <br />
+        <label for="bracket-file-input">Import a bracket:</label>
+        <input type="file" id="bracket-file-input" />
+    </form>
+</div>
+<hr />
+
+<div id="pageContent">
+    <h2>Current Bracket: <span id='curBrackName'></span></h2>
+    <p>Paste the output from the <a href="https://www.smogon.com/bracketmaker/" target="_blank">bracket maker</a> into
+        the field on the left below. Please enter the names of the winners, each on their own line, in the box on the
+        right. To store a record of the matches played, there cannot be any duplicate matchups. However, you may check
+        for duplicated matchups at any time.</p>
+    <p>In the case of extensions, remember to enter the extension matchup in the matchups box. Don't forget to update
+        any old matchups based on the winner of the extension! If the player won their extension and subsequent match
+        for the current round, enter their name in the winner field twice. Names not present in the winners field are
+        assumed to have lost. As an example, let's say the current round is (Winner of A vs B) vs C and (Loser of A vs
+        B) vs D. This represents 3 matches: A vs B, A/B vs C, and A/B vs D. All matches are played and A wins the
+        extension, as well as their subsequent match vs C. Player B prevails over player D. To log the matches played,
+        the matches box should have the following entries: A vs B; A vs C; B vs D. The winners field should have A; A;
+        B. The syntax here is for illustrative purposes. See paragraph above for proper syntax.</p>
+    <div class="row">
+        <div>
+            <h3 for="inputBox">Matches</h3>
+            <form>
+                <textarea id="inputBox" name="inputBox"></textarea>
+            </form>
+            <button type="button" onclick="compareMatches()" id="makeBracketBtn">Check for duplicates</button>
+        </div>
+        <div>
+            <h3 for="winLossBox">Winners</h3>
+            <form>
+                <textarea id="winLossBox" name="winLossBox"></textarea>
+            </form>
+            <button type="button" onclick="updateWL()" id="makeBracketBtn">Store matches and update</button>
+        </div>
+    </div>
+
+    <hr />
+    <div id="output" class="row">
+        <div id="duplicates-found" class="column">
+            <h2>Has Duplicates?</h2>
+            <div id="dupe-results"></div>
+
+        </div>
+
+        <div id="groups" class="column">
+            <h2>Groups</h2>
+            <div id="standings"></div>
+        </div>
+
+    </div>
+</div>
