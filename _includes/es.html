@@ -20,10 +20,13 @@
     // assign a proper table header using the first row of data instead of the abc
     const headerRow = document.getElementsByTagName('thead');
     const tableBody = document.getElementsByTagName('tbody');
-
-    headerRow[0].innerHTML = tableBody[0].children[0].innerHTML.replace(/td/gm, 'th');
-    tableBody[0].removeChild(tableBody[0].children[0]);
-    tableBody[0].removeChild(tableBody[0].children[0]);
+    for (let i = 0; i < headerRow.length; i++) {
+        headerRow[i].innerHTML = tableBody[i].children[0].innerHTML.replace(/td/gm, 'th');
+        tableBody[i].removeChild(tableBody[i].children[0]);
+        tableBody[i].removeChild(tableBody[i].children[0]);
+    }
+    
+    
 
     let softMerges = document.getElementsByClassName('softmerge-inner');
     for (const softMerge of softMerges) {

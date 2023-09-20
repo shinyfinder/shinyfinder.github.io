@@ -31,13 +31,6 @@ window.onload = function() {
         // remove the dark mode entry from displaying in the dropdown
         const modeIndex = bracketNames.indexOf('mode');
         bracketNames.splice(modeIndex,1);
-
-        // remove the skin entry
-        const skinIndex = bracketNames.indexOf('skin');
-        if (skinIndex > -1) {
-            bracketNames.splice(skinIndex,1);
-        }
-        
         // populate the dropdown
         const sel = document.getElementById('bracketSelect');
         bracketNames.forEach((name,key) => {
@@ -1972,7 +1965,9 @@ function getOppWinPercent(oppArr, finalResults) {
             continue;
         }
         // get their final results
-        const oppResult = finalResults.find(arr => arr[0] === opp)[1];
+        const oppResultFind = finalResults.find(arr => arr[0] === opp);
+
+        const oppResult = oppResultFind ? oppResultFind[1] : [0, 1];
         const winPercent = oppResult[0] / (oppResult[0] + oppResult[1]);
         tempOppWP.push(winPercent);
     }

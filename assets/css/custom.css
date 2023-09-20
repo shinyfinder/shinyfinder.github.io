@@ -123,3 +123,7 @@ button {
     font-style: italic;
     font-size: smaller;
 }
+
+.spacer {
+    margin: 50px;
+}
