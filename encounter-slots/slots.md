@@ -4,28 +4,42 @@ title: Encounter Slots
 permalink: /encounter-slots/
 ---
 
-[Alpha Sapphire](/encounter-slots/as/Land.html)
+[Alpha Sapphire](/encounter-slots/alpha-sapphire/Land.html)
 
-[Black 2](/encounter-slots/b2/Land.html)
+[Black 2](/encounter-slots/black-2/Land.html)
 
-[Black](/encounter-slots/b/Land.html)
+[Black](/encounter-slots/black/Land.html)
 
-[Japanese Blue](/encounter-slots/blue-j/Land%20&%20Surf.html)
+[Japanese Blue](/encounter-slots/blue-japanse/Land%20&%20Surf.html)
 
-[Blue](/encounter-slots/blue/Land%20&%20Surf.html)
+[Blue/Green](/encounter-slots/blue-green/Land%20&%20Surf.html)
 
-[Brilliant Diamond](/encounter-slots/bd/Land.html)
+[Brilliant Diamond](/encounter-slots/brilliant-diamond/Land.html)
 
-[Crystal](/encounter-slots/c/Land.html)
+[Crystal](/encounter-slots/crystal/Land.html)
 
-[Diamond](/encounter-slots/d/Land.html)
+[Diamond](/encounter-slots/diamond/Land.html)
 
-[Emerald](/encounter-slots/e/Land.html)
+[Emerald](/encounter-slots/emerald/Land.html)
 
-[FireRed](/encounter-slots/fr/Land.html)
+[FireRed](/encounter-slots/fire-red/Land.html)
 
-[Gold](/encounter-slots/g/Land.html)
+[Gold](/encounter-slots/gold/Land.html)
 
 [Grottos](/encounter-slots/grotto/Grotto-Black2.html)
 
-[HeartGold](/encounter-slots/hg/Land.html)
+[HeartGold](/encounter-slots/heart-gold/Land.html)
+
+[LeafGreen](/encounter-slots/leaf-green/Land.html)
+
+[Let's Go Eevee](/encounter-slots/lets-go-eevee/index.html)
+
+[Let's Go Pikachu](/encounter-slots/lets-go-pikachu/index.html)
+
+[Moon](/encounter-slots/moon/Land.html)
+
+[Omega Ruby](/encounter-slots/omega-ruby/Land.html)
+
+[Pearl](/encounter-slots/pearl/Land.html)
+
+[Platinum](/encounter-slots/platinum/Land.html)
