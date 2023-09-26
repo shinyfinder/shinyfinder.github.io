@@ -43,3 +43,13 @@ permalink: /encounter-slots/
 [Pearl](/encounter-slots/pearl/Land.html)
 
 [Platinum](/encounter-slots/platinum/Land.html)
+
+[Red](/encounter-slots/red/Land%20&%20Surf.html)
+
+[Ruby](/encounter-slots/ruby/Land.html)
+
+[Safari Zone](/encounter-slots/safari-zone/Land.html)
+
+[Sapphire](/encounter-slots/sapphire/Land.html)
+
+[Shield](/encounter-slots/shield/Overworld.html)
