@@ -26,8 +26,6 @@ permalink: /encounter-slots/
 
 [Gold](/encounter-slots/gold/Land.html)
 
-[Grottos](/encounter-slots/grotto/Grotto-Black2.html)
-
 [HeartGold](/encounter-slots/heart-gold/Land.html)
 
 [LeafGreen](/encounter-slots/leaf-green/Land.html)
@@ -53,3 +51,27 @@ permalink: /encounter-slots/
 [Sapphire](/encounter-slots/sapphire/Land.html)
 
 [Shield](/encounter-slots/shield/Overworld.html)
+
+[Sword](/encounter-slots/sword/Overworld.html)
+
+[Shining Pearl](/encounter-slots/shining-pearl/Land.html)
+
+[Silver](/encounter-slots/silver/Land.html)
+
+[SoulSilver](/encounter-slots/soul-silver/Land.html)
+
+[Sun](/encounter-slots/sun/Land.html)
+
+[Ultra Moon](/encounter-slots/ultra-moon/Land.html)
+
+[Ultra Sun](/encounter-slots/ultra-sun/Land.html)
+
+[White 2](/encounter-slots/white-2/Land.html)
+
+[White](/encounter-slots/white/Land.html)
+
+[X](/encounter-slots/x/Land.html)
+
+[Y](/encounter-slots/y/Land.html)
+
+[Yellow](/encounter-slots/yellow/Land%20&%20Surf.html)
