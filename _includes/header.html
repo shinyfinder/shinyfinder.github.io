@@ -4,6 +4,7 @@
       {%- assign default_paths = site.pages | map: "path" -%}
       {%- assign page_paths = site.header_pages | default: default_paths -%}
       {%- assign titles_size = site.pages | map: 'title' | join: '' | size -%}
+      <img class="site-image" src="/assets/images/sparkle.png" alt="sparkles">
       <a class="site-title" rel="author" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
   
       {%- if titles_size > 0 -%}
@@ -24,6 +25,7 @@
               <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
               {%- endif -%}
             {%- endfor -%}
+            <a class="page-link" href="https://github.com/sponsors/shinyfinder" target="_blank">Sponsor</a>
           </div>
         </nav>
       {%- endif -%}

@@ -131,3 +131,11 @@ button {
 .es-note {
     text-align: center;
 }
+
+
+/* Site image */
+.site-image {
+    float: left;
+    margin-top: 0.5em;
+    max-width: 5%;
+}

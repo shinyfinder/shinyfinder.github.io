@@ -15,5 +15,5 @@ Over time, links die, tools get lost, and the original devs move on. So in addit
 
 At the moment, I'm mostly working on developing and maintaining a [Discord bot](https://github.com/shinyfinder/chatot-smogon) for the Smogon Univeristy community, but I never know what need will pop up next.
 
-I hope you enjoy the tools as much as I've enjoyed working on them. While I'm just a hobbyist, I do my best to make each project robust and user friendly. While by no means necessary, a [sponsorship](https://github.com/sponsors/shinyfinde) is a deeply appreciated way to say thank you and to encourage and enable me to expand my horizons and improve my offerings. Thanks for reading!
+I hope you enjoy the tools as much as I've enjoyed working on them. While I'm just a hobbyist, I do my best to make each project robust and user friendly. While by no means necessary, a [sponsorship](https://github.com/sponsors/shinyfinder) is a deeply appreciated way to say thank you and to encourage and enable me to expand my horizons and improve my offerings. Thanks for reading!
 

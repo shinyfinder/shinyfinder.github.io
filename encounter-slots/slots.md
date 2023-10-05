@@ -10,7 +10,7 @@ The encounter slots listed on this page represent a combination of sources aroun
 
 * [Red](/encounter-slots/red/Land%20&%20Surf.html)
 * [Blue/Green](/encounter-slots/blue-green/Land%20&%20Surf.html)
-* [Japanese Blue](/encounter-slots/blue-japanse/Land%20&%20Surf.html)
+* [Japanese Blue](/encounter-slots/blue-japanese/Land%20&%20Surf.html)
 * [Yellow](/encounter-slots/yellow/Land%20&%20Surf.html)
 
 

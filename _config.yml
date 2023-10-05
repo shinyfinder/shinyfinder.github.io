@@ -12,12 +12,14 @@ minima:
   date_format: "%b %-d, %Y"
   social_links:
     - { platform: github, user_url: "https://github.com/shinyfinder" }
+    - { platform: smogon, user_url: "https://www.smogon.com/forums/members/shiny-finder.206479/" }
+    - { platform: reddit, user_url: "https://www.reddit.com/user/shi_fi/" }
+    
 
 header_pages:
   - about.md
   - tools/tools.md
   - tools/swiss/index.html
-  - misc/misc.md
   - encounter-slots/slots.md
 
 show_excerpts: false # set to true to show excerpts on the homepage
