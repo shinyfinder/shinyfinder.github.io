@@ -6,7 +6,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
 domain: shinyfinder.gihub.io
 url: "https://shinyfinder.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-
+google_analytics: G-BPGB43X3QR
 
 minima:
   date_format: "%b %-d, %Y"
