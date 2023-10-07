@@ -18,4 +18,4 @@ A full-featured webtool for managing Swiss tournaments. Extensions, byes, substi
 
 ## [Pokemon Encounter Slots](/encounter-slots/slots.md)
 
-The original and most-accurate source for encounter slots on the web is not hosted on GitHub! Originally on Google Sites, I decided to migrate everything over into one place. The tables for every mainline game from Gens 1-8 are provided, allowing users to quickly look up route information when RNGing.
+The original and most-accurate source for encounter slots on the web is now hosted on GitHub! Originally on Google Sites, I decided to migrate everything over into one place. The tables for every mainline game from Gens 1-8 are provided, allowing users to quickly look up route information when RNGing.
