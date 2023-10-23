@@ -1940,8 +1940,11 @@ function calcResist(finalResults, bracket) {
  */
 function getOpp(username, bracket) {
     // get the matchups that include this user
-    const matchArr = bracket.pairs.filter(p => p.some(uname => uname === username));
+    const matchArr = bracket.pairs?.filter(p => p.some(uname => uname === username)) ?? [];
 
+    if (!matchArr.length) {
+        return [];
+    }
     // get the list of opp names
     const oppArr = matchArr.map(oppname => oppname.find(name => name !== username));
 
