@@ -126,6 +126,9 @@ function loadBracket() {
     // put back the number of rounds remaining
     document.getElementById('rounds').innerHTML = bracket.roundsRemaining;
 
+    // repopulate the session storage with the pair info
+    sessionStorage.setItem('pairs', JSON.stringify(bracket.pairs ?? []));
+
 }
 
 /**
@@ -1940,6 +1943,7 @@ function calcResist(finalResults, bracket) {
  */
 function getOpp(username, bracket) {
     // get the matchups that include this user
+    // bracket.pairs shouldn't be null, but the check is from an old bug
     const matchArr = bracket.pairs?.filter(p => p.some(uname => uname === username)) ?? [];
 
     if (!matchArr.length) {
