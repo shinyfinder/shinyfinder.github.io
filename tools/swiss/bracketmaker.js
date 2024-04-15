@@ -1096,7 +1096,7 @@ function makeBracket(group, ext, makeExtBracket) {
         }
         // if the pairs aren't valid, reshuffle and try again
         if (!validPairs) {
-            userlistCopy = shuffle(userlist);
+            userlistCopy = JSON.parse(JSON.stringify(shuffle(userlist)));
         }
         // decrement the number of retries remaining and stop when you've reached the max
         retries--
