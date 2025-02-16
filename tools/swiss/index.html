@@ -10,7 +10,7 @@ permalink: /tools/swiss/
         display: none;
     }
 
-    #advance {
+    .advance-inputs {
         display: none;
     }
 
@@ -63,6 +63,10 @@ permalink: /tools/swiss/
     #inputBox {
         width: 400px;
         height: 200px;
+    }
+
+    .double-loss {
+      margin-left: 20px;
     }
 </style>
 
@@ -178,7 +182,11 @@ permalink: /tools/swiss/
         <h3>Brackets</h3>
         <div id="chooseWinners"></div>
 
-        <button type="button" onclick="advanceRound()" id="advance">Advance Round</button>
+        <div class='advance-inputs'>
+          <button type="button" onclick="advanceRound()" id="advance" class="advance-inputs">Advance Round</button>
+          <input type="checkbox" id="pair-down" />
+          <label for="pair-down">BETA - Pair Down (byes go to lower brackets)</label>
+        </div>
     </div>
 
 </div>
