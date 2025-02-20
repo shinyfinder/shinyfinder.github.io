@@ -198,21 +198,51 @@ function findDuplicates(array) {
     return results;
 }
 function extWinnerChosen(e) {
-    const matchup = e.nextSibling === null ? e.previousSibling.innerHTML : e.nextSibling.innerHTML;
+    let fakeWin = false;
+    if (e.classList.contains('double-loss') && e.checked) {
+        const sibs = e.parentElement?.children;
+        if (sibs) {
+            for (const sib of sibs) {
+                if (sib instanceof HTMLInputElement && !sib.classList.contains('double-loss')) {
+                    sib.checked = false;
+                    sib.disabled = true;
+                }
+            }
+        }
+        e = e.parentElement?.children[0];
+        e.checked = true;
+        fakeWin = true;
+    }
+    else if (e.classList.contains('double-loss')) {
+        const sibs = e.parentElement?.children;
+        if (sibs) {
+            for (const sib of sibs) {
+                if (sib instanceof HTMLInputElement && !sib.classList.contains('double-loss')) {
+                    sib.checked = false;
+                    sib.disabled = false;
+                }
+            }
+        }
+        e = e.parentElement?.children[0];
+    }
+    const matchup = e.nextSibling.classList.contains('double-loss') ? e.previousSibling.innerHTML : e.nextSibling.innerHTML;
     const name = e.value;
-    const opp = e.nextElementSibling === null ? e.previousElementSibling.previousElementSibling.value : e.nextElementSibling.nextElementSibling.value;
-    const oppElem = e.nextElementSibling === null ? e.previousElementSibling.previousElementSibling : e.nextElementSibling.nextElementSibling;
+    const opp = e.nextSibling.classList.contains('double-loss') ? e.previousElementSibling.previousElementSibling.value : e.nextElementSibling.nextElementSibling.value;
+    const oppElem = e.nextSibling.classList.contains('double-loss') ? e.previousElementSibling.previousElementSibling : e.nextElementSibling.nextElementSibling;
     const curBracket = sessionStorage.getItem('currentBracket');
     const bracket = JSON.parse(localStorage.getItem(curBracket));
     const oldPairsOrig = bracket['pairs'];
     const oldPairs = JSON.parse(sessionStorage.getItem('pairs')) || JSON.parse(JSON.stringify(bracket['pairs']));
+    const sibs = e.parentElement?.children;
+    const doubleLossInput = sibs ? [...sibs].filter(s => s.classList.contains('double-loss'))[0] : document.createElement('input');
     if (e.checked && !oppElem.checked) {
         const brackets = [...document.getElementById('chooseWinners').children];
         for (let i = 0; i < brackets.length; i++) {
             if (brackets[i].tagName != 'FORM') {
                 continue;
             }
-            const players = [...brackets[i]];
+            let players = [...brackets[i]];
+            players = players.filter(p => !p.classList.contains('double-loss'));
             for (let j = 0; j < players.length; j++) {
                 if (players[j].defaultValue === `(Winner of ${matchup})`) {
                     players[j].value = name;
@@ -246,6 +276,12 @@ function extWinnerChosen(e) {
                 }
             }
         }
+        if (fakeWin) {
+            e.checked = false;
+        }
+        else {
+            doubleLossInput.disabled = true;
+        }
     }
     else if (!e.checked && oppElem.checked) {
         const brackets = [...document.getElementById('chooseWinners').children];
@@ -253,7 +289,8 @@ function extWinnerChosen(e) {
             if (brackets[i].tagName != 'FORM') {
                 continue;
             }
-            const players = [...brackets[i]];
+            let players = [...brackets[i]];
+            players = players.filter(p => !p.classList.contains('double-loss'));
             for (let j = 0; j < players.length; j++) {
                 if (players[j].defaultValue === `(Winner of ${matchup})`) {
                     players[j].value = opp;
@@ -287,6 +324,9 @@ function extWinnerChosen(e) {
                 }
             }
         }
+        if (!fakeWin) {
+            doubleLossInput.disabled = true;
+        }
     }
     else {
         const brackets = [...document.getElementById('chooseWinners').children];
@@ -294,7 +334,8 @@ function extWinnerChosen(e) {
             if (brackets[i].tagName != 'FORM') {
                 continue;
             }
-            const players = [...brackets[i]];
+            let players = [...brackets[i]];
+            players = players.filter(p => !p.classList.contains('double-loss'));
             for (let j = 0; j < players.length; j++) {
                 if (players[j].dataset.default === `(Winner of ${matchup})`) {
                     players[j].value = players[j].dataset.default;
@@ -328,6 +369,7 @@ function extWinnerChosen(e) {
                 }
             }
         }
+        doubleLossInput.disabled = false;
     }
     return;
 }
@@ -792,13 +834,23 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket, ratio
             box2.disabled = true;
             box1.required = true;
         }
+        const dlBox = document.createElement('input');
+        dlBox.setAttribute('type', 'checkbox');
+        dlBox.classList.add('double-loss');
+        dlBox.setAttribute('value', 'Double loss');
+        dlBox.setAttribute('id', `${divID}winnerForm${childCount + 1}DoubleLoss`);
+        const dlLabel = document.createElement('label');
+        dlLabel.setAttribute('for', `${divID}winnerForm${childCount + 1}DoubleLoss`);
+        dlLabel.textContent = 'BETA - Double Loss';
         if (makeExtBracket) {
             box1.addEventListener('change', function () { extWinnerChosen(this); storeChecked(this); });
             box2.addEventListener('change', function () { extWinnerChosen(this); storeChecked(this); });
+            dlBox.addEventListener('change', function () { extWinnerChosen(this); storeChecked(this); });
         }
         else {
             box1.addEventListener('change', function () { storeChecked(this); });
             box2.addEventListener('change', function () { storeChecked(this); });
+            dlBox.addEventListener('change', function () { storeChecked(this); doubleLossDisable(this); });
         }
         const pairText = document.createElement('span');
         pairText.innerHTML = `${box1.value} VS ${box2.value}`;
@@ -806,17 +858,9 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket, ratio
         div.appendChild(box1);
         div.appendChild(pairText);
         div.appendChild(box2);
-        if (makeExtBracket) {
-            const dlBox = document.createElement('input');
-            dlBox.setAttribute('type', 'checkbox');
-            dlBox.classList.add('double-loss');
-            dlBox.setAttribute('value', 'Double loss');
-            dlBox.setAttribute('id', `${divID}winnerForm${childCount + 1}DoubleLoss`);
-            const label = document.createElement('label');
-            label.setAttribute('for', `${divID}winnerForm${childCount + 1}DoubleLoss`);
-            label.textContent = 'Grant double loss';
+        if (box1.value !== 'BYE' && box2.value !== 'BYE') {
             div.appendChild(dlBox);
-            div.appendChild(label);
+            div.appendChild(dlLabel);
         }
         form.appendChild(div);
     }
@@ -825,11 +869,28 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket, ratio
     bracket['DOM'] = curDOM;
     localStorage.setItem(curBracket, JSON.stringify(bracket));
 }
+function doubleLossDisable(e) {
+    const sibs = e.parentElement?.children;
+    if (sibs) {
+        const nodeList = [...sibs];
+        for (const node of nodeList) {
+            if (node instanceof HTMLInputElement && !node.classList.contains('double-loss')) {
+                node.checked = false;
+                if (e.checked) {
+                    node.disabled = true;
+                }
+                else {
+                    node.disabled = false;
+                }
+            }
+        }
+    }
+}
 function advanceRound() {
     const curBracket = sessionStorage.getItem('currentBracket');
     const bracket = JSON.parse(localStorage.getItem(curBracket));
-    const winners = [...document.querySelectorAll("input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down):checked")];
-    const losers = [...document.querySelectorAll('input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down):not(:checked)')];
+    const winners = [...document.querySelectorAll("input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down,.double-loss):checked")];
+    const losers = [...document.querySelectorAll('input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down,.double-loss):not(:checked)')];
     const extBracketChildNodeCount = document.getElementById('extensions').childNodes.length;
     const extWinners = [...document.querySelectorAll("#extensions :checked")];
     if (extWinners.length < extBracketChildNodeCount) {
@@ -857,7 +918,12 @@ function advanceRound() {
     }
     const dupFoundL = hasDuplicates(parentNodesL);
     if (dupFoundL) {
-        extension = findDuplicates(parentNodesL);
+        const doubleLoss = parentNodesL.filter(n => {
+            const elem = document.getElementById(n);
+            const dlElem = [...elem.children].filter(c => c.classList.contains('double-loss'))[0];
+            return !dlElem?.checked;
+        });
+        extension = findDuplicates(doubleLoss);
     }
     extension.forEach(e => {
         const extIndex = parentNodesL.indexOf(e);
@@ -1001,8 +1067,8 @@ function newPairs(standings, extNames) {
     }
 }
 function calcFinalScore() {
-    const winners = [...document.querySelectorAll("input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down):checked")];
-    const losers = [...document.querySelectorAll('input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down):not(:checked)')];
+    const winners = [...document.querySelectorAll("input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down,.double-loss):checked")];
+    const losers = [...document.querySelectorAll('input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down,.double-loss):not(:checked)')];
     const parentNodesW = [];
     const parentNodesL = [];
     const winnerNames = [];
@@ -1020,9 +1086,13 @@ function calcFinalScore() {
         alert('You cannot have two winners in a matchup!');
         return;
     }
-    const dupFoundL = hasDuplicates(parentNodesL);
-    if (dupFoundL) {
-        alert('You must have a winner in each matchup!');
+    const nonDoubleLoss = parentNodesL.filter(n => {
+        const elem = document.getElementById(n);
+        const dlElem = [...elem.children].filter(c => c.classList.contains('double-loss'))[0];
+        return !dlElem?.checked;
+    });
+    if (hasDuplicates(nonDoubleLoss)) {
+        alert('Each matchup must be decided!');
         return;
     }
     if (parentNodesW.length) {
