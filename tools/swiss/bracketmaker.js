@@ -16,7 +16,7 @@ window.onload = function() {
     // if it's set to light, remove the dark mode class
     else if (curMode == 'light') {
         document.body.classList.remove('dark-mode');
-    } 
+    }
     // if it's set to dark, add the dark mode class and update localstorage
     else if (curMode == 'dark') {
         localStorage.setItem('mode', 'dark');
@@ -47,7 +47,7 @@ window.onload = function() {
 
 
 /**
- * 
+ *
  * Bracket Management Functions
  *  Set of functions to load, delete, and make new brackets
  */
@@ -115,7 +115,7 @@ function loadBracket() {
     if (bracket.participants) {
         document.getElementById('inputBox').value = bracket.participants.join('\n');
     }
-    
+
     // re-check the boxes
     const checkedBoxes = document.querySelectorAll('.checked');
 
@@ -148,7 +148,7 @@ function deleteBracket() {
     // get the name of the selected bracket
     const text = bracketSelect.options[bracketSelect.selectedIndex].innerHTML;
 
-    
+
     // confirm
     let confirmText = `You are about to delete bracket ${text}. This action cannot be undone!\nContinue?`;
     if (confirm(confirmText) == true) {
@@ -172,7 +172,7 @@ function newBracket() {
     const name = nameInput.value;
     // reset the input
     nameInput.value = '';
-    
+
     // return if name is blank
     if (name == '') {
         alert('You must enter a name for the bracket');
@@ -194,7 +194,7 @@ function newBracket() {
         return;
     }
 
-    
+
     // reset the dom to its initial state
     const initialDOM = JSON.parse(sessionStorage.getItem('initialDOM'));
     document.getElementById('pageContent').innerHTML = initialDOM;
@@ -313,7 +313,7 @@ function resetWinners() {
     document.getElementById('extensions').innerHTML = '';
     document.getElementById('output-ext').innerHTML = '';
     document.getElementById('output-bracket').innerHTML = '';
-    
+
     return;
 }
 
@@ -334,7 +334,7 @@ function storeChecked(e) {
     const curDOM = document.getElementById('pageContent').innerHTML;
     bracket['DOM'] = curDOM;
     localStorage.setItem(curBracket,JSON.stringify(bracket));
-    
+
 }
 
 
@@ -349,16 +349,16 @@ function shuffle(array) {
 
     // While there remain elements to shuffle.
     while (currentIndex != 0) {
-  
+
       // Pick a remaining element.
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-  
+
       // And swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
     }
-  
+
     return array;
 }
 
@@ -376,7 +376,7 @@ function hasDuplicates(array) {
 
 /**
  * Gets the repeated entry in an array
- * @param {string[]} array 
+ * @param {string[]} array
  * @returns {string[]} array of repeated entries
  */
 // function to find duplicate entries in an array
@@ -434,7 +434,7 @@ function extWinnerChosen(e) {
                     }
                     else {
                         players[j].previousSibling.innerHTML = players[j].previousSibling.innerHTML.replace(`(Winner of ${matchup})`, name);
-                    }                    
+                    }
                 }
                 // loser of text
                 else if (players[j].defaultValue === `(Loser of ${matchup})`) {
@@ -445,7 +445,7 @@ function extWinnerChosen(e) {
                     else {
                         players[j].previousSibling.innerHTML = players[j].previousSibling.innerHTML.replace(`(Loser of ${matchup})`, opp);
                     }
-                    
+
                 }
             }
         }
@@ -487,7 +487,7 @@ function extWinnerChosen(e) {
                     else {
                         players[j].previousSibling.innerHTML = players[j].previousSibling.innerHTML.replace(`(Winner of ${matchup})`, opp);
                     }
-                    
+
                 }
                 else if (players[j].defaultValue === `(Loser of ${matchup})`) {
                     players[j].value = name;
@@ -496,7 +496,7 @@ function extWinnerChosen(e) {
                     } else {
                         players[j].previousSibling.innerHTML = players[j].previousSibling.innerHTML.replace(`(Loser of ${matchup})`, name);
                     }
-                    
+
                 }
             }
         }
@@ -537,7 +537,7 @@ function extWinnerChosen(e) {
                     else {
                         players[j].previousSibling.innerHTML = players[j].previousSibling.dataset.default;
                     }
-                    
+
                 }
                 else if (players[j].dataset.default === `(Loser of ${matchup})`) {
                     players[j].value = players[j].dataset.default;
@@ -547,7 +547,7 @@ function extWinnerChosen(e) {
                     else {
                         players[j].previousSibling.innerHTML = players[j].previousSibling.dataset.default;
                     }
-                    
+
                 }
             }
         }
@@ -595,7 +595,7 @@ function findWLIndices(arr) {
             indices.push(i);
         }
     }
-    
+
     return indices;
 }
 
@@ -621,7 +621,7 @@ function parseBM() {
         participants.push(parsedMatchup[1]);
         participants.push(parsedMatchup[2]);
     }
-    
+
     return participants;
 }
 
@@ -649,14 +649,14 @@ function postResults(arr, id) {
             if (bracketStrOut != bracketStrOutOld) {
                 arrOut.push('<br />' + bracketStrOut + '<br />');
             }
-            
+
             // get the names of the players from the obj
             const matchup = parentDiv.children;
-    
+
             // get the player checkboxes from this matchup
             const pElem1 = matchup[0];
             const pElem2 = matchup[2];
-            
+
             // build the output based on who won
             if (pElem1.checked && pElem2.value != 'BYE') {
                 strOut = `[b]@${pElem1.value}[/b] VS @${pElem2.value}`;
@@ -672,7 +672,7 @@ function postResults(arr, id) {
             }
 
         }
-        
+
     }
     // if it's an ext, we don't want the header
     else {
@@ -682,15 +682,15 @@ function postResults(arr, id) {
         });
 
     }
-    // post to dom    
+    // post to dom
     document.getElementById(id).innerHTML = arrOut.join('<br />');
 
 }
 
 /**
  * Posts the current Win/Loss ratios to the DOM after each round
- * @param {object} obj 
- * @param {*} ext 
+ * @param {object} obj
+ * @param {*} ext
  */
 function postStandings(obj, ext) {
     // get the entries in the standings object for sorting
@@ -737,7 +737,7 @@ function postStandings(obj, ext) {
  * Removes a user from the bracket
  * @returns void
  */
-// 
+//
 function removeUser() {
     // get the entered name
     const userField = document.getElementById('removeUserField');
@@ -787,7 +787,7 @@ function removeUser() {
     quitList.push(user);
 
 
-    
+
     if (bracket.standings) {
         // store the w/l ratio of the quitter to a separate object
         // and delete their name from the main bracket
@@ -849,12 +849,10 @@ function subUser() {
     }
 
     // update the standings
-    let standings = bracket.standings || [];
-
-    if (user1 !== user2) {
-        Object.defineProperty(standings, user2,
-            Object.getOwnPropertyDescriptor(standings, user1));
-        delete standings[user1];
+    if (user1 !== user2 && bracket.standings) {
+        Object.defineProperty(bracket.standings, user2,
+            Object.getOwnPropertyDescriptor(bracket.standings, user1));
+        delete bracket.standings[user1];
     }
 
     // update the pairs
@@ -897,7 +895,7 @@ function subUser() {
   * Runs whenever you click the make bracket button.
   * We separate this out because we need to reset the page for the inital bracket
   * but not whenever we make a bracket, as that would overwrite the new groups after R1
-  * @calls makeBracket() 
+  * @calls makeBracket()
   */
 function initBracket() {
     let providedNames;
@@ -907,14 +905,14 @@ function initBracket() {
 
     // check whether the box to use bracket maker format is checked
     const BMFlag = document.getElementById('parseBracketMakerOption').checked;
-    
+
     // if it's set to parse the bracket maker output, use the respective parse function
     if (BMFlag) {
         providedNames = parseBM();
     } else {
         providedNames = document.getElementById('inputBox').value.split(/[\r\n]+/);
     }
-    
+
     // check for no input
     if (providedNames == '') {
         alert(`Please enter the names of the participants.`);
@@ -945,7 +943,7 @@ function initBracket() {
     // retreive the same item from local storage to save the data across sessions
     let bracket = JSON.parse(localStorage.getItem(curBracket));
 
-    
+
     // make sure they didn't enter too many rounds
     const theoreticalRounds = Math.floor(providedNames.length / 2);
 
@@ -957,7 +955,7 @@ function initBracket() {
     // decrement the rounds remaining and update the DOM
     bracket.roundsRemaining = bracket.roundsRemaining - 1;
     document.getElementById('rounds').innerHTML = bracket.roundsRemaining;
-    
+
     // save the entered userlist
     bracket['participants'] = providedNames;
 
@@ -1008,7 +1006,7 @@ function makeBracket(group, ext, makeExtBracket) {
         //userlist = providedNames.split(/[\r?\n]+/);
         userlist = JSON.parse(JSON.stringify(providedNames));
     }
-    
+
 
     // shuffle the input array
     // unless there's only 2 names
@@ -1022,7 +1020,7 @@ function makeBracket(group, ext, makeExtBracket) {
         userlist = [userlist[1], userlist[0]];
     }
 
-    
+
     // make a deep copy of the userlist
     let userlistCopy = JSON.parse(JSON.stringify(userlist));
 
@@ -1036,7 +1034,7 @@ function makeBracket(group, ext, makeExtBracket) {
 
     // set the max number of retries
     let retries = 500;
-    
+
     // if a pair appears that has happened before, retry
     while (!validPairs) {
         pairings = [];
@@ -1045,8 +1043,8 @@ function makeBracket(group, ext, makeExtBracket) {
         while (userlistCopy.length) {
             // get the last element in the array
             // removes this element from the original array
-            name1 = userlistCopy.pop();      
-    
+            name1 = userlistCopy.pop();
+
             // get the next last element as the opponent
             // if there are no more names left, set the opponent to a bye
             if (userlistCopy.length == 0) {
@@ -1054,7 +1052,7 @@ function makeBracket(group, ext, makeExtBracket) {
             } else {
                 name2 = userlistCopy.pop();
             }
-            
+
             // group them together
             const tempPair = [name1, name2];
 
@@ -1068,7 +1066,7 @@ function makeBracket(group, ext, makeExtBracket) {
                         // test whether the pair is the same
                         // [A, B] is the same as [B, A]
                         // ignore BYE vs BYE matchups
-                        return element === tempPair[0] || element === tempPair[1] && tempPair[0] !== tempPair[1]; 
+                        return element === tempPair[0] || element === tempPair[1] && tempPair[0] !== tempPair[1];
                     });
                     return arr.length == tempPair.length && sameTest;
                 })
@@ -1080,14 +1078,14 @@ function makeBracket(group, ext, makeExtBracket) {
                 alert('No possible pairings left!');
                 return;
             }
-            
+
             // if it's an old pair, break the loop
             if (isOldPair) {
                 break;
             }
             // if it's a new pair, push it to the pairings array
-            pairings.push([name1, name2]); 
-            
+            pairings.push([name1, name2]);
+
             // check on last loop if everything is ok
             // if you got this far and there are no more names, then this is a valid bracket
             if (!userlistCopy.length) {
@@ -1121,11 +1119,11 @@ function makeBracket(group, ext, makeExtBracket) {
     // .some returns true or false depending on whether it passes the provided function
     // .find returns the first element in the provided array that satisfies the testing criteria
     // .includes tests the substring for the desired string
-    
+
 
     // make a deep copy of the pairings array
     let pairingsCopy = JSON.parse(JSON.stringify(pairings));
-    
+
     // loop over the array
     for (let i = 0; i < pairingsCopy.length; i++) {
         // check for special cases (Winner of, Loser of, bye)
@@ -1143,7 +1141,7 @@ function makeBracket(group, ext, makeExtBracket) {
                         pairingsCopy[i][j] = pairingsCopy[i][j].replace(ext[k], `@${ext[k]}`);
                     }
                 }
-                
+
             }
 
             // if you found a single Winner of/Loser of text...
@@ -1163,7 +1161,7 @@ function makeBracket(group, ext, makeExtBracket) {
                 const pairText = `${pairingsCopy[i][0]} VS ${pairingsCopy[i][1]}`;
                 pairTextArr.push(pairText);
             }
-            
+
         }
         // the first call doesn't pass ext, so we need a separate conditional for that case
         // the logic is pretty much the same as above
@@ -1183,14 +1181,14 @@ function makeBracket(group, ext, makeExtBracket) {
                 pairTextArr.push(pairText);
             }
         }
-        
+
         // if there's no special text, then just put an @ before each
         else {
             const pairText = `@${pairings[i][0]} VS @${pairings[i][1]}`;
             pairTextArr.push(pairText);
         }
 
-                   
+
     }
 
 
@@ -1212,7 +1210,7 @@ function makeBracket(group, ext, makeExtBracket) {
                 // get the name of the first user in the extension
                 ext.some(name => {
                     user = name;
-                    return pairings[i][0].includes(name) 
+                    return pairings[i][0].includes(name)
                 });
                 // get the record for the person in the extension
                 let bracketRecord = JSON.parse(JSON.stringify(bracket.standings[user]));
@@ -1227,7 +1225,7 @@ function makeBracket(group, ext, makeExtBracket) {
                 // get the name of the first user in the extension
                 ext.some(name => {
                     user = name;
-                    return pairings[i][0].includes(name) 
+                    return pairings[i][0].includes(name)
                 });
                 // get the record for the person in the extension
                 let bracketRecord = JSON.parse(JSON.stringify(bracket.standings[user]));
@@ -1240,10 +1238,10 @@ function makeBracket(group, ext, makeExtBracket) {
             else {
                 headerOut = ['<br />[' + bracket.standings[pairings[i][0]].toString() + '] Bracket<br />'];
             }
-            
+
         }
     }
-    
+
 
     // push the copy/pastable output to the DOM
     let output;
@@ -1253,24 +1251,24 @@ function makeBracket(group, ext, makeExtBracket) {
     } else {
         output = document.getElementById('output-bracket');
     }
-    
+
     // div to store the pairs
     const textDiv = document.createElement('div');
-    
+
     // append the header for regular brackets
     if (makeExtBracket) {
-        textDiv.innerHTML = pairTextArr.join('<br />');    
+        textDiv.innerHTML = pairTextArr.join('<br />');
     }
     else {
         textDiv.innerHTML = headerOut.concat(pairTextArr).join('<br />');
     }
-    
+
     // post to the dom
     output.appendChild(textDiv);
 
-    
 
-    // store the userlist and pairings 
+
+    // store the userlist and pairings
     bracket['pairs'] = bracket['pairs'] || [];
     if (!makeExtBracket) {
         bracket['pairs'] = bracket['pairs'].concat(pairings);
@@ -1280,7 +1278,7 @@ function makeBracket(group, ext, makeExtBracket) {
 
     // make the pairings into a form for the user to select the winner
     createWinnerForm(pairings, ext, makeExtBracket, curBracket, bracket);
-    
+
 }
 
 
@@ -1303,7 +1301,7 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
         parentDiv = document.getElementById('chooseWinners');
         divID = '';
     }
-    
+
     // get the current number of chooseWinner forms and the children they contain
     const child = parentDiv.children;
     let childCount = 0;
@@ -1312,7 +1310,7 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
             childCount++;
         }
     }
-    
+
     let grandChildCount = 0;
     for (let i = 0; i < child.length; i++) {
         grandChildCount += child[i].childElementCount;
@@ -1329,7 +1327,7 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
         label.style.cssText = 'margin: 20px 0px; display: inline-block;';
         parentDiv.appendChild(label);
     }
-    
+
     // loop through the pairs
     for (let i = 0; i < pairs.length; i++) {
         // create a div to contain everything
@@ -1350,7 +1348,7 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
         else {
             div.setAttribute('data-bracket', '[0,0] Bracket');
         }
-        
+
         // if it's not the first round and you aren't making an extension bracket,
         // determine what the header should be based on their w/l ratio
         // we only care about the first entrant since both parties have the same ratio
@@ -1360,7 +1358,7 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
                 let user = '';
                 ext.some(name => {
                     user = name;
-                    return pairs[i][0].includes(name) 
+                    return pairs[i][0].includes(name)
                 });
                 // get the record for the person in the extension
                 let bracketRecord = JSON.parse(JSON.stringify(bracket.standings[user]));
@@ -1375,7 +1373,7 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
                 let user = '';
                 ext.some(name => {
                     user = name;
-                    return pairs[i][0].includes(name) 
+                    return pairs[i][0].includes(name)
                 });
                 // get the record for the person in the extension
                 let bracketRecord = JSON.parse(JSON.stringify(bracket.standings[user]));
@@ -1389,9 +1387,9 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
                 label.innerHTML = '[' + bracket.standings[pairs[i][0]].toString() + '] Bracket';
                 div.setAttribute('data-bracket', label.innerHTML);
             }
-            
+
         }
-        
+
         // make a checkbox for the second player
         const box2 = document.createElement("input");
         box2.setAttribute('type', 'checkbox');
@@ -1410,7 +1408,7 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
             box1.required = true;
         }
 
-        // if the form is for extensions, add an onChange event listener 
+        // if the form is for extensions, add an onChange event listener
         // the event listener updates the text in the other forms from (Winner/Loser of ...) to the winner/loser name
         // this way if they get another extension, the code works as normal
         // also store that it has been checked so the DOM can be reloaded later with them checked
@@ -1436,18 +1434,18 @@ function createWinnerForm(pairs, ext, makeExtBracket, curBracket, bracket) {
 
     // post the form to the div
     parentDiv.appendChild(form);
-    
+
 
     // store the current DOM state to local storage
     const curDOM = document.getElementById('pageContent').innerHTML;
     bracket['DOM'] = curDOM;
     localStorage.setItem(curBracket,JSON.stringify(bracket));
-    
+
 }
 
 /**
  * Retrieves the checked boxes from the forms so that we can update the wins and loses for each player
- * @calls updatewL() 
+ * @calls updatewL()
  */
 function advanceRound() {
     // get the current bracket from storage
@@ -1510,7 +1508,7 @@ function advanceRound() {
     // nodes that are repeated got an extension
     // updated the names of the losers to only have the players who lost
     extension.forEach(e => {
-        // get the index of the repeated entry in the 
+        // get the index of the repeated entry in the
         const extIndex = parentNodesL.indexOf(e);
 
         // log this entry and entry+1 to the extNames array
@@ -1534,12 +1532,12 @@ function advanceRound() {
     if (extNames.length) {
         postResults(extNames, 'results-ext');
     }
-    
+
 
 
     // get the pairs (updated with extension winners/losers) from the storage and save it
     bracket['pairs'] = JSON.parse(sessionStorage.getItem('pairs'));
-    
+
     // reduce the number of rounds remaining
     bracket['roundsRemaining']--
     // re-save to storage
@@ -1576,7 +1574,7 @@ function updateWL(winnerNames, loserNames, extNames, curBracket, bracket) {
         standings = standings;
         userlist = winnerNames.concat(loserNames);
     }
-    
+
     // if someone quit, remove their name.
     // if the person quit and was in an extension, replace their name with a BYE
     if (bracket.quits) {
@@ -1598,8 +1596,8 @@ function updateWL(winnerNames, loserNames, extNames, curBracket, bracket) {
             }
         })
     }
-    
-    
+
+
 
     // loop over the list of usernames so we can update their records
     for (const username of userlist) {
@@ -1625,7 +1623,7 @@ function updateWL(winnerNames, loserNames, extNames, curBracket, bracket) {
         else if (username != 'BYE') {
             standings[username] = [(standings[username]?.[0] || 0), standings[username]?.[1] || 0];
         }
-        
+
     }
 
     // update the storage variable
@@ -1643,8 +1641,8 @@ function updateWL(winnerNames, loserNames, extNames, curBracket, bracket) {
 
 /**
  * Groups the users based on their records
- * @param {object} standings 
- * @param {*} extNames 
+ * @param {object} standings
+ * @param {*} extNames
  * @calls makeBracket()
  */
 function newPairs(standings, extNames) {
@@ -1686,16 +1684,16 @@ function newPairs(standings, extNames) {
             // check if the users have the same ratio as the test
             // ratios are in the form [W, L]
             let is_same = array1.length == array2.length && array1.every(function(element, index) {
-                return element === array2[index]; 
+                return element === array2[index];
             });
-             
+
             // get the name of the person with this ratio
             let name = names[j];
 
             // if the ratio is the same as the test and their name isn't in the list of extensions, log it
             if (is_same && !allExtNames.includes(name)) {
                 indices.push(name);
-            }  
+            }
             // else if it is the same as the test and they are given an extension
             else if (is_same && allExtNames.includes(name)) {
                 // get the index of the extension pair
@@ -1710,7 +1708,7 @@ function newPairs(standings, extNames) {
                 else {
                     indices.push(`(Loser of ${extNames[pairIndex][0]} VS ${extNames[pairIndex][1]})`);
                 }
-                
+
             }
         }
         groups.push(indices);
@@ -1741,7 +1739,7 @@ function calcFinalScore() {
     // get a list of all of the winners (checked) and losers (unchecked)
     const winners = [...document.querySelectorAll( "input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check):checked" )];
     const losers = [...document.querySelectorAll('input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check):not(:checked)')];
-   
+
     // get the parent nodes of each
     const parentNodesW = [];
     let parentNodesL = [];
@@ -1818,7 +1816,7 @@ function calcFinalScore() {
 
     // update storage variable
     bracket['standings'] = standings;
-    // get the temp pairs (updated with extention winners/losers) from the session storage and save it to local 
+    // get the temp pairs (updated with extention winners/losers) from the session storage and save it to local
     bracket['pairs'] = JSON.parse(sessionStorage.getItem('pairs'));
     localStorage.setItem(curBracket, JSON.stringify(bracket));
 
@@ -1855,7 +1853,7 @@ function calcFinalScore() {
     if (bracket.quitStandings) {
         quitFinalResults = Object.entries(bracket.quitStandings);
     }
-    
+
     // calc resistance for quits
     const modQuitFinalResults = calcResist(quitFinalResults, bracket);
 
@@ -1871,7 +1869,7 @@ function calcFinalScore() {
             quitStrOut.push(str);
         }
     }
-    
+
 
     if (quitStrOut.length) {
         document.getElementById('quitResults').innerHTML = quitStrOut.join('<br />');
@@ -1893,7 +1891,7 @@ function calcFinalScore() {
  * Calculates the players resistance, defined as avg Op Win % and avg Op Op Win %
  * @param {*} finalResults Array of array containing names and W/L records
  * @param {*} bracket DOM
- * @returns 
+ * @returns
  */
 function calcResist(finalResults, bracket) {
     const modFinalResults = [];
@@ -1918,7 +1916,7 @@ function calcResist(finalResults, bracket) {
             // push to temp array
             tempOppOppWP.push(oppOppWP);
         }
-        
+
         // find the average of the opp opp win %
         const avgOppOppWP = (tempOppOppWP.reduce( (a,b) => (Number(a)+Number(b)), 0) / (tempOppOppWP.length === 0 ? 1 : tempOppOppWP.length)).toFixed(2);
 
@@ -1928,7 +1926,7 @@ function calcResist(finalResults, bracket) {
 
         // add it to the final array for output
         modFinalResults.push(user);
-        
+
 
     }
     return modFinalResults;
@@ -1939,7 +1937,7 @@ function calcResist(finalResults, bracket) {
  * Looks through the list of games and returns an array containing their opponents throughout the tournament
  * @param {string} username Name of player
  * @param {*} bracket DOM
- * @returns 
+ * @returns
  */
 function getOpp(username, bracket) {
     // get the matchups that include this user
@@ -1953,7 +1951,7 @@ function getOpp(username, bracket) {
     const oppArr = matchArr.map(oppname => oppname.find(name => name !== username));
 
     return oppArr;
-    
+
 }
 
 
@@ -1961,7 +1959,7 @@ function getOpp(username, bracket) {
  * Calculates the average win percentage of the provided array of names
  * @param {string[]} oppArr Array of opponent names
  * @param {*} finalResults Array of array containing player names and W/L records
- * @returns 
+ * @returns
  */
 function getOppWinPercent(oppArr, finalResults) {
     // loop over the list of opp names
@@ -2042,7 +2040,7 @@ function addMatch() {
     }
 
     bracket.participants = participants;
-    
+
 
     // update the standings
     const standings = bracket.standings || {};
@@ -2080,7 +2078,7 @@ function addMatch() {
     else {
         bracket.pairs = [users];
     }
-    
+
 
     // reset the input fields
     userField1.value = '';
