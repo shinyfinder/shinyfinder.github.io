@@ -538,11 +538,8 @@ function subUser() {
         userField1.value = '';
         return;
     }
-
-    // update the standings
     if (user1 !== user2 && bracket.standings) {
-        Object.defineProperty(bracket.standings, user2,
-            Object.getOwnPropertyDescriptor(bracket.standings, user1));
+        Object.defineProperty(bracket.standings, user2, Object.getOwnPropertyDescriptor(bracket.standings, user1));
         delete bracket.standings[user1];
     }
     if (bracket.pairs) {
@@ -760,7 +757,6 @@ function makeBracket(group, ext, makeExtBracket, pairDownUser, finalIter, ratio)
     }
     const textDiv = document.createElement('div');
     if (makeExtBracket) {
-        textDiv.innerHTML = pairTextArr.join('<br />');
         textDiv.innerHTML = pairTextArr.join('<br />');
     }
     else {
@@ -1278,4 +1274,3 @@ function addMatch() {
     localStorage.setItem(curBracket, JSON.stringify(bracket));
     sessionStorage.setItem('pairs', JSON.stringify(bracket['pairs']));
 }
-

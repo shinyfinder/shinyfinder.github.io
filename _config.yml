@@ -11,10 +11,10 @@ google_analytics: G-BPGB43X3QR
 minima:
   date_format: "%b %-d, %Y"
   social_links:
-    - { platform: github, user_url: "https://github.com/shinyfinder" }
-    - { platform: smogon, user_url: "https://www.smogon.com/forums/members/shiny-finder.206479/" }
-    - { platform: reddit, user_url: "https://www.reddit.com/user/shi_fi/" }
-    
+    - { icon: "github", title: "GitHub", url: "https://github.com/shinyfinder" }
+    - { icon: "user", title: "Smogon", url: "https://www.smogon.com/forums/members/shiny-finder.206479/" }
+    - { icon: "reddit-alien", title: "Reddit", url: "https://www.reddit.com/user/shi_fi/" }
+
 
 header_pages:
   - about.md
