@@ -610,7 +610,7 @@ function makeBracket(group, ext, makeExtBracket, pairDownUser, finalIter, ratio)
     const bracket = JSON.parse(localStorage.getItem(curBracket));
     const providedNames = bracket['participants'];
     const oldPairings = bracket['pairs'] || [];
-    const pairDown = document.getElementById('pair-down').checked;
+    const pairDown = document.getElementById('pair-down')?.checked ?? false;
     let unpaired = '';
     let userlist;
     if (makeExtBracket) {
