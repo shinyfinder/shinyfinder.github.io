@@ -10,7 +10,7 @@ permalink: /tools/swiss/
         display: none;
     }
 
-    #advance {
+    .advance-inputs {
         display: none;
     }
 
@@ -63,6 +63,10 @@ permalink: /tools/swiss/
     #inputBox {
         width: 400px;
         height: 200px;
+    }
+
+    .double-loss {
+      margin-left: 30px;
     }
 </style>
 
@@ -125,6 +129,12 @@ permalink: /tools/swiss/
         output from the <a href="https://www.smogon.com/bracketmaker/" target="_blank">bracket maker</a> into the field
         below and check the box before making a new bracket. Note that users will be re-paired if using the output from
         the bracket maker.</p>
+    <p>Beta Features:</p>
+    <ul>
+      <li><strong>Double Loss</strong>: If desired, both players in a matchup are given the loss. When granting a double loss to an extension, one of the players may end up playing outside of their bracket for the current round.</li>
+      <li><strong>Pair Down</strong>: Rather than granting byes to the upper brackets, unmatched players are put into the next bracket down, essentially forcing the byes to go to players with worse standings.
+        For example, a 3-0 player will be placed into the 2-1 bracket for the next round rather than being given a bye.</li>
+    </ul>
     <form>
         <label for="inputBox">Usernames</label>
         <br />
@@ -178,7 +188,11 @@ permalink: /tools/swiss/
         <h3>Brackets</h3>
         <div id="chooseWinners"></div>
 
-        <button type="button" onclick="advanceRound()" id="advance">Advance Round</button>
+        <div class='advance-inputs'>
+          <button type="button" onclick="advanceRound()" id="advance" class="advance-inputs">Advance Round</button>
+          <input type="checkbox" id="pair-down" />
+          <label for="pair-down">BETA - Pair Down</label>
+        </div>
     </div>
 
 </div>
