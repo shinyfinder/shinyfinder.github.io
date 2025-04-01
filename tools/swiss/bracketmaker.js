@@ -966,11 +966,11 @@ function updateWL(winnerNames, loserNames, extNames, curBracket, bracket) {
                 }
             }
             for (let i = 0; i < extNames.length; i++) {
-                if (extNames[0][0] == name) {
-                    extNames[0][0] = 'BYE';
+                if (extNames[i][0] == name) {
+                    extNames[i][0] = 'BYE';
                 }
-                else if (extNames[1][1] == name) {
-                    extNames[1][1] = 'BYE';
+                else if (extNames[i][1] == name) {
+                    extNames[i][1] = 'BYE';
                 }
             }
         });
