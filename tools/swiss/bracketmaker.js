@@ -1,21 +1,17 @@
 "use strict";
 window.onload = function () {
     document.getElementById('bracket-file-input').addEventListener('change', importBracket, false);
-    const curMode = localStorage.getItem('mode');
-    if (curMode === null) {
-        localStorage.setItem('mode', 'light');
-    }
-    else if (curMode == 'light') {
-        document.body.classList.remove('dark-mode');
-    }
-    else if (curMode == 'dark') {
-        localStorage.setItem('mode', 'dark');
-    }
     const brackets = localStorage;
     if (brackets.length) {
         const bracketNames = Object.keys(brackets);
         const modeIndex = bracketNames.indexOf('mode');
-        bracketNames.splice(modeIndex, 1);
+        if (modeIndex >= 0) {
+            bracketNames.splice(modeIndex, 1);
+        }
+        const skinIndex = bracketNames.indexOf('skin');
+        if (skinIndex >= 0) {
+            bracketNames.splice(skinIndex, 1);
+        }
         const sel = document.getElementById('bracketSelect');
         bracketNames.forEach((name, key) => {
             sel[key + 1] = new Option(name, `${key + 1}`);
@@ -106,6 +102,7 @@ function newBracket() {
     bracket['DOM'] = initialDOM;
     bracket['roundsRemaining'] = numRounds;
     bracket['origin'] = 'manage';
+    bracket['winners'] = {};
     localStorage.setItem(name, JSON.stringify(bracket));
     sessionStorage.setItem('currentBracket', name);
     sessionStorage.removeItem('pairs');
@@ -902,6 +899,30 @@ function advanceRound() {
     winners.forEach(e => {
         parentNodesW.push(e.parentNode.id);
         winnerNames.push(e.value);
+        const prevElem = e.previousElementSibling;
+        const nextElem = e.nextElementSibling;
+        if (prevElem instanceof HTMLSpanElement) {
+            if (!bracket['winners']) {
+                bracket['winners'] = {};
+                const matchup = prevElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+            else {
+                const matchup = prevElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+        }
+        else if (nextElem instanceof HTMLSpanElement) {
+            if (!bracket['winners']) {
+                bracket['winners'] = {};
+                const matchup = nextElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+            else {
+                const matchup = nextElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+        }
     });
     losers.forEach(e => {
         parentNodesL.push(e.parentNode.id);
@@ -1063,6 +1084,8 @@ function newPairs(standings, extNames) {
     }
 }
 function calcFinalScore() {
+    const curBracket = sessionStorage.getItem('currentBracket');
+    const bracket = JSON.parse(localStorage.getItem(curBracket));
     const winners = [...document.querySelectorAll("input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down,.double-loss):checked")];
     const losers = [...document.querySelectorAll('input[type=checkbox]:not(#parseBracketMakerOption,#player1Check,#player2Check,#pair-down,.double-loss):not(:checked)')];
     const parentNodesW = [];
@@ -1072,6 +1095,30 @@ function calcFinalScore() {
     winners.forEach(e => {
         parentNodesW.push(e.parentNode.id);
         winnerNames.push(e.value);
+        const prevElem = e.previousElementSibling;
+        const nextElem = e.nextElementSibling;
+        if (prevElem instanceof HTMLSpanElement) {
+            if (!bracket['winners']) {
+                bracket['winners'] = {};
+                const matchup = prevElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+            else {
+                const matchup = prevElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+        }
+        else if (nextElem instanceof HTMLSpanElement) {
+            if (!bracket['winners']) {
+                bracket['winners'] = {};
+                const matchup = nextElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+            else {
+                const matchup = nextElem.innerText;
+                bracket['winners'][matchup] = e.value;
+            }
+        }
     });
     losers.forEach(e => {
         parentNodesL.push(e.parentNode.id);
@@ -1100,8 +1147,6 @@ function calcFinalScore() {
     }
     document.getElementById('standings').innerHTML = '';
     const userlist = winnerNames.concat(loserNames);
-    const curBracket = sessionStorage.getItem('currentBracket');
-    const bracket = JSON.parse(localStorage.getItem(curBracket));
     const standings = bracket['standings'] || {};
     for (const username of userlist) {
         if (winnerNames.includes(username)) {
@@ -1118,17 +1163,15 @@ function calcFinalScore() {
     bracket['standings'] = standings;
     bracket['pairs'] = JSON.parse(sessionStorage.getItem('pairs'));
     localStorage.setItem(curBracket, JSON.stringify(bracket));
-    let finalResults = Object.entries(standings);
-    finalResults = finalResults.sort(function (a, b) {
-        return (b[1][0] - b[1][1]) - (a[1][0] - a[1][1]);
-    });
+    const finalResults = Object.entries(standings);
     const modFinalResults = calcResist(finalResults, bracket);
+    const sortedResults = sortFinalResults(modFinalResults, bracket);
     const strOut = ['Format is:  Win,Loss (Avg Opp Win % | Avg Opp Opp Win %)<br />'];
-    for (let i = 0; i < modFinalResults.length; i++) {
-        if (modFinalResults[i][0] == 'BYE') {
+    for (let i = 0; i < sortedResults.length; i++) {
+        if (sortedResults[i][0] == 'BYE') {
             continue;
         }
-        const str = `@${modFinalResults[i][0]}: ${modFinalResults[i][1].join(',')} (${modFinalResults[i][2]}% | ${modFinalResults[i][3]}%)`;
+        const str = `@${sortedResults[i][0]}: ${sortedResults[i][1].join(',')} (${sortedResults[i][2]}% | ${sortedResults[i][3]}%)`;
         strOut.push(str);
     }
     document.getElementById('current-output').innerHTML = strOut.join('<br />');
@@ -1138,14 +1181,15 @@ function calcFinalScore() {
         quitFinalResults = Object.entries(bracket.quitStandings);
     }
     const modQuitFinalResults = calcResist(quitFinalResults, bracket);
+    const sortedQuits = sortFinalResults(modQuitFinalResults, bracket);
     const quitStrOut = [];
-    if (modQuitFinalResults.length) {
+    if (sortedQuits.length) {
         quitStrOut.push('Format is:  Win,Loss (Avg Opp Win % | Avg Opp Opp Win %)<br />');
-        for (let i = 0; i < modQuitFinalResults.length; i++) {
-            if (modQuitFinalResults[i][0] == 'BYE') {
+        for (let i = 0; i < sortedQuits.length; i++) {
+            if (sortedQuits[i][0] == 'BYE') {
                 continue;
             }
-            const str = `@${modQuitFinalResults[i][0]}: ${modQuitFinalResults[i][1].join(',')} (${modQuitFinalResults[i][2]}% | ${modQuitFinalResults[i][3]}%)`;
+            const str = `@${sortedQuits[i][0]}: ${sortedQuits[i][1].join(',')} (${sortedQuits[i][2]}% | ${sortedQuits[i][3]}%)`;
             quitStrOut.push(str);
         }
     }
@@ -1156,6 +1200,43 @@ function calcFinalScore() {
     const curDOM = document.getElementById('pageContent').innerHTML;
     bracket['DOM'] = curDOM;
     localStorage.setItem(curBracket, JSON.stringify(bracket));
+}
+function sortFinalResults(modFinalResults, bracket) {
+    modFinalResults = modFinalResults.sort((a, b) => {
+        const aDiff = a[1][0] - a[1][1];
+        const bDiff = b[1][0] - b[1][1];
+        if (aDiff !== bDiff) {
+            return bDiff - aDiff;
+        }
+        const aOppWinP = Number(a[2]);
+        const bOppWinP = Number(b[2]);
+        if (aOppWinP !== bOppWinP) {
+            return bOppWinP - aOppWinP;
+        }
+        const aOppOppWinP = Number(a[3]);
+        const bOppOppWinP = Number(b[3]);
+        if (aOppOppWinP !== bOppOppWinP) {
+            return bOppOppWinP - aOppOppWinP;
+        }
+        const aName = a[0];
+        const bName = b[0];
+        const aOpps = getOpp(aName, bracket);
+        if (aOpps.includes(bName)) {
+            const winners = bracket['winners'] ?? {};
+            const matchupWinner = winners[`${aName} VS ${bName}`] ?? winners[`${bName} VS ${aName}`];
+            if (matchupWinner === aName) {
+                return -1;
+            }
+            else if (matchupWinner === bName) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+        return 0;
+    });
+    return modFinalResults;
 }
 function calcResist(finalResults, bracket) {
     const modFinalResults = [];

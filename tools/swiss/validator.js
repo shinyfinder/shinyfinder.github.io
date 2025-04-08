@@ -7,6 +7,7 @@ window.onload = function() {
     // add the event listener to the bracket importer
     document.getElementById('bracket-file-input').addEventListener('change', importBracket, false);
 
+    /*
     // get the current light/dark mode, if it exists
     // if it doesn't set it,
     let curMode = localStorage.getItem('mode');
@@ -16,11 +17,12 @@ window.onload = function() {
     // if it's set to light, remove the dark mode class
     else if (curMode == 'light') {
         document.body.classList.remove('dark-mode');
-    } 
+    }
     // if it's set to dark, add the dark mode class and update localstorage
     else if (curMode == 'dark') {
         localStorage.setItem('mode', 'dark');
     }
+    */
 
     // retrieve the brackets from storage
     const brackets = localStorage;
@@ -30,7 +32,15 @@ window.onload = function() {
         let bracketNames = Object.keys(brackets);
         // remove the dark mode entry from displaying in the dropdown
         const modeIndex = bracketNames.indexOf('mode');
-        bracketNames.splice(modeIndex,1);
+        if (modeIndex >= 0) {
+          bracketNames.splice(modeIndex,1);
+        }
+
+        const skinIndex = bracketNames.indexOf('skin');
+        if (skinIndex >= 0) {
+          bracketNames.splice(skinIndex,1);
+        }
+
         // populate the dropdown
         const sel = document.getElementById('bracketSelect');
         bracketNames.forEach((name,key) => {
@@ -50,7 +60,7 @@ window.onload = function() {
 
 
 /**
- * 
+ *
  * Bracket Management Functions
  *  Set of functions to load, delete, and make new brackets
  */
@@ -122,7 +132,7 @@ function deleteBracket() {
     // get the name of the selected bracket
     const text = bracketSelect.options[bracketSelect.selectedIndex].innerHTML;
 
-    
+
     // confirm
     let confirmText = `You are about to delete bracket ${text}. This action cannot be undone!\nContinue?`;
     if (confirm(confirmText) == true) {
@@ -146,7 +156,7 @@ function newBracket() {
     const name = nameInput.value;
     // reset the input
     nameInput.value = '';
-    
+
     // return if name is blank
     if (name == '') {
         alert('You must enter a name for the bracket');
@@ -159,7 +169,7 @@ function newBracket() {
         alert('A bracket of this name already exists! Please choose a different name.');
         return;
     }
-    
+
     // reset the dom to its initial state
     const initialDOM = JSON.parse(sessionStorage.getItem('initialDOM'));
     document.getElementById('pageContent').innerHTML = initialDOM;
@@ -168,6 +178,7 @@ function newBracket() {
     let bracket = {};
     bracket['DOM'] = initialDOM;
     bracket['origin'] = 'validate';
+    bracket['winners'] = {};
 
     localStorage.setItem(name, JSON.stringify(bracket));
 
@@ -178,7 +189,7 @@ function newBracket() {
     // display the rest of the DOM so the user can input the players
     document.getElementById('pageContent').style.display = 'block';
     document.getElementById('curBrackName').innerHTML = name;
-    
+
 
     // because we don't reload the page, we have to manually update the dropdown
     allBracketNames = Object.keys(localStorage);
@@ -290,8 +301,8 @@ function compareMatches() {
     // if we have saved pairs, check to see if any of the entries are the same
     if (bracket.pairs) {
         // create a temp array that concats the info saved with that provided
-        const pairCompArr = providedNames.concat(bracket.pairs);  
-        
+        const pairCompArr = providedNames.concat(bracket.pairs);
+
         // check for any duplicated entries by first getting all of the unique entries
         const uniq = pairCompArr.filter((a = {}, b => !(a[b] = b in a || b.slice().reverse() in a)));
 
@@ -314,7 +325,7 @@ function compareMatches() {
         document.getElementById('dupe-results').innerHTML = "<span style='color: green;'><strong>No duplicate matchups found!</strong></span>";
         return false;
 
-    } 
+    }
     // else, save the array of provided matchups to storage
     else {
         // bracket['pairs'] = providedNames;
@@ -339,13 +350,13 @@ function updateWL() {
     // get the names from the input
     // in form [user1, user2]
     let providedNames = parseBM();
-    
+
     // check for blank input
     if (providedNames.length == 0) {
         alert('No match input found!');
         return;
     }
-    
+
     // turn the provided pairs into a list of names
     let providedNamesList = [];
     providedNames.forEach(pair => {
@@ -377,7 +388,13 @@ function updateWL() {
         return;
     }
 
+    const winners = bracket.winners || {};
+    for (let i = 0; i < providedNames.length; i++) {
+      winners[`${providedNames[i][0]} vs ${providedNames[i][1]}`] = providedWinners[i];
+    }
+
     let standings = bracket.standings || {};
+
     // add 1 W to the list of winners
     // loop over the list of usernames so we can update their records
     for (const username of providedWinners) {
@@ -391,7 +408,7 @@ function updateWL() {
             // update the records for the winners
             standings[username] = [(standings[username]?.[0] || 0) + 1, standings[username]?.[1] || 0];
     }
-        
+
     // providedNamesList is now a list of the losers
     // loop over it to update the loss counts
     for (const username of providedNamesList) {
@@ -411,7 +428,9 @@ function updateWL() {
     } else {
         bracket['pairs'] = providedNames;
     }
-    
+
+    bracket['winners'] = winners;
+
 
     // update storage
     localStorage.setItem(curBracket, JSON.stringify(bracket));
@@ -431,7 +450,9 @@ function postStandings(obj) {
     const names = Object.keys(obj.standings);
 
     // calc the resistance
-    const modFinalResults = calcResist(finalResults, obj);
+    let modFinalResults = calcResist(finalResults, obj);
+
+    modFinalResults = sortFinalResults(modFinalResults, obj);
 
     // get the unique values
     const uniq = ratios.filter((a = {}, b => !(a[b] = b in a)));
@@ -451,9 +472,9 @@ function postStandings(obj) {
             // check if the users have the same ratio as the test
             // ratios are in the form [W, L]
             let is_same = array1.length == array2.length && array1.every(function(element, index) {
-                return element === array2[index]; 
+                return element === array2[index];
             });
-             
+
             // get the name of the person with this ratio
             let name = names[j];
 
@@ -463,7 +484,7 @@ function postStandings(obj) {
                 const elem = modFinalResults.find(row => row[0] === name);
                 const strOut = `${name} (${elem[2]}% | ${elem[3]}%)`;
                 indices.push(strOut);
-            }  
+            }
         }
         // join the header with the names
         strOut = strOut.concat(indices).join('<br />');
@@ -471,8 +492,8 @@ function postStandings(obj) {
         arrOut.push(strOut);
     }
 
-   
-    
+
+
 
     document.getElementById('standings').innerHTML = arrOut.join('<br />');
 }
@@ -481,7 +502,7 @@ function postStandings(obj) {
 
 /**
  * Gets the repeated entry in an array
- * @param {*} array 
+ * @param {*} array
  * @returns {*} array of repeated entries
  */
 // function to find duplicate entries in an array
@@ -493,7 +514,7 @@ function findDuplicates(array) {
     // if adjacent entries are the same, log this value to the results array
     for (let i = 0; i < sortedArr.length - 1; i++) {
         let isSame = sortedArr[i].length == sortedArr[i+1].length && sortedArr[i].every(function(element, index) {
-            return element === sortedArr[i+1][index]; 
+            return element === sortedArr[i+1][index];
         });
         if (isSame) {
             results.push(sortedArr[i]);
@@ -536,7 +557,7 @@ function findDuplicates(array) {
         // log the names
         participants.push([parsedMatchup[1], parsedMatchup[2]]);
     }
-    
+
     return participants;
 }
 
@@ -567,7 +588,7 @@ function calcResist(finalResults, bracket) {
             // push to temp array
             tempOppOppWP.push(oppOppWP);
         }
-        
+
         // find the average of the opp opp win %
         const avgOppOppWP = (tempOppOppWP.reduce( (a,b) => (Number(a)+Number(b)), 0) / (tempOppOppWP.length === 0 ? 1 : tempOppOppWP.length)).toFixed(2);
 
@@ -577,7 +598,7 @@ function calcResist(finalResults, bracket) {
 
         // add it to the final array for output
         modFinalResults.push(user);
-        
+
 
     }
     return modFinalResults;
@@ -593,7 +614,7 @@ function getOpp(username, bracket) {
     const oppArr = matchArr.map(oppname => oppname.find(name => name !== username));
 
     return oppArr;
-    
+
 }
 
 
@@ -617,4 +638,43 @@ function getOppWinPercent(oppArr, finalResults) {
     avgOppW = tempOppWP.reduce((a,b) => (a + b), 0) / (tempOppWP.length === 0 ? 1 : tempOppWP.length);
 
     return (avgOppW * 100).toFixed(2);
+}
+
+
+function sortFinalResults(modFinalResults, bracket) {
+  modFinalResults = modFinalResults.sort((a, b) => {
+      const aDiff = a[1][0] - a[1][1];
+      const bDiff = b[1][0] - b[1][1];
+      if (aDiff !== bDiff) {
+          return bDiff - aDiff;
+      }
+      const aOppWinP = Number(a[2]);
+      const bOppWinP = Number(b[2]);
+      if (aOppWinP !== bOppWinP) {
+          return bOppWinP - aOppWinP;
+      }
+      const aOppOppWinP = Number(a[3]);
+      const bOppOppWinP = Number(b[3]);
+      if (aOppOppWinP !== bOppOppWinP) {
+          return bOppOppWinP - aOppOppWinP;
+      }
+      const aName = a[0];
+      const bName = b[0];
+      const aOpps = getOpp(aName, bracket);
+      if (aOpps.includes(bName)) {
+          const winners = bracket['winners'] ?? {};
+          const matchupWinner = winners[`${aName} VS ${bName}`] ?? winners[`${bName} VS ${aName}`];
+          if (matchupWinner === aName) {
+              return -1;
+          }
+          else if (matchupWinner === bName) {
+              return 1;
+          }
+          else {
+              return 0;
+          }
+      }
+      return 0;
+  });
+  return modFinalResults;
 }
