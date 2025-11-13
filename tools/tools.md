@@ -28,9 +28,9 @@ This simple tool converts the starting seed for a live-battery Ruby/Sapphire gam
 
 The location of any TR in the Wild Area is provided with this tool. Simply enter in your desired TR or ball and determine when and where a Trader will have it, or which raids can drop it.
 
-### [Pokemon GO Weather Searcher](/tools/go-weather/index.html)
+### Pokemon GO Weather Searcher
 
-GWS is a webtool used to lookup the latitude/longitude coordinates of a specific weather condition used within Pokemon GO. With the click of a single button, you can find the current weather from any of the top 150 cities around the world!
+GWS has been deprecated due to the AccuWeather API now being locked behind a paywall. Sorry!
 
 ---
 

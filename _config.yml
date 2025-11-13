@@ -29,3 +29,11 @@ remote_theme: jekyll/minima
 plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
+
+
+exclude:
+  - tools/go-weather/about.html
+  - tools/go-weather/credits.html
+  - tools/go-weather/faq.html
+  - tools/go-weather/map.html
+  - tools/go-weather/weather.css

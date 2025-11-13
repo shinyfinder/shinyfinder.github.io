@@ -10,7 +10,6 @@ Over time, links die, tools get lost, and the original devs move on. So in addit
 
 * [Various web calculators](./tools/tools.md) featured in several guides.
 * A [management tool](./tools/swiss/index.html) for maintaining Swiss Tournaments
-* A webpage to lookup [current weather conditions](./tools/go-weather/index.html) for Pokemon GO
 * And many more
 
 At the moment, I'm mostly working on developing and maintaining a [Discord bot](https://github.com/shinyfinder/chatot-smogon) for the Smogon Univeristy community, but I never know what need will pop up next.
